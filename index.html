@@ -22,18 +22,20 @@
                 <name>Jiawei Zhang</name>
               </p>
           <p>
-            I am currently pursuing my <b>Ph.D. in Computer Science at the University of Chicago</b>, where I serve as a research assistant in the Secure Learning Lab under the guidance of <a href="https://aisecure.github.io/">Prof. Bo Li</a>. Before joining UChicago, I was temporarily pursuing my Ph.D. studies at the <a href="https://siebelschool.illinois.edu/">Siebel School of Computing and Data Science</a> at the University of Illinois Urbana-Champaign, where I also earned my M.S. in Computer Science. Prior to that, I completed my Bachelor's degree at Zhejiang University. I have also interned at <b>NVIDIA Research</b>, <b>Bytedance Seed</b>, <b>Nuro AI</b>, and <b>Sea AI</b>, and work closely with <b>Meta GenAI</b>.
+            I am currently pursuing my <b>Ph.D. in Computer Science at the University of Chicago</b>, where I serve as a research assistant in the Secure Learning Lab under the guidance of <a href="https://aisecure.github.io/">Prof. Bo Li</a>. Before joining UChicago, I was temporarily pursuing my Ph.D. studies at the <a href="https://siebelschool.illinois.edu/">Siebel School of Computing and Data Science</a> at the University of Illinois Urbana-Champaign, where I also earned my M.S. in Computer Science. Prior to that, I completed my Bachelor's degree at Zhejiang University.
           </p>
 
            <p>
-                      I study how to <strong>make LLMs and LLM agents reliable at scale</strong>. My research runs as a closed loop:
-                      <strong>(i) scalable red-teaming</strong> that elicits realistic, long-horizon failures —
-                      I attended internal red-teaming evaluations of <strong>OpenAI o1</strong>, <strong>Google DeepMind</strong>, and <strong>ElevenLabs TTS</strong>
-                      with <a href="https://www.virtueai.com/" target="_blank">Virtue AI</a>;
+                      I study <strong>Safe AGI</strong>, especially how to <strong>make LLMs and LLM agents reliable at scale</strong>, and explore <strong>WorldModels</strong> to improve downstream safe policy learning. My research runs as a closed loop:
+                      <strong>(i) scalable red-teaming</strong> that elicits realistic, long-horizon failures—I attended internal red-teaming evaluations of <strong>OpenAI o1</strong>, <strong>Google DeepMind</strong>, and <strong>ElevenLabs TTS</strong> with <a href="https://www.virtueai.com/" target="_blank">Virtue AI</a>;
                       <strong>(ii) theoretical guarantees via certified robustness</strong> that turn safety into provable design constraints;
-                      <strong>(iii) scalable, interpretability-guided defenses</strong> that translate circuit-level insights into generalizable mitigations; and
-                      <strong>(iv) closed-loop safety guarantees for autonomous driving</strong>, where perception–language–action coupling magnifies risk.
-                      Together, these pillars elevate safety from ad-hoc patches to engineerable, provable, and generalizable methods.
+                      <strong>(iii) scalable, interpretability-guided alignments</strong> that translate circuit-level insights into generalizable mitigations; and
+                      <strong>(iv) better safety-aware reasoning for autonomous driving</strong> by leveraging additional knowledge from the world model with RL.
+                      Together, my goal is to enhance LLMs with stronger reasoning capabilities with world models and improved safety awareness while ensuring scalability.
+              </p>
+
+              <p style="white-space: nowrap;">
+                <span style="color: #dc3545;"><b>I am selected as the Anthropic Fellow for AI safety research starting in January 2026!</b></span>
               </p>
               <p style="text-align:center">
                 <a href="mailto:jwz@uchicago.edu">Email</a> &nbsp/&nbsp
@@ -115,12 +117,116 @@
   .pub-link a:hover {
     text-decoration: underline;
   }
+
+  .intern-box {
+    display: flex;
+    align-items: center;
+    background-color: #f7f7f7;
+    border-radius: 10px;
+    padding: 16px 22px;
+    margin-bottom: 12px;
+    box-shadow: 0px 1px 3px rgba(0,0,0,0.05);
+  }
+
+  .intern-logo {
+    width: 200px;
+    height: 60px;
+    border-radius: 8px;
+    margin-right: 18px;
+    flex-shrink: 0;
+    object-fit: contain;
+  }
+
+  .intern-info {
+    flex: 1;
+  }
+
+  .intern-company {
+    font-weight: 700;
+    font-size: 17px;
+    color: #111;
+    margin-bottom: 4px;
+  }
+
+  .intern-date {
+    font-size: 15px;
+    color: #555;
+    margin-bottom: 3px;
+  }
+
+  .intern-advisor {
+    font-size: 15px;
+    color: #666;
+    font-style: italic;
+  }
+
+  .intern-role {
+    font-size: 15px;
+    color: #444;
+    margin-bottom: 3px;
+  }
 </style>
 
 <table style="width:100%;border:0;border-spacing:0;margin:auto;">
   <tbody>
     <tr>
       <td style="padding:20px;vertical-align:middle;">
+        <heading>Industry Experience</heading>
+
+        <div style="margin-top: 20px;"></div>
+
+        <div class="intern-box">
+          <img class="intern-logo" src="https://upload.wikimedia.org/wikipedia/sco/2/21/Nvidia_logo.svg" alt="NVIDIA">
+          <div class="intern-info">
+            <div class="intern-company">NVIDIA Research</div>
+            <div class="intern-role">Autonomous Driving Research Intern, Santa Clara</div>
+            <div class="intern-date">Oct 2025 – Present</div>
+            <div class="intern-advisor">Advised by Dr. Boris Ivanovic and Prof. Marco Pavone</div>
+          </div>
+        </div>
+
+        <div class="intern-box">
+          <img class="intern-logo" src="data/ByteDance Seedream Logo PNG SVG-01.png" alt="ByteDance">
+          <div class="intern-info">
+            <div class="intern-company">ByteDance Seed Research</div>
+            <div class="intern-role">Responsible AI Research Intern, San Jose</div>
+            <div class="intern-date">June 2025 – Sept 2025</div>
+            <div class="intern-advisor">Advised by Dr. Xiaojun Xu and Dr. Hang Li</div>
+          </div>
+        </div>
+
+        <div class="intern-box">
+          <img class="intern-logo" src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg" alt="Meta">
+          <div class="intern-info">
+            <div class="intern-company">Meta AI</div>
+            <div class="intern-role">GenAI Research Collaborator (External)</div>
+            <div class="intern-date">Sept 2024 – June 2025</div>
+            <div class="intern-advisor">Advised by Dr. Shuang Yang</div>
+          </div>
+        </div>
+
+        <div class="intern-box">
+          <img class="intern-logo" src="https://s.yimg.com/ny/api/res/1.2/B2KpaX_.DZsGOGk9eRXIdQ--/YXBwaWQ9aGlnaGxhbmRlcjt3PTI0MDA7aD02ODY-/https://media.zenfs.com/en/business-wire.com/3ce419965b02def34af568b9163830f4" alt="Nuro">
+          <div class="intern-info">
+            <div class="intern-company">Nuro AI</div>
+            <div class="intern-role">Machine Learning Research Intern (Pathfinder), Mountain View</div>
+            <div class="intern-date">May 2024 – Aug 2024</div>
+            <div class="intern-advisor">Advised by Dr. Aleksandr Petiushko</div>
+          </div>
+        </div>
+
+        <div class="intern-box">
+          <img class="intern-logo" src="data/seaai.png" alt="Sea">
+          <div class="intern-info">
+            <div class="intern-company">Sea AI Lab</div>
+            <div class="intern-role">Machine Learning Research Intern, Singapore</div>
+            <div class="intern-date">May 2023 – Aug 2023</div>
+            <div class="intern-advisor">Advised by Dr. Tianyu Pang and Dr. Chao Du</div>
+          </div>
+        </div>
+
+        <div style="margin-top: 40px;"></div>
+
         <heading>Selected Publications <span style="font-size:14px; color:#555; font-style:italic; font-weight:normal;">(* denotes co-first authorship)</span></heading>
 
 
@@ -129,10 +235,17 @@
         <div class="pub-box">
           <div class="pub-title">Any-Depth Alignment: Unlocking Innate Safety Alignment of LLMs to Any-Depth</div>
           <div class="pub-authors"><b>Jiawei Zhang</b>, Andrew Estornell, David D. Baek, Bo Li, Xiaojun Xu</div>
-          <div class="pub-venue">arXiv 2025</div>
+          <div class="pub-venue"><span style="color: #dc3545;"><b>[Oral presentation at ResponsibleFM@NeurIPS 2025]</b></span></div>
           <div class="pub-link"><a href="https://arxiv.org/abs/2510.18081">[arXiv]</a></div>
         </div>
-
+        
+        <div class="pub-box">
+          <div class="pub-title">ARMs: Adaptive Red-Teaming Agent against Multimodal Models with Plug-and-Play Attacks</div>
+          <div class="pub-authors">Zhaorun Chen*, Xun Liu*, Mintong Kang, <b>Jiawei Zhang</b>, Minzhou Pan, Shuang Yang, Bo Li</div>
+          <div class="pub-venue"><span style="color: #dc3545;"><b>[Oral presentation at ResponsibleFM@NeurIPS 2025]</b></span></div>
+          <div class="pub-link"><a href="https://arxiv.org/pdf/2510.02677">[arXiv]</a></div>
+        </div>
+        
         <div class="pub-box">
           <div class="pub-title">GraphQ-LM: Scalable Graph Representation for Large Language Models via Residual Vector Quantization</div>
           <div class="pub-authors"><b>Jiawei Zhang</b>, Yang Yang, Kaushik Rangadurai, Tao Liu, Minhui Huang, Yiping Han, Bo Li, Shuang Yang</div>
