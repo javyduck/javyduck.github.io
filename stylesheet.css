@@ -575,15 +575,15 @@
 
 
 a {
-    color: #145da0;
-    /* color: #1772d0; */
+    color: #1772d0;
+    font-weight: 500;
     text-decoration: none;
 }
 
 a:focus,
 a:hover {
-    color: #01949a;
-    text-decoration: none;
+    color: #d63384;
+    text-decoration: underline;
 }
 
 
