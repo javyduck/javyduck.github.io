@@ -576,14 +576,16 @@
 
 a {
     color: #800000;
-    font-weight: 700;
+    font-weight: 600;
     text-decoration: none;
+    transition: color 0.15s ease;
 }
 
 a:focus,
 a:hover {
     color: #b34747;
-    text-decoration: underline;
+    text-decoration: none;
+    border-bottom: 1px solid #b34747;
 }
 
 
@@ -617,7 +619,9 @@ highlight {
 heading {
     font-family: 'Roboto', Verdana, Helvetica, sans-serif;
     font-size: 22px;
-    color: #800000
+    font-weight: 400;
+    color: #800000;
+    letter-spacing: 0.02em;
 }
 
 papertitle {
@@ -628,8 +632,10 @@ papertitle {
 
 name {
     font-family: 'Roboto', Verdana, Helvetica, sans-serif;
-    font-size: 34px;
-    color: #800000
+    font-size: 36px;
+    font-weight: 300;
+    color: #800000;
+    letter-spacing: 0.03em;
 }
 
 .one {

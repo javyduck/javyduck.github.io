@@ -58,40 +58,52 @@
         
         <style>
   .pub-year {
-    font-size: 22px;
-    font-weight: bold;
-    color: #1a1a1a;
-    margin-top: 35px;
-    margin-bottom: 16px;
+    font-size: 20px;
+    font-weight: 500;
+    color: #800000;
+    letter-spacing: 0.05em;
+    margin-top: 44px;
+    margin-bottom: 18px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #ead7d7;
   }
 
   .pub-box {
-    background-color: #f7f7f7;
-    border-radius: 10px;
-    padding: 18px 22px;
-    margin-bottom: 14px;
-    box-shadow: 0px 1px 3px rgba(0,0,0,0.05);
+    background-color: #ffffff;
+    border: 1px solid #ececec;
+    border-left: 3px solid #800000;
+    border-radius: 6px;
+    padding: 16px 22px;
+    margin-bottom: 12px;
+    transition: box-shadow 0.2s ease, transform 0.2s ease, border-left-color 0.2s ease;
+  }
+
+  .pub-box:hover {
+    box-shadow: 0px 4px 14px rgba(128, 0, 0, 0.08);
+    transform: translateY(-1px);
+    border-left-color: #b34747;
   }
 
   .pub-title {
-    font-weight: 700;
-    font-size: 17px;
-    color: #111;
-    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 16.5px;
+    color: #1a1a1a;
+    margin-bottom: 6px;
+    letter-spacing: 0.005em;
   }
 
   .pub-authors {
-    color: #333;
-    font-size: 16px;
+    color: #3a3a3a;
+    font-size: 15px;
     margin-bottom: 4px;
   }
 
   .pub-venue {
     font-style: italic;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-size: 16px !important;
+    font-size: 15px !important;
     line-height: 1.3 !important;
-    color: #444;
+    color: #6a6a6a;
     font-weight: 400 !important;
     margin-top: 3px;
     margin-bottom: 2px;
@@ -104,24 +116,39 @@
     line-height: inherit !important;
   }
 
+  .pub-link {
+    margin-top: 4px;
+  }
+
   .pub-link a {
-    color: #800000; /* UChicago maroon */
+    color: #800000;
     font-weight: 500;
+    font-size: 14.5px;
     text-decoration: none;
   }
 
   .pub-link a:hover {
-    text-decoration: underline;
+    color: #b34747;
+    text-decoration: none;
+    border-bottom: none;
   }
 
   .intern-box {
     display: flex;
     align-items: center;
-    background-color: #f7f7f7;
-    border-radius: 10px;
+    background-color: #ffffff;
+    border: 1px solid #ececec;
+    border-left: 3px solid #800000;
+    border-radius: 6px;
     padding: 16px 22px;
     margin-bottom: 12px;
-    box-shadow: 0px 1px 3px rgba(0,0,0,0.05);
+    transition: box-shadow 0.2s ease, transform 0.2s ease, border-left-color 0.2s ease;
+  }
+
+  .intern-box:hover {
+    box-shadow: 0px 4px 14px rgba(128, 0, 0, 0.08);
+    transform: translateY(-1px);
+    border-left-color: #b34747;
   }
 
   .intern-logo {
