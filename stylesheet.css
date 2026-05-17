@@ -575,14 +575,14 @@
 
 
 a {
-    color: #d63384;
+    color: #800000;
     font-weight: 700;
     text-decoration: none;
 }
 
 a:focus,
 a:hover {
-    color: #a02766;
+    color: #b34747;
     text-decoration: underline;
 }
 
@@ -617,7 +617,7 @@ highlight {
 heading {
     font-family: 'Roboto', Verdana, Helvetica, sans-serif;
     font-size: 22px;
-    color: #003366
+    color: #800000
 }
 
 papertitle {
@@ -629,7 +629,7 @@ papertitle {
 name {
     font-family: 'Roboto', Verdana, Helvetica, sans-serif;
     font-size: 34px;
-    color: #003366
+    color: #800000
 }
 
 .one {
