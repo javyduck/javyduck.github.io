@@ -1,0 +1,3128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Integers, Divisibility, and the Logic of Proof | Jiawei Zhang</title>
+<meta name="description" content="Chapter 1 of my first-principles mathematics notes: quantifiers and proof methods, induction and well-ordering, the division algorithm, gcd and Bézout's identity, and the fundamental theorem of arithmetic.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍪</text></svg>">
+<link rel="stylesheet" href="../../assets/blog.css">
+<script src="../../assets/blog.js"></script>
+<script src="../../assets/mathjax-config.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="site-title" href="../../">Jiawei Zhang<span style="color:var(--accent)">&nbsp;· Blog</span></a>
+    <nav class="site-nav">
+      <a href="../../">Posts</a>
+      <a href="https://javyduck.github.io/">About</a>
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">☾</button>
+    </nav>
+  </div>
+</header>
+
+<div class="post-wrap">
+  <main class="post-main">
+    <header class="post-header">
+      <h1 class="post-title">Integers, Divisibility, and the Logic of Proof</h1>
+      <div class="post-meta">
+        <span>Jul 17, 2026</span>
+        <span>·</span>
+        <span class="tag">math</span>
+        <span>·</span><span>70 min read</span>
+        <span id="busuanzi_container_page_pv" style="display:none">·
+          <span id="busuanzi_value_page_pv"></span> views</span>
+      </div>
+    </header>
+
+    <article class="post-content">
+
+<h2 data-number="1.1" id="sec:ch001-motivating-problem"><span
+class="header-section-number">1.1</span> A Question About Two
+Integers</h2>
+<p>Mathematics begins when a claim becomes precise enough to survive a
+skeptical reader. Such a skeptic may choose an awkward input, ask why a
+construction exists, or demand to know why an algorithm must stop. A
+proof succeeds only when each obligation is met by an argument that can
+be reconstructed without trusting the person who proposed it. The
+integers provide an ideal first setting: their arithmetic is familiar,
+but it already contains quantifiers, induction, invariants, existence
+and uniqueness, and canonical factorization.</p>
+<p>We reason classically throughout, and take the elementary
+ordered-arithmetic laws of the integers and the ordinary principle of
+induction as our starting point. Everything else used in the chapter
+will be defined or proved as it is needed. The construction of the
+integers themselves, formal logical calculi, abstract rings, and
+congruence classes require machinery developed later; none of them is
+needed for the arguments here.</p>
+<p>Consider the positive integers that divide both <span
+class="math inline">\(252\)</span> and <span
+class="math inline">\(198\)</span>. Among them, <span
+class="math inline">\(18\)</span> is the largest. Listing all divisors
+would verify the assertion for this particular pair, but it would
+conceal the reason and would scale badly. What would constitute a proof
+that <span class="math inline">\(18\)</span> is not merely a common
+divisor, but the greatest common divisor?</p>
+<p>Here is the evidence we shall eventually justify: <span
+class="math display">\[\begin{aligned}
+  252 &amp;= 1\cdot198+54,\\
+  198 &amp;= 3\cdot54+36,\\
+   54 &amp;= 1\cdot36+18,\\
+   36 &amp;= 2\cdot18+0,
+\end{aligned}\]</span> and backward substitution gives <span
+class="math display">\[18=54-36=4\cdot54-198=4\cdot252-5\cdot198.\]</span>
+The remainders decrease until they reach zero. The final identity shows
+that every common divisor of <span class="math inline">\(252\)</span>
+and <span class="math inline">\(198\)</span> must divide <span
+class="math inline">\(18\)</span>; to finish, one also checks that <span
+class="math inline">\(18\)</span> divides both inputs. This small
+example already contains the themes of the chapter. The words <em>every
+common divisor</em> call for a universal quantifier, whereas the
+coefficients <span class="math inline">\(4\)</span> and <span
+class="math inline">\(-5\)</span> witness an existential claim. Passing
+from one line to the next must preserve something, and the strictly
+decreasing nonnegative remainders must eventually stop. We begin by
+making the logical language behind these moves precise, then return to
+the arithmetic and prove that the procedure always works.</p>
+<h2 data-number="1.2" id="sec:ch001-proof-language"><span
+class="header-section-number">1.2</span> A Working Language for Claims
+and Proofs</h2>
+<p>The opening calculation contained two very different promises. The
+words “every common divisor” ask us to control an arbitrary integer,
+while the identity <span class="math inline">\(18=4(252)-5(198)\)</span>
+answers an existence question by exhibiting two particular coefficients.
+These are not stylistic variations: they specify different kinds of
+evidence. Before returning to arithmetic, we need enough logical
+language to hear that difference whenever it occurs.</p>
+<h3 data-number="1.2.1" id="statements-predicates-and-domains"><span
+class="header-section-number">1.2.1</span> Statements, predicates, and
+domains</h3>
+<div id="def:ch001-statement-predicate" class="definition">
+<p><strong>Definition 1.1</strong> (Statement and predicate). <em>A
+<em>statement</em> is a declarative mathematical claim with fixed
+variable meanings and a determined truth value. A <em>predicate</em>
+<span class="math inline">\(P(x_1,\ldots,x_k)\)</span> is a claim with
+free variables. It becomes a statement only after those variables are
+assigned values or bound by quantifiers. The <em>domain</em> specifies
+which values are permitted.</em></p>
+</div>
+<p>We write <span class="math inline">\(\Z\)</span> for the set of
+integers. For <span class="math inline">\(a,b\in\Z\)</span>, write <span
+class="math inline">\(a\mid b\)</span> when <span
+class="math inline">\(b=ak\)</span> for some <span
+class="math inline">\(k\in\Z\)</span>, and write <span
+class="math inline">\(a\nmid b\)</span> when no such integer exists; we
+shall study this relation systematically later. Thus <span
+class="math inline">\(n\mid 12\)</span> is a predicate when <span
+class="math inline">\(n\)</span> is free. The expressions “<span
+class="math inline">\(3\mid12\)</span>,” “for every integer <span
+class="math inline">\(n\)</span>, <span
+class="math inline">\(n\mid12\)</span>,” and “there exists an integer
+<span class="math inline">\(n\)</span> such that <span
+class="math inline">\(n\mid12\)</span>” are statements. Their truth
+values differ because fixing a variable and quantifying it are different
+operations.</p>
+<p>This distinction has practical force. The string <span
+class="math inline">\(x+y&gt;0\)</span> is not yet a mathematical
+statement: it does not say what <span class="math inline">\(x\)</span>
+and <span class="math inline">\(y\)</span> are, nor whether they are
+fixed or quantified. A proof cannot repair an ill-posed claim after the
+fact, because there is not yet a single claim to prove. Choosing a
+domain and binding the variables is part of deciding what one means, not
+clerical work performed after the mathematics.</p>
+<div id="def:ch001-connectives" class="definition">
+<p><strong>Definition 1.2</strong> (Connectives and implication).
+<em>For statements <span class="math inline">\(P\)</span> and <span
+class="math inline">\(Q\)</span>, the statements <span
+class="math inline">\(\neg P\)</span>, <span
+class="math inline">\(P\land Q\)</span>, <span
+class="math inline">\(P\lor Q\)</span>, and <span
+class="math inline">\(P\Rightarrow Q\)</span> mean respectively “not
+<span class="math inline">\(P\)</span>,” “both <span
+class="math inline">\(P\)</span> and <span
+class="math inline">\(Q\)</span>,” “at least one of <span
+class="math inline">\(P,Q\)</span>,” and “whenever <span
+class="math inline">\(P\)</span> is true, <span
+class="math inline">\(Q\)</span> is true.” The biconditional <span
+class="math inline">\(P\Leftrightarrow Q\)</span> abbreviates the
+conjunction of <span class="math inline">\(P\Rightarrow Q\)</span> and
+<span class="math inline">\(Q\Rightarrow P\)</span>.</em></p>
+</div>
+<p>The implication <span class="math inline">\(P\Rightarrow Q\)</span>
+forbids exactly one situation: <span class="math inline">\(P\)</span>
+true and <span class="math inline">\(Q\)</span> false. It does not claim
+that <span class="math inline">\(P\)</span> is true, that <span
+class="math inline">\(P\)</span> causes <span
+class="math inline">\(Q\)</span>, or that the converse <span
+class="math inline">\(Q\Rightarrow P\)</span> holds. This truth
+condition is the mechanism behind contraposition. Ordinary language
+often suggests temporal or causal force in the word “implies”;
+mathematical implication deliberately forgets those associations and
+retains only the relation between truth values. That loss is what makes
+the connective broadly reusable, but it is also why one must not read a
+causal story into a formal arrow.</p>
+<div id="prop:ch001-contrapositive" class="proposition">
+<p><strong>Proposition 1.3</strong> (Contrapositive equivalence).
+<em>For statements <span class="math inline">\(P\)</span> and <span
+class="math inline">\(Q\)</span>, <span
+class="math display">\[(P\Rightarrow Q)\quad\Longleftrightarrow\quad
+  (\neg Q\Rightarrow\neg P).\]</span></em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Assume <span class="math inline">\(P\Rightarrow
+Q\)</span> and suppose <span class="math inline">\(Q\)</span> is false.
+If <span class="math inline">\(P\)</span> were true, the assumed
+implication would make <span class="math inline">\(Q\)</span> true,
+contradicting <span class="math inline">\(\neg Q\)</span>. Hence <span
+class="math inline">\(P\)</span> is false, which proves <span
+class="math inline">\(\neg Q\Rightarrow\neg P\)</span>.</p>
+<p>Conversely, assume <span class="math inline">\(\neg Q\Rightarrow\neg
+P\)</span> and suppose <span class="math inline">\(P\)</span> is true.
+If <span class="math inline">\(Q\)</span> were false, then <span
+class="math inline">\(\neg Q\)</span> would imply <span
+class="math inline">\(\neg P\)</span>, contradicting <span
+class="math inline">\(P\)</span>. Hence <span
+class="math inline">\(Q\)</span> is true, and therefore <span
+class="math inline">\(P\Rightarrow Q\)</span>. ◻</p>
+</div>
+<p>The original implication and its contrapositive therefore have
+exactly the same possible counterexample. Contraposition is not a
+symbolic trick but a change of viewpoint on the same forbidden case.</p>
+<h3 data-number="1.2.2" id="quantifier-order-and-dependence"><span
+class="header-section-number">1.2.2</span> Quantifier order and
+dependence</h3>
+<div id="def:ch001-quantifiers" class="definition">
+<p><strong>Definition 1.4</strong> (Universal and existential
+quantification). <em>Let <span class="math inline">\(P(x)\)</span> be a
+predicate on a stated domain <span
+class="math inline">\(D\)</span>.</em></p>
+<ul>
+<li><p><em><span class="math inline">\(\forall x\in D,\ P(x)\)</span>
+asserts that <span class="math inline">\(P(x)\)</span> holds for every
+permitted <span class="math inline">\(x\)</span>. A proof must accept an
+arbitrary <span class="math inline">\(x\in D\)</span> and may use no
+additional property of <span
+class="math inline">\(x\)</span>.</em></p></li>
+<li><p><em><span class="math inline">\(\exists x\in D,\ P(x)\)</span>
+asserts that at least one permitted <span
+class="math inline">\(x\)</span> makes <span
+class="math inline">\(P(x)\)</span> true. A direct proof supplies a
+<em>witness</em> and verifies it.</em></p></li>
+</ul>
+<p><em>A value that makes a universal statement false is a
+<em>counterexample</em>.</em></p>
+</div>
+<p>With two variables, quantifier order determines which choices may
+depend on which earlier information: <span
+class="math display">\[\begin{array}{rcl}
+  \forall x\,\exists y\,P(x,y)
+    &amp;:&amp; \text{after $x$ is fixed, one may choose a witness
+$y=y(x)$},\\[2pt]
+  \exists y\,\forall x\,P(x,y)
+    &amp;:&amp; \text{one fixed $y$ must work for every later choice of
+$x$}.
+\end{array}\]</span></p>
+<p>For example, <span class="math display">\[\forall a\in\Z\;\exists
+b\in\Z\;(b&gt;a)\]</span> is true: after the skeptic chooses <span
+class="math inline">\(a\)</span>, take <span
+class="math inline">\(b=a+1\)</span>. Reversing the quantifiers asserts
+that one integer <span class="math inline">\(b\)</span> is greater than
+every integer <span class="math inline">\(a\)</span>. That is false,
+because after any proposed <span class="math inline">\(b\)</span> the
+choice <span class="math inline">\(a=b+1\)</span> defeats it. The order
+of the quantifiers therefore records which information a witness is
+allowed to use.</p>
+<p>The notation that makes this dependence visible is historically
+young, even though general mathematical reasoning is not. Euclid could
+argue about an arbitrary number without writing a quantifier symbol.
+More than two millennia later, Frege’s 1879 <em>Begriffsschrift</em>
+made variable binding and inferential scope part of an explicit formal
+language. Frege is often credited with a decisive creation of modern
+quantificational logic, but both the extent of that credit and the
+relation of his system to contemporary algebraic logics remain subjects
+of historical study; his two-dimensional notation was also markedly
+unlike the symbols used here <span class="citation"
+data-cites="euclidheath1926elements frege1879begriffsschrift cook2023fregelogic">(Euclid
+1926, bk. VII; Frege 1879, Preface and Secs. 1–3; Cook 2023, secs.
+1–2)</span>. Symbols did not make proof rigorous for the first time.
+They made dependence inspectable. That is exactly the gain in passing
+from an unpunctuated sentence about choices to the visibly different
+forms <span class="math inline">\(\forall x\,\exists y\)</span> and
+<span class="math inline">\(\exists y\,\forall x\)</span>.</p>
+<p>The same distinction will later separate pointwise assertions from
+uniform ones in analysis. A choice that may be adjusted after seeing
+<span class="math inline">\(x\)</span> can be much easier to produce
+than one choice that must work simultaneously for every <span
+class="math inline">\(x\)</span>. Already here, quantifier order is
+recording dependence: it tells us which objects may respond to which
+earlier choices.</p>
+<div id="prop:ch001-quantifier-negation" class="proposition">
+<p><strong>Proposition 1.5</strong> (Negating quantified statements).
+<em>For a predicate <span class="math inline">\(P(x)\)</span> on a
+domain <span class="math inline">\(D\)</span>, <span
+class="math display">\[\neg(\forall x\in D\;P(x))\ \Longleftrightarrow\
+\exists x\in D\;\neg P(x),\]</span> and <span
+class="math display">\[\neg(\exists x\in D\;P(x))\ \Longleftrightarrow\
+\forall x\in D\;\neg P(x).\]</span></em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> The statement <span class="math inline">\(\forall
+x\in D\;P(x)\)</span> says that no permitted <span
+class="math inline">\(x\)</span> makes <span
+class="math inline">\(P(x)\)</span> false. Its negation therefore says
+that some permitted <span class="math inline">\(x\)</span> does make
+<span class="math inline">\(P(x)\)</span> false, which is precisely
+<span class="math inline">\(\exists x\in D\;\neg P(x)\)</span>.
+Similarly, <span class="math inline">\(\exists x\in D\;P(x)\)</span>
+says that at least one witness succeeds. Its negation says that every
+candidate fails, namely <span class="math inline">\(\forall x\in D\;\neg
+P(x)\)</span>. ◻</p>
+</div>
+<p>The direction from <span class="math inline">\(\neg\forall
+x\,P(x)\)</span> to an explicit <span class="math inline">\(\exists
+x\,\neg P(x)\)</span> uses classical reasoning. Constructive logic
+accepts the reverse direction and both directions of the
+existential-negation law, but it does not in general extract a
+counterexample merely from the failure of a universal claim. Later logic
+and type-theory chapters will make that distinction precise.</p>
+<p>This exchange explains an important asymmetry in mathematical
+practice. One counterexample can destroy a universal claim, but one
+successful example cannot establish it. Conversely, one witness proves
+an existential claim, whereas refuting existence requires ruling out
+every candidate. Examples and proofs therefore cooperate, but they do
+not carry the same epistemic weight.</p>
+<p>When several quantifiers occur, negate them one at a time while
+preserving their order. For instance, the negation of <span
+class="math display">\[\forall a\in\Z\;\exists b\in\Z\;(b&gt;a)\]</span>
+is <span class="math display">\[\exists a\in\Z\;\forall b\in\Z\;(b\le
+a),\]</span> not a rearrangement chosen for convenience.</p>
+<p>Negation must also pass correctly through the connectives that
+assemble compound claims, because a misapplied negation silently
+converts one proof obligation into a different one. The rules are few
+enough to record once and completely.</p>
+<div id="prop:ch001-connective-negation" class="proposition">
+<p><strong>Proposition 1.6</strong> (Negating compound statements).
+<em>For all statements <span class="math inline">\(P\)</span> and <span
+class="math inline">\(Q\)</span>:</em></p>
+<ol>
+<li><p><em><span class="math inline">\(\neg(P\wedge Q)\)</span> is
+equivalent to <span class="math inline">\(\neg P\vee\neg Q\)</span>, and
+<span class="math inline">\(\neg(P\vee Q)\)</span> is equivalent to
+<span class="math inline">\(\neg P\wedge\neg Q\)</span>;</em></p></li>
+<li><p><em><span class="math inline">\(\neg(P\Rightarrow Q)\)</span> is
+equivalent to <span class="math inline">\(P\wedge\neg
+Q\)</span>.</em></p></li>
+</ol>
+</div>
+<div class="proof">
+<p><em>Proof.</em> A conjunction fails exactly when at least one
+conjunct fails, and a disjunction fails exactly when both disjuncts
+fail; that proves (i). For (ii), the implication <span
+class="math inline">\(P\Rightarrow Q\)</span> makes exactly one promise:
+whenever <span class="math inline">\(P\)</span> holds, <span
+class="math inline">\(Q\)</span> holds as well. The only way to break
+that promise is to realize the promised situation without the promised
+outcome, that is, to have <span class="math inline">\(P\)</span> true
+and <span class="math inline">\(Q\)</span> false. If <span
+class="math inline">\(P\)</span> fails, no promise has been invoked, so
+the implication stands. ◻</p>
+</div>
+<p>The two equivalences in (i) are <em>De Morgan’s laws</em>, and
+together with the quantifier laws they make negation a purely mechanical
+computation on any statement built from predicates, connectives, and
+quantifiers. Part (ii) carries two lessons that recur throughout this
+book. First, to refute an implication one must exhibit an instance
+satisfying the hypothesis and failing the conclusion; an instance that
+merely fails the hypothesis refutes nothing. Second, an implication
+whose hypothesis is never satisfied is automatically true—true
+<em>vacuously</em>. The universal claim “every integer that is both even
+and odd is prime” is correct, and so is the claim that every such
+integer is composite: no candidate exists to violate either promise.
+Vacuous truth can feel like a lawyer’s trick, but the convention is
+forced by part (ii): were implications with false hypotheses counted as
+false, the true statement “every multiple of <span
+class="math inline">\(6\)</span> is even” would already fail at <span
+class="math inline">\(n=5\)</span>, where the hypothesis <span
+class="math inline">\(6\mid n\)</span> is false, and no universally
+quantified implication over an infinite domain could survive.</p>
+<h3 data-number="1.2.3" id="proof-design-follows-logical-form"><span
+class="header-section-number">1.2.3</span> Proof design follows logical
+form</h3>
+<p>Logical form does not dictate the interesting idea of a proof, but it
+does tell us what a completed argument must deliver. To prove a
+universal statement, we fix an arbitrary permitted object and avoid
+using any feature not shared by the whole domain. To prove existence, we
+must produce or otherwise justify a witness and then check every
+condition imposed on it. A biconditional asks for two implications;
+unique existence asks first for an object and then for an argument that
+any two such objects coincide.</p>
+<p>Implications admit more than one useful viewpoint. We may assume the
+hypothesis and work toward the conclusion, or prove the contrapositive
+when the negated conclusion has a more usable form. A proof by
+contradiction temporarily assumes the negation of the desired claim and
+derives an explicit impossibility. The word <em>temporarily</em>
+matters. Once that assumption has been discharged, consequences that
+depended on it cannot be carried into the surrounding argument.
+Contradiction is not a license to reason from arbitrary falsehoods; it
+is a carefully scoped way of showing that one particular supposition
+cannot be maintained.</p>
+<p>Thus proof writing is not the filling of a template. It is the art of
+finding a productive representation of the current obligation while
+preserving its logical scope. The following elementary implication shows
+how much can change when a statement is reversed, negated, or
+strengthened by accident.</p>
+<div id="ex:ch001-implication-family" class="example">
+<p><strong>Example 1.7</strong> (One implication, four logically
+different claims). <em>For <span class="math inline">\(n\in\Z\)</span>,
+consider <span class="math display">\[6\mid
+n\quad\Longrightarrow\quad2\mid n.\]</span> If <span
+class="math inline">\(n=6k\)</span>, then <span
+class="math inline">\(n=2(3k)\)</span>, so the implication is true. Its
+contrapositive, <span class="math inline">\(2\nmid n\Rightarrow6\nmid
+n\)</span>, is the same theorem viewed from the only possible failure:
+if <span class="math inline">\(6\)</span> divided <span
+class="math inline">\(n\)</span>, the displayed witness transformation
+would force <span class="math inline">\(2\)</span> to divide <span
+class="math inline">\(n\)</span>.</em></p>
+<p><em>The converse <span class="math inline">\(2\mid n\Rightarrow6\mid
+n\)</span> is false at <span class="math inline">\(n=2\)</span>, and the
+inverse <span class="math inline">\(6\nmid n\Rightarrow2\nmid n\)</span>
+fails at the same input. Thus an implication and its contrapositive
+agree in truth value, while the converse and inverse form the other
+pair. The calculation does <em>not</em> prove that divisibility by <span
+class="math inline">\(6\)</span> and evenness are equivalent; the
+counterexample isolates the missing factor <span
+class="math inline">\(3\)</span>. Later direct and contrapositive proofs
+repeat this pattern with less transparent predicates.</em></p>
+</div>
+<p>Testing examples and proving a theorem play different logical roles.
+One counterexample completely refutes a universal claim. Any finite
+collection of successful tests, however large, leaves all untested cases
+unresolved unless an additional theorem reduces the infinite domain to
+those tests. Computation is often how a conjecture is discovered and how
+a false conjecture is quickly discarded; proof begins where the pattern
+seen in finitely many cases is compressed into a reason that governs
+them all.</p>
+<p>How large can “finitely many cases” be while the claim still
+collapses? Larger than any reasonable person would keep checking.</p>
+<div id="ex:ch001-euler-polynomial" class="example">
+<p><strong>Example 1.8</strong> (A conjecture that survives forty
+tests). <em>Consider the claim: <em><span
+class="math inline">\(n^2+n+41\)</span> is prime for every integer <span
+class="math inline">\(n\ge0\)</span>.</em> The evidence begins well: the
+values at <span class="math inline">\(n=0,1,2,3,4\)</span> are <span
+class="math inline">\(41\)</span>, <span
+class="math inline">\(43\)</span>, <span
+class="math inline">\(47\)</span>, <span
+class="math inline">\(53\)</span>, <span
+class="math inline">\(61\)</span>, all prime, and patient checking
+confirms that every value up to and including <span
+class="math inline">\(n=39\)</span> is prime <span class="citation"
+data-cites="lehman2010mcs">(Lehman, Leighton, and Meyer 2010, sec.
+1.3)</span>. Forty consecutive successes are more testing than most
+conjectures ever receive. The claim is nevertheless false, and no search
+was needed to see it—only the discipline of reading the expression
+instead of its values. Group the first two terms: <span
+class="math display">\[n^2+n+41=n(n+1)+41 .\]</span> At <span
+class="math inline">\(n=41\)</span> every summand is visibly divisible
+by <span class="math inline">\(41\)</span>. One step earlier the same
+structure already bites: at <span class="math inline">\(n=40\)</span>,
+<span class="math display">\[40\cdot41+41=41\cdot41=41^2,\]</span> a
+perfect square. The forty successes were not meaningless—they suggest,
+correctly, that the polynomial is unusually rich in primes, a phenomenon
+with a genuine explanation in algebraic number theory—but as evidence
+for the universal claim they carried exactly the weight of any finite
+test against an infinite domain: none. A pattern’s persistence is a
+reason to seek a proof, never a substitute for one.</em></p>
+</div>
+<h2 data-number="1.3" id="sec:ch001-foundation-boundary"><span
+class="header-section-number">1.3</span> Integers and Induction</h2>
+<p>Induction will turn a local successor step into a claim about every
+nonnegative integer. To use that power without hiding its foundations,
+we must say what structure is being assumed. The integers come with
+their familiar arithmetic and order: addition and multiplication obey
+the usual commutative and distributive laws, cancellation is valid, the
+order is compatible with addition and with multiplication by a positive
+integer, and <span class="math inline">\(1\)</span> is the least
+positive integer. We also use ordinary classical reasoning and
+mathematical induction. Later chapters will construct number systems and
+formalize the underlying logic; doing so here would obscure the
+elementary number theory rather than clarify it.</p>
+<p>We write <span class="math display">\[\N_0=\{0,1,2,\ldots\},\qquad
+  \N_{&gt;0}=\{1,2,3,\ldots\}.\]</span> At this stage the notation
+simply names the familiar nonnegative and positive integers; a general
+theory of sets is not needed for what follows.</p>
+<p>The least-positive-integer assumption makes the order discrete: a
+strict gap between two integers contains at least one whole step. This
+elementary fact will support the least-witness and descent arguments
+that follow.</p>
+<div id="lem:ch001-discrete-order" class="lemma">
+<p><strong>Lemma 1.9</strong> (Discrete order). <em>If <span
+class="math inline">\(m,n\in\Z\)</span> and <span
+class="math inline">\(m&lt;n\)</span>, then <span
+class="math inline">\(m+1\le n\)</span>.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Since <span class="math inline">\(m&lt;n\)</span>,
+order compatibility gives <span class="math inline">\(n-m&gt;0\)</span>.
+Discreteness says every positive integer is at least <span
+class="math inline">\(1\)</span>, so <span
+class="math inline">\(n-m\ge1\)</span>. Adding <span
+class="math inline">\(m\)</span> to both sides gives <span
+class="math inline">\(n\ge m+1\)</span>. ◻</p>
+</div>
+<div id="pr:ch001-induction" class="principle">
+<p><strong>Principle 1.10</strong> (Mathematical induction). <em>Let
+<span class="math inline">\(P(n)\)</span> be a predicate on <span
+class="math inline">\(\N_0\)</span>. If <span
+class="math inline">\(P(0)\)</span> is true and <span
+class="math display">\[\forall n\in\N_0,\qquad P(n)\Rightarrow
+P(n+1),\]</span> then <span class="math inline">\(P(n)\)</span> is true
+for every <span class="math inline">\(n\in\N_0\)</span>.</em></p>
+</div>
+<p>The base case anchors the argument. The inductive step is a universal
+implication: it must work for an arbitrary <span
+class="math inline">\(n\)</span>, and it may assume <span
+class="math inline">\(P(n)\)</span> only to prove <span
+class="math inline">\(P(n+1)\)</span>. Induction does not say “the
+pattern continues.” It proves that no first failure can occur.</p>
+<p>An individual problem can force inductive reasoning before anyone has
+isolated induction as a principle. Consider the first rows of the
+arithmetical triangle: <span
+class="math display">\[\begin{array}{ccccccc}
+  &amp;&amp;&amp;1&amp;&amp;&amp;\\
+  &amp;&amp;1&amp;&amp;1&amp;&amp;\\
+  &amp;1&amp;&amp;2&amp;&amp;1&amp;\\
+  1&amp;&amp;3&amp;&amp;3&amp;&amp;1
+\end{array}\]</span> If <span class="math inline">\(T_{n,k}\)</span>
+denotes entry <span class="math inline">\(k\)</span> of row <span
+class="math inline">\(n\)</span>, with rows and positions numbered from
+<span class="math inline">\(0\)</span>, then each interior entry obeys
+<span class="math display">\[T_{n+1,k}=T_{n,k-1}+T_{n,k}.\]</span> Once
+a property of row <span class="math inline">\(n\)</span> is known, the
+displayed rule suggests how it might be carried to row <span
+class="math inline">\(n+1\)</span>. But the rule belongs to this
+triangle; by itself it does not yet say what counts as a valid induction
+for an arbitrary predicate.</p>
+<p>That separation between a recurring construction and a general proof
+schema has no single uncontested birthday. Historians have reconstructed
+problem-specific inductive arguments in the algebraic work of al-Karajī
+and al-Samaw’al and in the fourteenth-century arithmetic of Levi ben
+Gershon. Hara describes Pascal’s 1654 work on the arithmetical triangle
+as a decisive move toward systematic, nearly abstract formulation,
+rather than as the first occasion on which anyone ever reasoned
+recursively <span class="citation"
+data-cites="rashed1972induction rabinovitch1970induction hara1962pascal">(Rashed
+1972, 1–21; Rabinovitch 1970, 237–48; Hara 1962, 287–302)</span>. The
+historical progression clarifies the logical one now visible in the
+diagram: using one recurrence is not yet the same achievement as
+isolating a principle that governs every predicate on the nonnegative
+integers. We use the later abstraction because it lets one proof
+mechanism travel from this picture of numbers to any discrete
+construction.</p>
+<div id="ex:ch001-odd-sum" class="example">
+<p><strong>Example 1.11</strong> (The sum of the first odd integers).
+<em>For every <span class="math inline">\(n\in\N_0\)</span>, <span
+class="math display">\[1+3+\cdots+(2n-1)=n^2,\]</span> where the sum is
+empty and equals <span class="math inline">\(0\)</span> when <span
+class="math inline">\(n=0\)</span>.</em></p>
+<p><em>For <span class="math inline">\(n=0\)</span>, both sides are
+<span class="math inline">\(0\)</span>. Assume the identity holds for an
+arbitrary <span class="math inline">\(n\)</span>. The next odd integer
+is <span class="math inline">\(2(n+1)-1=2n+1\)</span>, so <span
+class="math display">\[\bigl(1+3+\cdots+(2n-1)\bigr)+(2n+1)
+=n^2+2n+1=(n+1)^2.\]</span> The induction hypothesis was used exactly
+once to replace the partial sum. Geometrically, the next odd number is
+the border that enlarges an <span
+class="math inline">\(n\)</span>-by-<span
+class="math inline">\(n\)</span> square to an <span
+class="math inline">\((n+1)\)</span>-by-<span
+class="math inline">\((n+1)\)</span> square; algebraically, it is
+exactly the correction from <span class="math inline">\(n^2\)</span> to
+<span class="math inline">\((n+1)^2\)</span>. The picture suggests the
+right induction, but a valid base case and a uniform step are what prove
+the identity.</em></p>
+</div>
+<p>Induction moves forward: an initial case is secured, and a uniform
+step propagates truth through the integers. The same discreteness can be
+viewed from the opposite direction. If something happens at all among
+nonnegative integers, can we locate the first place where it happens?
+That question leads to well-ordering. Its importance is not merely that
+a least number can be named; a least witness can be challenged by
+constructing something smaller.</p>
+<div id="thm:ch001-well-ordering" class="theorem">
+<p><strong>Theorem 1.12</strong> (Well-ordering). <em>Let <span
+class="math inline">\(P(n)\)</span> be a predicate on <span
+class="math inline">\(\N_0\)</span>. If <span
+class="math inline">\(P(n)\)</span> is true for at least one <span
+class="math inline">\(n\in\N_0\)</span>, then there is an <span
+class="math inline">\(m\in\N_0\)</span> such that <span
+class="math inline">\(P(m)\)</span> is true and <span
+class="math display">\[\forall k\in\N_0,\qquad P(k)\Rightarrow m\le
+k.\]</span> In words, every inhabited collection of nonnegative integer
+witnesses has a least witness.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Assume <span class="math inline">\(P\)</span> has a
+witness but no least witness. For <span
+class="math inline">\(n\in\N_0\)</span>, let <span
+class="math inline">\(Q(n)\)</span> be the statement “<span
+class="math inline">\(P(k)\)</span> is false for every integer <span
+class="math inline">\(k\)</span> with <span class="math inline">\(0\le
+k\le n\)</span>.”</p>
+<p>For <span class="math inline">\(n=0\)</span>, if <span
+class="math inline">\(P(0)\)</span> were true then <span
+class="math inline">\(0\)</span> would be a least witness, because every
+nonnegative integer is at least <span class="math inline">\(0\)</span>.
+Hence <span class="math inline">\(Q(0)\)</span> is true.</p>
+<p>Now assume <span class="math inline">\(Q(n)\)</span>. If <span
+class="math inline">\(P(n+1)\)</span> were true, then every nonnegative
+integer <span class="math inline">\(k&lt;n+1\)</span> would satisfy
+<span class="math inline">\(k\le n\)</span> by discrete order, and hence
+would fail <span class="math inline">\(P\)</span> by <span
+class="math inline">\(Q(n)\)</span>. Therefore <span
+class="math inline">\(n+1\)</span> would be a least witness. This
+contradicts the assumption that no least witness exists. Thus <span
+class="math inline">\(P(n+1)\)</span> is false, and together with <span
+class="math inline">\(Q(n)\)</span> this proves <span
+class="math inline">\(Q(n+1)\)</span>.</p>
+<p>Induction yields <span class="math inline">\(Q(n)\)</span> for every
+<span class="math inline">\(n\in\N_0\)</span>. Therefore <span
+class="math inline">\(P\)</span> has no witness, contradicting the
+original hypothesis. A least witness must exist. ◻</p>
+</div>
+<p>This is a minimal-counterexample argument run in reverse: if no
+success could be first, the absence of success would propagate through
+the whole domain.</p>
+<p>Sometimes a construction of size <span
+class="math inline">\(n\)</span> is assembled not from the case <span
+class="math inline">\(n-1\)</span> alone, but from whichever smaller
+case the problem happens to reveal. A factor of <span
+class="math inline">\(n\)</span>, for example, need not equal <span
+class="math inline">\(n-1\)</span>. The next form of induction allows
+the argument to use the entire verified past. It adds no new axiom; it
+packages earlier conclusions so that the appropriate one is available
+when needed.</p>
+<div id="thm:ch001-strong-induction" class="theorem">
+<p><strong>Theorem 1.13</strong> (Strong induction). <em>Let <span
+class="math inline">\(P(n)\)</span> be a predicate on <span
+class="math inline">\(\N_0\)</span>. Suppose that for every <span
+class="math inline">\(n\in\N_0\)</span>, <span
+class="math display">\[\bigl(\forall k\in\N_0,\ k&lt;n\Rightarrow
+P(k)\bigr)
+  \quad\Longrightarrow\quad P(n).\]</span> Then <span
+class="math inline">\(P(n)\)</span> holds for every <span
+class="math inline">\(n\in\N_0\)</span>.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Define <span class="math inline">\(Q(n)\)</span> to
+mean that <span class="math inline">\(P(k)\)</span> holds for every
+<span class="math inline">\(k\)</span> with <span
+class="math inline">\(0\le k\le n\)</span>. For <span
+class="math inline">\(n=0\)</span>, the hypothesis of strong induction
+has no earlier <span class="math inline">\(k\)</span> to check, so it
+gives <span class="math inline">\(P(0)\)</span> and hence <span
+class="math inline">\(Q(0)\)</span>.</p>
+<p>Assume <span class="math inline">\(Q(n)\)</span>. If <span
+class="math inline">\(k\in\N_0\)</span> and <span
+class="math inline">\(k&lt;n+1\)</span>, discrete order gives <span
+class="math inline">\(k\le n\)</span>, so <span
+class="math inline">\(Q(n)\)</span> gives <span
+class="math inline">\(P(k)\)</span>. The stated strong-step hypothesis
+therefore gives <span class="math inline">\(P(n+1)\)</span>. Together
+with <span class="math inline">\(Q(n)\)</span>, this gives <span
+class="math inline">\(Q(n+1)\)</span>. Ordinary induction now proves
+<span class="math inline">\(Q(n)\)</span> for every <span
+class="math inline">\(n\)</span>, and each <span
+class="math inline">\(Q(n)\)</span> includes <span
+class="math inline">\(P(n)\)</span>. ◻</p>
+</div>
+<p>Strong induction is therefore not a stronger axiom here. It is
+ordinary induction applied to accumulated information.</p>
+<div id="ex:ch001-strong-induction-coins" class="example">
+<p><strong>Example 1.14</strong> (Why strong induction sometimes needs a
+block of bases). <em>We prove that every integer <span
+class="math inline">\(n\ge8\)</span> can be written <span
+class="math inline">\(n=3a+5b\)</span> with <span
+class="math inline">\(a,b\in\N_0\)</span>. Apply strong induction to the
+shifted predicate <span class="math inline">\(Q(m)\)</span> asserting
+that <span class="math inline">\(8+m\)</span> has such a representation.
+The first three cases are <span class="math display">\[8=3+5,\qquad
+9=3+3+3,\qquad 10=5+5\]</span> and are not random tests: they form the
+consecutive base block needed by a step that subtracts <span
+class="math inline">\(3\)</span>. For <span
+class="math inline">\(m\ge3\)</span>, suppose <span
+class="math inline">\(Q(j)\)</span> holds for every <span
+class="math inline">\(j&lt;m\)</span> and put <span
+class="math inline">\(n=8+m\)</span>. The index <span
+class="math inline">\(m-3\)</span> is nonnegative and smaller than <span
+class="math inline">\(m\)</span>, so <span
+class="math inline">\(Q(m-3)\)</span> gives <span
+class="math inline">\(n-3=3a+5b\)</span>. Then <span
+class="math inline">\(n=3(a+1)+5b\)</span>, completing the
+strong-induction step.</em></p>
+<p><em>The nearby failure mode shows why the bases carry logical weight.
+For the predicate <span class="math inline">\(P(n)\)</span> meaning
+<span class="math inline">\(n\ge1\)</span> on <span
+class="math inline">\(\N_0\)</span>, the implication <span
+class="math inline">\(P(n)\Rightarrow P(n+1)\)</span> is true for every
+<span class="math inline">\(n\)</span>, yet <span
+class="math inline">\(P(0)\)</span> is false. Therefore the step alone
+proves nothing about the starting point. Nor should existence be
+confused with uniqueness: larger integers can have more than one
+representation <span class="math inline">\(3a+5b\)</span>.</em></p>
+</div>
+<p>Well-ordering also turns a hypothetical failure into a concrete
+target. To prove <span class="math inline">\(P(n)\)</span> for all <span
+class="math inline">\(n\in\N_0\)</span>, one may suppose that
+counterexamples exist and choose the least one, say <span
+class="math inline">\(m\)</span>. If the structure of the problem then
+produces a smaller counterexample, or lets earlier valid cases prove
+<span class="math inline">\(P(m)\)</span>, the chosen <span
+class="math inline">\(m\)</span> cannot exist. This
+minimal-counterexample method is induction expressed as the
+impossibility of a first failure.</p>
+<p>Seventeenth-century correspondence supplies a revealing instance of
+this reverse viewpoint. In a 1659 communication to Pierre de Carcavi,
+Fermat described what he called infinite or indefinite descent: a
+hypothetical integer right triangle with square area would yield another
+such triangle that was strictly smaller, and the same production could
+be repeated <span class="citation"
+data-cites="fermat1894oeuvres">(Fermat 1894, vol. 2, vol. II,
+pp. 431–432)</span>. The surviving account is a sketch transmitted
+through correspondence, not a proof written in the formal architecture
+below. Its mathematical lesson is nevertheless exact. The well-ordering
+principle forbids the endless chain, but it does not invent the map from
+one alleged counterexample to a smaller one. Finding that
+problem-specific transformation is where the creative difficulty of a
+descent proof lies.</p>
+<p>There is a further change of viewpoint hidden here. Once a changing
+state is assigned a nonnegative integer measure, an order-theoretic fact
+becomes a statement about time: strict descent cannot continue forever.
+The theorem below isolates that mechanism so that later termination
+arguments need only identify the correct measure and verify its
+decrease.</p>
+<div id="thm:ch001-descent-termination" class="theorem">
+<p><strong>Theorem 1.15</strong> (Strict descent terminates).
+<em>Consider a discrete-step procedure. Call a state <em>terminal</em>
+if no transition leaves it, and call a run <em>maximal</em> if it is
+infinite or ends at a state from which it cannot be extended. Suppose
+every reachable state has a nonnegative integer measure and every
+transition from a nonterminal state strictly decreases that measure.
+Then no run can continue indefinitely, and every maximal run reaches a
+terminal state after finitely many steps.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Suppose, for contradiction, that a particular run
+continues indefinitely. Let <span class="math inline">\(R(m)\)</span>
+mean that a state of measure <span class="math inline">\(m\)</span>
+occurs somewhere on this run. The predicate <span
+class="math inline">\(R\)</span> has a witness, and every witness lies
+in <span class="math inline">\(\N_0\)</span>. By <a
+href="#thm:ch001-well-ordering" data-reference-type="ref+label"
+data-reference="thm:ch001-well-ordering">1.12</a>, there is a least
+measure <span class="math inline">\(m\)</span> occurring along this
+particular run. When the run reaches a state with measure <span
+class="math inline">\(m\)</span>, that state cannot be terminal, because
+the same run continues to a next state. The next state has a nonnegative
+integer measure strictly smaller than <span
+class="math inline">\(m\)</span>, and it also occurs on the same run.
+This contradicts the choice of <span class="math inline">\(m\)</span>.
+Hence no infinite run exists. Every maximal run is therefore finite. Its
+final state admits no further transition by maximality, so it is
+terminal. ◻</p>
+</div>
+<p>The theorem proves termination only after a suitable measure and
+strict decrease have been established. Saying “the numbers seem to get
+smaller” is not a termination proof: a visual pattern may fail on an
+untested branch, or a quantity may decrease while leaving the domain in
+which descent is impossible. One must prove that the measure remains in
+a well-ordered set and decreases on every continuing step. This
+separates two kinds of understanding that are often
+conflated—recognizing a trend and identifying a structure that makes the
+trend logically irreversible.</p>
+<p>The measure’s codomain deserves the same scrutiny as its decrease.
+Strict descent sounds self-terminating, as if “the quantity keeps
+dropping” were already the proof, and the insistence on nonnegative
+integers might look like mere caution about negative values. Fractions
+expose the real reason. Consider a procedure whose <span
+class="math inline">\(n\)</span>th state carries the measure <span
+class="math inline">\(1/n\)</span>, so that a run visits <span
+class="math display">\[1,\quad\tfrac12,\quad\tfrac13,\quad\tfrac14,\quad\ldots\]</span>
+Every value is positive, and every transition strictly decreases the
+measure, since <span class="math inline">\(1/(n+1)&lt;1/n\)</span> is
+the integer comparison <span class="math inline">\(n&lt;n+1\)</span>
+after clearing denominators. Yet the run never terminates. The proof
+above shows exactly where this example escapes: it applied <a
+href="#thm:ch001-well-ordering" data-reference-type="ref+label"
+data-reference="thm:ch001-well-ordering">1.12</a> to the measures
+occurring along the run, and among positive fractions such a collection
+can fail to contain a least element—the values <span
+class="math inline">\(1,\tfrac12,\tfrac13,\ldots\)</span> have none.
+What terminates a descent is not decrease but the impossibility of
+infinite decrease, and that is a property of the receiving order, not of
+the arrow’s direction. The nonnegative integers have it; the positive
+fractions do not.</p>
+<p>One identification of shared structure is worth a sentence here,
+recorded as orientation and carrying no logical weight in any proof of
+this book: an iterative optimization procedure that reports a strictly
+smaller loss after every step—as training procedures for modern learning
+systems routinely do—has exhibited a descent measure into positive
+quantities that need not be integers, so the decrease by itself proves
+neither that the procedure halts nor that any state attains a least
+loss, and the run <span
+class="math inline">\(1,\tfrac12,\tfrac13,\ldots\)</span> is already a
+complete counterexample to both hopes.</p>
+<h2 data-number="1.4" id="sec:ch001-divisibility"><span
+class="header-section-number">1.4</span> Divisibility: Turning a
+Relation into a Witness</h2>
+<p>We used divisibility earlier as an example of a predicate; now we
+examine the algebra carried by its witness. The phrase “<span
+class="math inline">\(a\)</span> goes evenly into <span
+class="math inline">\(b\)</span>” hides the object that makes it true.
+Exposing that integer multiplier turns an informal relation into an
+equation that can be substituted, combined, and transported through a
+proof.</p>
+<p>Signs will repeatedly obscure this structure without changing it.
+Before formalizing divisibility, we therefore name the operation that
+forgets sign while retaining magnitude.</p>
+<div id="def:ch001-absolute-value" class="definition">
+<p><strong>Definition 1.16</strong> (Absolute value). <em>For <span
+class="math inline">\(a\in\Z\)</span>, <span
+class="math display">\[|a|=\begin{cases}
+       a,&amp;a\ge0,\\
+       -a,&amp;a&lt;0.
+     \end{cases}\]</span> Thus <span
+class="math inline">\(|a|\ge0\)</span>, and <span
+class="math inline">\(|a|=0\)</span> exactly when <span
+class="math inline">\(a=0\)</span>.</em></p>
+</div>
+<p>The identities <span class="math inline">\(|-a|=|a|\)</span> and
+<span class="math inline">\(|ab|=|a||b|\)</span> follow by considering
+the signs of <span class="math inline">\(a\)</span> and <span
+class="math inline">\(b\)</span>. For the product identity there are
+four cases. If both factors are nonnegative, it is the ordinary equality
+<span class="math inline">\(ab=ab\)</span>. If exactly one is negative,
+both sides equal <span class="math inline">\(-(ab)\)</span>. If both are
+negative, their product is nonnegative and both sides equal <span
+class="math inline">\(ab=(-a)(-b)\)</span>. This sign distinction
+matters whenever an algorithm first replaces inputs by their absolute
+values.</p>
+<div id="def:ch001-divisibility" class="definition">
+<p><strong>Definition 1.17</strong> (Divisibility). <em>For integers
+<span class="math inline">\(a,b\)</span>, we say that <span
+class="math inline">\(a\)</span> <em>divides</em> <span
+class="math inline">\(b\)</span>, and write <span
+class="math inline">\(a\mid b\)</span>, if <span
+class="math display">\[\exists k\in\Z,\qquad b=ak.\]</span> The integer
+<span class="math inline">\(k\)</span> is a divisibility witness. We
+write <span class="math inline">\(a\nmid b\)</span> for the
+negation.</em></p>
+</div>
+<p>It is tempting to paraphrase <span class="math inline">\(a\mid
+b\)</span> as “<span class="math inline">\(b/a\)</span> is an integer.”
+For <span class="math inline">\(a\ne0\)</span> the paraphrase is
+equivalent, but it is a poor definition: it invokes division before
+division has been controlled, and it is meaningless when <span
+class="math inline">\(a=0\)</span>. The witness equation <span
+class="math inline">\(b=ak\)</span> uses only integer multiplication and
+still makes sense at the boundary. More generally, a durable definition
+is chosen not only for familiar cases but for the structure it preserves
+when the setting is enlarged.</p>
+<p>The notation is easy to read backward, so fix the convention once:
+the potential factor sits on the left, the multiple on the right. For
+example, <span class="math inline">\(-4\mid12\)</span> because <span
+class="math inline">\(12=(-4)(-3)\)</span>. The boundary cases contain
+useful information: <span class="math display">\[\forall a\in\Z,\
+a\mid0,
+  \qquad
+  0\mid b\ \Longleftrightarrow\ b=0.\]</span> The first statement uses
+witness <span class="math inline">\(0\)</span>. For the second, <span
+class="math inline">\(b=0k\)</span> forces <span
+class="math inline">\(b=0\)</span>, and if <span
+class="math inline">\(b=0\)</span> any integer <span
+class="math inline">\(k\)</span> is a witness.</p>
+<div id="prop:ch001-divisibility-calculus" class="proposition">
+<p><strong>Proposition 1.18</strong> (Divisibility calculus). <em>For
+integers <span class="math inline">\(a,b,c,d,m,n\)</span>:</em></p>
+<ol>
+<li><p><em><span class="math inline">\(a\mid a\)</span>, <span
+class="math inline">\(1\mid a\)</span>, and <span
+class="math inline">\(a\mid0\)</span>;</em></p></li>
+<li><p><em>if <span class="math inline">\(a\mid b\)</span> and <span
+class="math inline">\(b\mid c\)</span>, then <span
+class="math inline">\(a\mid c\)</span>;</em></p></li>
+<li><p><em>if <span class="math inline">\(d\mid a\)</span> and <span
+class="math inline">\(d\mid b\)</span>, then <span
+class="math inline">\(d\mid(ma+nb)\)</span>;</em></p></li>
+<li><p><em>if <span class="math inline">\(a\mid b\)</span>, then <span
+class="math inline">\(a\mid bc\)</span>;</em></p></li>
+<li><p><em>if <span class="math inline">\(a\mid b\)</span> and <span
+class="math inline">\(b\mid a\)</span>, then <span
+class="math inline">\(a=b\)</span> or <span
+class="math inline">\(a=-b\)</span>.</em></p></li>
+</ol>
+</div>
+<div class="proof">
+<p><em>Proof.</em> For (i), the equations <span
+class="math inline">\(a=a\cdot1\)</span>, <span
+class="math inline">\(a=1\cdot a\)</span>, and <span
+class="math inline">\(0=a\cdot0\)</span> provide the required
+witnesses.</p>
+<p>For (ii), choose <span class="math inline">\(u,v\in\Z\)</span> with
+<span class="math inline">\(b=au\)</span> and <span
+class="math inline">\(c=bv\)</span>. Substitution gives <span
+class="math inline">\(c=(au)v=a(uv)\)</span>, and <span
+class="math inline">\(uv\in\Z\)</span>, so <span
+class="math inline">\(a\mid c\)</span>.</p>
+<p>For (iii), choose <span class="math inline">\(u,v\in\Z\)</span> with
+<span class="math inline">\(a=du\)</span> and <span
+class="math inline">\(b=dv\)</span>. Then <span
+class="math display">\[ma+nb=mdu+ndv=d(mu+nv),\]</span> and <span
+class="math inline">\(mu+nv\in\Z\)</span> is a witness.</p>
+<p>For (iv), write <span class="math inline">\(b=ak\)</span>. Then <span
+class="math inline">\(bc=a(kc)\)</span>, so <span
+class="math inline">\(a\mid bc\)</span>.</p>
+<p>For (v), first suppose <span class="math inline">\(a=0\)</span>. The
+relation <span class="math inline">\(0\mid b\)</span> forces <span
+class="math inline">\(b=0\)</span>, hence <span
+class="math inline">\(a=b\)</span>. Now suppose <span
+class="math inline">\(a\ne0\)</span>. Choose <span
+class="math inline">\(u,v\in\Z\)</span> with <span
+class="math inline">\(b=au\)</span> and <span
+class="math inline">\(a=bv\)</span>. Then <span
+class="math inline">\(a=auv\)</span>, and cancellation of the nonzero
+integer <span class="math inline">\(a\)</span> gives <span
+class="math inline">\(uv=1\)</span>. The only integer factors of <span
+class="math inline">\(1\)</span> are <span
+class="math inline">\(1,1\)</span> and <span
+class="math inline">\(-1,-1\)</span>: indeed <span
+class="math inline">\(|u||v|=1\)</span>, while a nonzero absolute value
+is at least <span class="math inline">\(1\)</span>. Therefore <span
+class="math inline">\(u=1\)</span> or <span
+class="math inline">\(u=-1\)</span>, so <span
+class="math inline">\(b=a\)</span> or <span
+class="math inline">\(b=-a\)</span>. ◻</p>
+</div>
+<p>The reusable mechanism is witness algebra. No picture of factors can
+replace the equations that carry the witnesses through the proof.</p>
+<p>Part (iii) will do most of the work later. It says that the common
+divisors of two integers survive every integer linear combination of
+them. The individual identities above are less important than this
+closure principle: it is the bridge from divisibility to greatest common
+divisors, Bézout identities, and integer equations.</p>
+<p>One superficially similar rule is false. The implication <span
+class="math display">\[d\mid ab\quad\Longrightarrow\quad d\mid a\
+\text{or}\ d\mid b\]</span> is false for general <span
+class="math inline">\(d\)</span>. We have <span
+class="math inline">\(6\mid2\cdot3\)</span>, but <span
+class="math inline">\(6\nmid2\)</span> and <span
+class="math inline">\(6\nmid3\)</span>. A later theorem repairs the
+claim when <span class="math inline">\(d\)</span> is prime. The failed
+example is not an isolated warning: it poses the question that will
+eventually force the distinction between prime and composite
+divisors.</p>
+<div class="example">
+<p><strong>Example 1.19</strong> (Transporting divisibility through a
+linear combination). <em>Assume <span class="math inline">\(7\mid
+a\)</span> and <span class="math inline">\(7\mid b\)</span>. To prove
+<span class="math inline">\(7\mid(3a-5b)\)</span>, unpack the
+hypotheses: <span class="math inline">\(a=7u\)</span> and <span
+class="math inline">\(b=7v\)</span> for some <span
+class="math inline">\(u,v\in\Z\)</span>. Then <span
+class="math display">\[3a-5b=21u-35v=7(3u-5v).\]</span> Because <span
+class="math inline">\(3u-5v\)</span> is an integer, it is the required
+witness. Merely saying “divisibility is closed under linear
+combinations” would cite <a href="#prop:ch001-divisibility-calculus"
+data-reference-type="ref+label"
+data-reference="prop:ch001-divisibility-calculus">1.18</a>; this
+expanded version shows why.</em></p>
+</div>
+<h2 data-number="1.5" id="sec:ch001-division"><span
+class="header-section-number">1.5</span> Division with Remainder</h2>
+<p>Divisibility is exact, but most pairs of integers do not divide
+evenly. The next best representation separates a multiple from a
+controlled error: <span class="math display">\[a=bq+r.\]</span> Without
+a restriction on <span class="math inline">\(r\)</span>, the
+representation is meaningless: replacing <span
+class="math inline">\(q\)</span> by <span
+class="math inline">\(q-1\)</span> replaces <span
+class="math inline">\(r\)</span> by <span
+class="math inline">\(r+b\)</span>. The interval <span
+class="math inline">\(0\le r&lt;b\)</span> selects one canonical
+representative.</p>
+<p>The word <em>canonical</em> is doing real work. There are infinitely
+many true equations <span class="math inline">\(a=bq+r\)</span> for a
+fixed pair <span class="math inline">\(a,b\)</span>; the remainder
+window chooses exactly one of them. Structure often enters mathematics
+in this way: first recognize an ambiguity, then impose a condition that
+selects one representative without discarding the information of
+interest. Here both existence and uniqueness must be proved; neither
+follows merely from adopting the convention.</p>
+<div id="thm:ch001-division-algorithm" class="theorem">
+<p><strong>Theorem 1.20</strong> (Division algorithm). <em>Let <span
+class="math inline">\(a,b\in\Z\)</span> with <span
+class="math inline">\(b&gt;0\)</span>. There exist unique integers <span
+class="math inline">\(q,r\)</span> such that <span
+class="math display">\[a=bq+r,
+  \qquad 0\le r&lt;b.\]</span></em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> <em>Existence.</em> Consider the predicate <span
+class="math display">\[P(s):\quad s\ge0\ \text{and}\ \exists q\in\Z\
+(s=a-bq).\]</span> It has a nonnegative integer witness. If <span
+class="math inline">\(a\ge0\)</span>, take <span
+class="math inline">\(q=0\)</span> and <span
+class="math inline">\(s=a\)</span>. If <span
+class="math inline">\(a&lt;0\)</span>, take <span
+class="math inline">\(q=a\)</span>. Since <span
+class="math inline">\(b\ge1\)</span>, both <span
+class="math inline">\(a\)</span> and <span
+class="math inline">\(1-b\)</span> are nonpositive, so <span
+class="math display">\[s=a-ba=a(1-b)\ge0.\]</span> By <a
+href="#thm:ch001-well-ordering" data-reference-type="ref+label"
+data-reference="thm:ch001-well-ordering">1.12</a>, choose the least
+witness <span class="math inline">\(r\)</span>, with <span
+class="math inline">\(r=a-bq\)</span> for some <span
+class="math inline">\(q\in\Z\)</span>.</p>
+<p>If <span class="math inline">\(r\ge b\)</span>, then <span
+class="math display">\[r-b=a-b(q+1)\ge0.\]</span> This is another
+witness for <span class="math inline">\(P\)</span>, but it is strictly
+smaller than <span class="math inline">\(r\)</span>, a contradiction.
+Hence <span class="math inline">\(0\le r&lt;b\)</span>, and rearranging
+<span class="math inline">\(r=a-bq\)</span> gives <span
+class="math inline">\(a=bq+r\)</span>.</p>
+<p><em>Uniqueness.</em> Suppose <span
+class="math display">\[a=bq+r=bq&#39;+r&#39;,\qquad 0\le
+r,r&#39;&lt;b.\]</span> Subtracting gives <span
+class="math display">\[b(q-q&#39;)=r&#39;-r.\]</span> If <span
+class="math inline">\(q-q&#39;\ge1\)</span>, the left side is at least
+<span class="math inline">\(b\)</span>, whereas <span
+class="math inline">\(r&#39;-r&lt;b\)</span>. If <span
+class="math inline">\(q-q&#39;\le-1\)</span>, the left side is at most
+<span class="math inline">\(-b\)</span>, whereas <span
+class="math inline">\(r&#39;-r&gt;-b\)</span>. Both are impossible.
+Therefore <span class="math inline">\(q=q&#39;\)</span>, and then the
+original equality gives <span
+class="math inline">\(r=r&#39;\)</span>. ◻</p>
+</div>
+<p>Existence came from minimality; uniqueness came from the fact that
+the remainder window is narrower than one nonzero multiple of <span
+class="math inline">\(b\)</span>. The two parts answer different
+questions and use different features of the integers.</p>
+<figure id="fig:ch001-division-block">
+<img class="figure-light" src="figures/ch001-division-block.svg" alt="ch001 division block">
+
+<figcaption>For divisor <span class="math inline">\(5\)</span>, every
+integer lies at a unique offset <span
+class="math inline">\(r\in\{0,1,2,3,4\}\)</span> from a multiple <span
+class="math inline">\(5q\)</span>. The continuous line is only a visual
+organizer; existence and uniqueness are supplied by <a
+href="#thm:ch001-division-algorithm" data-reference-type="ref+label"
+data-reference="thm:ch001-division-algorithm">1.20</a>.</figcaption>
+</figure>
+<p>Congruence classes will later identify all integers that differ by a
+multiple of the divisor. In that language, the remainder is the
+representative selected by the chosen window; here the existence and
+uniqueness just proved contain the whole argument.</p>
+<div class="example">
+<p><strong>Example 1.21</strong> (Negative dividends). <em>Dividing
+<span class="math inline">\(-37\)</span> by <span
+class="math inline">\(5\)</span> gives <span
+class="math display">\[-37=5(-8)+3,
+  \qquad 0\le3&lt;5.\]</span> The tempting equality <span
+class="math inline">\(-37=5(-7)-2\)</span> has an inadmissible negative
+remainder. The theorem does not choose the quotient closest to zero; it
+chooses the unique quotient whose remainder lies in the stated window.
+Negative inputs make the difference between those conventions visible. A
+negative dividend does not confer a negative remainder: the window, not
+the sign, governs the choice.</em></p>
+</div>
+<div id="ex:ch001-remainder-window-audit" class="example">
+<p><strong>Example 1.22</strong> (Why both remainder bounds are
+necessary). <em>The legal representation <span
+class="math inline">\(17=6(2)+5\)</span> becomes nonunique if either
+remainder inequality is removed: <span class="math display">\[17=6(1)+11
+  \qquad\text{and}\qquad
+  17=6(3)-1.\]</span> The first alternative still has <span
+class="math inline">\(r\ge0\)</span> but violates <span
+class="math inline">\(r&lt;6\)</span>; the second still has <span
+class="math inline">\(r&lt;6\)</span> but violates <span
+class="math inline">\(r\ge0\)</span>. Thus both inequalities are needed
+together.</em></p>
+<p><em>The assumption <span class="math inline">\(b&gt;0\)</span> is
+also structural: if <span class="math inline">\(b=0\)</span> or <span
+class="math inline">\(b&lt;0\)</span>, the interval <span
+class="math inline">\(0\le r&lt;b\)</span> is empty. A negative divisor
+is handled by first dividing by <span
+class="math inline">\(|b|\)</span>; from <span
+class="math inline">\(a=|b|q+r\)</span> one obtains <span
+class="math inline">\(a=b(-q)+r\)</span>. This normalization changes the
+quotient sign, not the divisibility information. Other remainder
+conventions are possible, but each requires its own interval and
+uniqueness statement.</em></p>
+</div>
+<p>Division by <span class="math inline">\(2\)</span> is the first
+nontrivial instance of this classification. The two possible remainders
+turn the whole of <span class="math inline">\(\Z\)</span> into two
+mutually exclusive forms, and those forms can be used as hypotheses in
+later arguments rather than rediscovered case by case.</p>
+<div id="def:ch001-parity" class="definition">
+<p><strong>Definition 1.23</strong> (Even and odd). <em>An integer <span
+class="math inline">\(n\)</span> is <em>even</em> if <span
+class="math inline">\(2\mid n\)</span>. It is <em>odd</em> if <span
+class="math inline">\(n=2k+1\)</span> for some <span
+class="math inline">\(k\in\Z\)</span>.</em></p>
+</div>
+<p>Applying <a href="#thm:ch001-division-algorithm"
+data-reference-type="ref+label"
+data-reference="thm:ch001-division-algorithm">1.20</a> with <span
+class="math inline">\(b=2\)</span> shows that every integer is either
+even or odd, and uniqueness of the remainder shows that it cannot be
+both.</p>
+<div id="prop:ch001-even-square" class="proposition">
+<p><strong>Proposition 1.24</strong> (Parity and contraposition).
+<em>For every <span class="math inline">\(n\in\Z\)</span>, if <span
+class="math inline">\(n^2\)</span> is even, then <span
+class="math inline">\(n\)</span> is even.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Assume <span class="math inline">\(n\)</span> is not
+even. Division by <span class="math inline">\(2\)</span> gives a
+remainder <span class="math inline">\(0\)</span> or <span
+class="math inline">\(1\)</span>; the remainder cannot be <span
+class="math inline">\(0\)</span>, so <span
+class="math inline">\(n=2k+1\)</span> for some <span
+class="math inline">\(k\in\Z\)</span>. Therefore <span
+class="math display">\[n^2=(2k+1)^2=4k^2+4k+1=2(2k^2+2k)+1.\]</span>
+Thus <span class="math inline">\(n^2\)</span> has remainder <span
+class="math inline">\(1\)</span> on division by <span
+class="math inline">\(2\)</span> and is not even. We have proved the
+contrapositive, so <a href="#prop:ch001-contrapositive"
+data-reference-type="ref+label"
+data-reference="prop:ch001-contrapositive">1.3</a> gives the stated
+implication. ◻</p>
+</div>
+<p>A direct attempt would begin with <span
+class="math inline">\(n^2=2m\)</span> and try to extract a factor <span
+class="math inline">\(2\)</span> from <span
+class="math inline">\(n\)</span>; that extraction is exactly the missing
+theorem. Contraposition changes the hypothesis into a representation
+that algebra can use immediately.</p>
+<h2 data-number="1.6" id="sec:ch001-gcd"><span
+class="header-section-number">1.6</span> Greatest Common Divisors as a
+Universal Property</h2>
+<p>Parity classified an integer relative to the single divisor <span
+class="math inline">\(2\)</span>. We now return to the opening pair and
+ask how all of its common divisors can be compressed into one object.
+The word “greatest” can suggest an optimization over a list; the
+structurally useful definition says instead what every other common
+divisor must do. It remains meaningful at <span
+class="math inline">\((0,0)\)</span> and later survives generalization
+beyond ordered integers.</p>
+<div id="def:ch001-gcd" class="definition">
+<p><strong>Definition 1.25</strong> (Common divisor, gcd, and
+coprimality). <em>Let <span class="math inline">\(a,b\in\Z\)</span>. An
+integer <span class="math inline">\(c\)</span> is a <em>common
+divisor</em> of <span class="math inline">\(a\)</span> and <span
+class="math inline">\(b\)</span> if <span class="math inline">\(c\mid
+a\)</span> and <span class="math inline">\(c\mid b\)</span>. A
+<em>greatest common divisor</em> is an integer <span
+class="math inline">\(d\)</span> satisfying</em></p>
+<ol>
+<li><p><em><span class="math inline">\(d\ge0\)</span>;</em></p></li>
+<li><p><em><span class="math inline">\(d\mid a\)</span> and <span
+class="math inline">\(d\mid b\)</span>;</em></p></li>
+<li><p><em>for every <span class="math inline">\(c\in\Z\)</span>, if
+<span class="math inline">\(c\mid a\)</span> and <span
+class="math inline">\(c\mid b\)</span>, then <span
+class="math inline">\(c\mid d\)</span>.</em></p></li>
+</ol>
+<p><em>When it exists it is denoted <span
+class="math inline">\(\gcd(a,b)\)</span>. The integers <span
+class="math inline">\(a,b\)</span> are <em>coprime</em> if <span
+class="math inline">\(\gcd(a,b)=1\)</span>.</em></p>
+</div>
+<p>Clause (iii) is the universal property. It records not merely that
+<span class="math inline">\(d\)</span> is large but that <span
+class="math inline">\(d\)</span> captures all common divisibility
+information. The sign condition makes the representative unique: <span
+class="math inline">\(d\)</span> and <span
+class="math inline">\(-d\)</span> have the same divisors.</p>
+<p>A universal property characterizes an object through its relations to
+every competitor. This is more demanding than pointing to a large entry
+in a list, but it is also more portable: the definition speaks the
+language of divisibility and does not depend on numerical order except
+for the harmless choice of sign. The same style of definition will recur
+when algebra replaces integers by structures in which “largest” may have
+no meaning.</p>
+<div id="ex:ch001-gcd-universal-property" class="example">
+<p><strong>Example 1.26</strong> (Verifying a gcd by its universal
+property). <em>The pair <span class="math inline">\((12,18)\)</span> is
+small enough to expose every clause without hiding the mechanism in a
+long factor list. Let <span class="math inline">\(d=6\)</span>. First,
+<span class="math inline">\(6\ge0\)</span> and <span
+class="math display">\[12=6(2),\qquad18=6(3),\]</span> so <span
+class="math inline">\(6\)</span> is a common divisor. If <span
+class="math inline">\(c\)</span> is any common divisor of <span
+class="math inline">\(12\)</span> and <span
+class="math inline">\(18\)</span>, then witness algebra gives <span
+class="math display">\[c\mid18-12=6.\]</span> Hence every common divisor
+divides <span class="math inline">\(6\)</span>, and the definition
+proves <span class="math inline">\(\gcd(12,18)=6\)</span>.</em></p>
+<p><em>Three nearby candidates show why all clauses are present. The
+integer <span class="math inline">\(3\)</span> is a nonnegative common
+divisor but fails the universal clause because <span
+class="math inline">\(6\nmid3\)</span>. The integer <span
+class="math inline">\(-6\)</span> has the same divisibility information
+but fails nonnegativity. The integer <span
+class="math inline">\(12\)</span> is nonnegative but fails to divide
+<span class="math inline">\(18\)</span>. This verification proves the
+gcd for one pair; the existence theorem below is still needed to know
+that every pair has such an object.</em></p>
+</div>
+<p>The example verifies a candidate once it has been found. It leaves
+the harder question unanswered: why should such a candidate exist for an
+arbitrary pair, and how could one discover it without listing divisors?
+The proof below makes an unexpected choice. Instead of searching among
+common divisors, it searches among positive integer linear combinations
+of the two inputs.</p>
+<p>Why can that apparently sideways search succeed? Suppose <span
+class="math inline">\(d=ax+by\)</span> is the least positive value
+obtainable in this way. If <span class="math inline">\(d\)</span> failed
+to divide <span class="math inline">\(a\)</span>, the remainder after
+dividing <span class="math inline">\(a\)</span> by <span
+class="math inline">\(d\)</span> would still be a linear combination of
+<span class="math inline">\(a\)</span> and <span
+class="math inline">\(b\)</span>, but it would be positive and smaller
+than <span class="math inline">\(d\)</span>. Minimality would then
+contradict itself. The same trap forces <span
+class="math inline">\(d\)</span> to divide <span
+class="math inline">\(b\)</span>. Once both divisibilities are known,
+witness algebra makes every common divisor divide <span
+class="math inline">\(d\)</span>. The formal proof turns this preview
+into an existence argument and then settles uniqueness separately.</p>
+<div id="thm:ch001-gcd-bezout" class="theorem">
+<p><strong>Theorem 1.27</strong> (GCD existence, uniqueness, and Bézout
+identity). <em>For every <span class="math inline">\(a,b\in\Z\)</span>,
+a unique greatest common divisor exists. Moreover, there are integers
+<span class="math inline">\(x,y\)</span> such that <span
+class="math display">\[\gcd(a,b)=ax+by.\]</span></em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> First suppose <span
+class="math inline">\(a=b=0\)</span>. The integer <span
+class="math inline">\(d=0\)</span> satisfies the definition: every
+integer divides both inputs and also divides <span
+class="math inline">\(0\)</span>. The identity <span
+class="math inline">\(0=0\cdot0+0\cdot0\)</span> supplies Bézout
+coefficients.</p>
+<p>Now suppose at least one of <span class="math inline">\(a,b\)</span>
+is nonzero. Positive integer linear combinations exist. If <span
+class="math inline">\(a\ne0\)</span>, then either <span
+class="math inline">\(a&gt;0\)</span> and <span
+class="math inline">\(a=1\cdot a+0\cdot b\)</span>, or <span
+class="math inline">\(a&lt;0\)</span> and <span
+class="math inline">\(-a=(-1)a+0\cdot b\)</span>, is positive. If <span
+class="math inline">\(a=0\)</span>, use <span
+class="math inline">\(b\)</span> or <span
+class="math inline">\(-b\)</span> in the same way. By <a
+href="#thm:ch001-well-ordering" data-reference-type="ref+label"
+data-reference="thm:ch001-well-ordering">1.12</a>, there is a least
+positive integer of the form <span
+class="math display">\[d=ax+by\]</span> with <span
+class="math inline">\(x,y\in\Z\)</span>.</p>
+<p>Divide <span class="math inline">\(a\)</span> by the positive integer
+<span class="math inline">\(d\)</span>: <span
+class="math display">\[a=qd+r,\qquad 0\le r&lt;d.\]</span> Substituting
+the representation of <span class="math inline">\(d\)</span> gives <span
+class="math display">\[r=a-q(ax+by)=(1-qx)a+(-qy)b.\]</span> Thus <span
+class="math inline">\(r\)</span> is also an integer linear combination
+of <span class="math inline">\(a\)</span> and <span
+class="math inline">\(b\)</span>. If <span
+class="math inline">\(r&gt;0\)</span>, it would be a positive such
+combination smaller than <span class="math inline">\(d\)</span>,
+contradicting the choice of <span class="math inline">\(d\)</span>.
+Hence <span class="math inline">\(r=0\)</span>, so <span
+class="math inline">\(d\mid a\)</span>. Dividing <span
+class="math inline">\(b\)</span> by <span
+class="math inline">\(d\)</span> and repeating the same argument proves
+<span class="math inline">\(d\mid b\)</span>.</p>
+<p>Let <span class="math inline">\(c\)</span> be any common divisor of
+<span class="math inline">\(a\)</span> and <span
+class="math inline">\(b\)</span>. By <a
+href="#prop:ch001-divisibility-calculus" data-reference-type="ref+label"
+data-reference="prop:ch001-divisibility-calculus">1.18</a>, <span
+class="math inline">\(c\)</span> divides every integer linear
+combination of <span class="math inline">\(a,b\)</span>, in particular
+<span class="math inline">\(d=ax+by\)</span>. Therefore <span
+class="math inline">\(c\mid d\)</span>. The integer <span
+class="math inline">\(d\)</span> satisfies all three clauses of <a
+href="#def:ch001-gcd" data-reference-type="ref+label"
+data-reference="def:ch001-gcd">1.25</a>, and the displayed
+representation proves Bézout’s identity.</p>
+<p>For uniqueness, suppose <span class="math inline">\(d\)</span> and
+<span class="math inline">\(e\)</span> both satisfy the gcd definition.
+Because <span class="math inline">\(e\)</span> is a common divisor, the
+universal property of <span class="math inline">\(d\)</span> gives <span
+class="math inline">\(e\mid d\)</span>. Similarly <span
+class="math inline">\(d\mid e\)</span>. By <a
+href="#prop:ch001-divisibility-calculus" data-reference-type="ref+label"
+data-reference="prop:ch001-divisibility-calculus">1.18</a>, <span
+class="math inline">\(d=e\)</span> or <span
+class="math inline">\(d=-e\)</span>. Both are nonnegative, so either
+possibility gives <span class="math inline">\(d=e\)</span> (if one is
+zero, so is the other). ◻</p>
+</div>
+<p>The proof has converted two apparently different descriptions into
+one object. The gcd is the nonnegative number that absorbs every common
+divisor, and it is also the least positive value attainable as <span
+class="math inline">\(ax+by\)</span> when the inputs are not both zero.
+Minimality makes every division remainder vanish; closure under linear
+combinations then supplies the universal property. This equivalence is
+the conceptual source of both the Euclidean algorithm and the
+solvability criterion for linear integer equations.</p>
+<p>More precisely, if <span class="math inline">\(d=\gcd(a,b)\)</span>,
+then the theorem determines the entire range of integer linear
+combinations: <span
+class="math display">\[\{ax+by:x,y\in\Z\}=\{dk:k\in\Z\}.\]</span> Every
+value on the left is divisible by <span
+class="math inline">\(d\)</span>. Conversely, if <span
+class="math inline">\(d=ax_0+by_0\)</span>, then <span
+class="math inline">\(dk=a(kx_0)+b(ky_0)\)</span> for every <span
+class="math inline">\(k\in\Z\)</span>. Thus the gcd is not merely one
+extremal common divisor; it generates exactly the values obtainable from
+the two inputs by integer linear combination. Later algebra will call
+this collection the ideal generated by <span
+class="math inline">\(a\)</span> and <span
+class="math inline">\(b\)</span>.</p>
+<p>Before exploiting that equivalence, it is worth settling the boundary
+and sign conventions. They are not afterthoughts: they ensure that the
+universal description names exactly one integer for every input
+pair.</p>
+<div id="cor:ch001-gcd-boundary" class="corollary">
+<p><strong>Corollary 1.28</strong> (Boundary values). <em>For every
+<span class="math inline">\(a\in\Z\)</span>, <span
+class="math display">\[\gcd(a,0)=|a|,
+  \qquad
+  \gcd(0,0)=0.\]</span> If <span
+class="math inline">\((a,b)\ne(0,0)\)</span>, then <span
+class="math inline">\(\gcd(a,b)&gt;0\)</span> and it is also the largest
+positive common divisor in the ordinary order.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> The second identity was handled in the theorem. The
+integer <span class="math inline">\(|a|\)</span> divides <span
+class="math inline">\(a\)</span> and <span
+class="math inline">\(0\)</span>. If <span
+class="math inline">\(c\)</span> divides both <span
+class="math inline">\(a\)</span> and <span
+class="math inline">\(0\)</span>, then <span class="math inline">\(c\mid
+a\)</span> and hence <span class="math inline">\(c\mid|a|\)</span>,
+since <span class="math inline">\(|a|\)</span> is either <span
+class="math inline">\(a\)</span> or <span
+class="math inline">\(-a\)</span>. Thus <span
+class="math inline">\(|a|\)</span> has the universal property for <span
+class="math inline">\((a,0)\)</span>.</p>
+<p>For a nonzero pair the construction in the theorem produces a
+positive gcd. If <span class="math inline">\(c&gt;0\)</span> is any
+common divisor, then <span class="math inline">\(c\mid d\)</span>, so
+<span class="math inline">\(d=ck\)</span> for an integer <span
+class="math inline">\(k\)</span>. Positivity forces <span
+class="math inline">\(k\ge1\)</span>, and hence <span
+class="math inline">\(c\le d\)</span>. Thus the universal gcd is the
+ordinary largest positive common divisor as well. ◻</p>
+</div>
+<p>The boundary formula also lets us test a sign change without starting
+a new search. The pairs <span class="math inline">\((-12,18)\)</span>
+and <span class="math inline">\((12,18)\)</span> have the same common
+divisors: changing a sign changes a divisibility witness by a sign, but
+it does not change whether a witness exists. Thus both pairs have gcd
+<span class="math inline">\(6\)</span>. This is not a lucky numerical
+coincidence. The universal property makes such symmetries almost
+effortless because reordering the inputs or changing their signs changes
+their appearance but not the set of common divisors.</p>
+<div id="cor:ch001-gcd-symmetry" class="corollary">
+<p><strong>Corollary 1.29</strong> (Symmetry and signs). <em>For all
+<span class="math inline">\(a,b\in\Z\)</span>, <span
+class="math display">\[\gcd(a,b)=\gcd(b,a)=\gcd(|a|,|b|).\]</span></em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> The pairs <span class="math inline">\((a,b)\)</span>
+and <span class="math inline">\((b,a)\)</span> have exactly the same
+common divisors, so the unique nonnegative integer satisfying the gcd
+universal property is the same. Also, an integer divides <span
+class="math inline">\(a\)</span> exactly when it divides <span
+class="math inline">\(|a|\)</span>, and likewise for <span
+class="math inline">\(b\)</span>. Hence replacing either input by its
+absolute value does not change the common divisors or the gcd. ◻</p>
+</div>
+<p>The common divisors of a pair have now been compressed into a single
+generating integer. The mirror question asks the same of the common
+<em>multiples</em>: the integers divisible by both <span
+class="math inline">\(a\)</span> and <span
+class="math inline">\(b\)</span>. Common multiples certainly exist—<span
+class="math inline">\(0\)</span> and <span
+class="math inline">\(ab\)</span> among them—and the same
+universal-property discipline tells us what a canonical representative
+must do: it must be a common multiple that <em>divides</em> every other
+common multiple, so that the whole supply is recovered from one
+integer.</p>
+<div id="def:ch001-lcm" class="definition">
+<p><strong>Definition 1.30</strong> (Least common multiple). <em>A
+<em>least common multiple</em> of <span
+class="math inline">\(a,b\in\Z\)</span> is a nonnegative integer <span
+class="math inline">\(m\)</span> such that <span
+class="math inline">\(a\mid m\)</span> and <span
+class="math inline">\(b\mid m\)</span>, and such that every common
+multiple <span class="math inline">\(c\)</span> of <span
+class="math inline">\(a\)</span> and <span
+class="math inline">\(b\)</span> satisfies <span
+class="math inline">\(m\mid c\)</span>. It is written <span
+class="math inline">\(\lcm(a,b)\)</span>.</em></p>
+</div>
+<p>As with the gcd, two integers satisfying the definition divide each
+other, so by <a href="#prop:ch001-divisibility-calculus"
+data-reference-type="ref+label"
+data-reference="prop:ch001-divisibility-calculus">1.18</a> and
+nonnegativity at most one least common multiple exists; the name and
+notation are justified once existence is proved. Existence could be
+extracted from well-ordering alone, by the division-with-remainder
+argument that produced the gcd. With Bézout coefficients already in
+hand, however, there is a sharper statement available: the gcd and the
+lcm are tied by an exact identity, so the Euclidean machinery of the
+next section will price both at once.</p>
+<div id="thm:ch001-lcm-existence" class="theorem">
+<p><strong>Theorem 1.31</strong> (Existence of the lcm and the <span
+class="math inline">\(\gcd\)</span>–<span
+class="math inline">\(\lcm\)</span> identity). <em>Every pair <span
+class="math inline">\(a,b\in\Z\)</span> has exactly one least common
+multiple. It satisfies <span
+class="math inline">\(\lcm(a,b)=\lcm(|a|,|b|)\)</span> and <span
+class="math inline">\(\lcm(a,0)=0\)</span>, and for <span
+class="math inline">\(a,b&gt;0\)</span>, writing <span
+class="math inline">\(d=\gcd(a,b)\)</span>, <span
+class="math display">\[\lcm(a,b)=\frac{ab}{d},
+  \qquad\text{so that}\qquad
+  \gcd(a,b)\cdot\lcm(a,b)=ab .\]</span></em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Uniqueness was settled above. An integer is a
+multiple of <span class="math inline">\(a\)</span> exactly when it is a
+multiple of <span class="math inline">\(|a|\)</span>, so the common
+multiples of <span class="math inline">\((a,b)\)</span> and of <span
+class="math inline">\((|a|,|b|)\)</span> coincide and the two lcm
+problems have the same solutions. If <span
+class="math inline">\(b=0\)</span>, the multiples of <span
+class="math inline">\(0\)</span> are <span
+class="math inline">\(\{0\}\)</span> alone, so <span
+class="math inline">\(0\)</span> is the only common multiple and it
+trivially divides itself; hence <span
+class="math inline">\(\lcm(a,0)=0\)</span>.</p>
+<p>Now let <span class="math inline">\(a,b&gt;0\)</span> and <span
+class="math inline">\(d=\gcd(a,b)&gt;0\)</span>, and set <span
+class="math inline">\(m_0=ab/d\)</span>, an integer because <span
+class="math inline">\(d\mid a\)</span>. First, <span
+class="math inline">\(m_0\)</span> is a common multiple: <span
+class="math display">\[m_0=\Bigl(\frac{a}{d}\Bigr)b=a\Bigl(\frac{b}{d}\Bigr),\]</span>
+exhibiting witnesses for <span class="math inline">\(b\mid m_0\)</span>
+and <span class="math inline">\(a\mid m_0\)</span>. Second, <span
+class="math inline">\(m_0\)</span> absorbs into every common multiple.
+Let <span class="math inline">\(c\)</span> satisfy <span
+class="math inline">\(c=ax=by\)</span> for integers <span
+class="math inline">\(x,y\)</span>, and choose Bézout coefficients <span
+class="math inline">\(d=au+bv\)</span>. Multiplying the Bézout identity
+by <span class="math inline">\(c\)</span> and substituting each copy of
+<span class="math inline">\(c\)</span> by the representation that
+cancels best, <span
+class="math display">\[cd=c\,au+c\,bv=(by)au+(ax)bv=ab\,(yu+xv),\]</span>
+so <span class="math inline">\(c=m_0(yu+xv)\)</span> and <span
+class="math inline">\(m_0\mid c\)</span>. Thus <span
+class="math inline">\(m_0\)</span> is the least common multiple, and
+<span class="math inline">\(d\cdot m_0=ab\)</span>. ◻</p>
+</div>
+<p>For the running pair, <span
+class="math inline">\(\gcd(12,18)=6\)</span> gives <span
+class="math inline">\(\lcm(12,18)=12\cdot18/6=36\)</span>: indeed <span
+class="math inline">\(36=12\cdot3=18\cdot2\)</span>, and the common
+multiples <span class="math inline">\(36,72,108,\dots\)</span> of <span
+class="math inline">\(12\)</span> and <span
+class="math inline">\(18\)</span> are exactly the multiples of <span
+class="math inline">\(36\)</span>. The identity explains the familiar
+experience that beyond the coprime case the “obvious” common multiple
+<span class="math inline">\(ab\)</span> overshoots: <span
+class="math inline">\(ab\)</span> counts the shared factor <span
+class="math inline">\(d\)</span> twice, once from each input, and
+dividing it out once leaves the tight bound. The proof also completes a
+pleasing symmetry. The gcd generates the values <span
+class="math inline">\(ax+by\)</span>—in later language, the smallest
+ideal containing <span class="math inline">\(a\)</span> and <span
+class="math inline">\(b\)</span>—while the lcm generates the common
+multiples, the <em>intersection</em> of the multiples of <span
+class="math inline">\(a\)</span> with those of <span
+class="math inline">\(b\)</span>. Compression from above and compression
+from below both succeed, and one Euclidean computation prices them both.
+A second description of the lcm—by maximum prime exponents, the mirror
+of the gcd’s minima—must wait until unique factorization is proved later
+in this chapter.</p>
+<p>We have now proved that the universal definition recovers the
+familiar largest positive common divisor. Its advantage is that the
+divisibility invariant is visible in the definition itself. In a
+commutative ring with identity, principal-ideal containment will encode
+divisibility. If the ideal generated by <span
+class="math inline">\(a,b\)</span> is principal, any generator is a
+Bézout gcd. In general, that ideal retains linear-combination
+information that a gcd alone need not capture. For now, the same
+viewpoint tells us what an algorithm is allowed to simplify: it may
+change the pair of integers, provided it preserves all their common
+divisors.</p>
+<h2 data-number="1.7" id="sec:ch001-euclidean-algorithm"><span
+class="header-section-number">1.7</span> The Euclidean Algorithm:
+Invariant Plus Descent</h2>
+<p>The existence proof for the gcd is conceptually powerful but does not
+yet tell us how to find the minimal positive linear combination.
+Division with remainder supplies an executable descent, while an
+invariant proves that no common-divisor information is lost.</p>
+<p>Both halves of that sentence trace back to one algebraic move. A
+division step replaces the pair <span
+class="math inline">\((a,b)\)</span> by <span
+class="math inline">\((b,r)=(b,\,a-qb)\)</span>, and everything the
+algorithm preserves is already visible in this substitution, before any
+inequality on <span class="math inline">\(r\)</span> enters. Three facts
+that we would otherwise establish by three separate inductions—division
+steps preserve the gcd, Bézout coefficients can be transported backward
+through a trace, and the complete solution family of an integer equation
+<span class="math inline">\(ax+by=c\)</span> can be recovered from a
+trace—are corollaries of a single lemma: the substitution is invertible,
+and it preserves the set of integer linear combinations.</p>
+<div id="lem:ch001-invertible-substitution" class="lemma">
+<p><strong>Lemma 1.32</strong> (Invertible substitution). <em>For <span
+class="math inline">\(q\in\Z\)</span> define <span
+class="math inline">\(\sigma_q\colon\Z\times\Z\to\Z\times\Z\)</span> by
+<span class="math inline">\(\sigma_q(a,b)=(b,\,a-qb)\)</span>.</em></p>
+<ol>
+<li><p><em>The map <span class="math inline">\(\sigma_q\)</span> is a
+bijection, with inverse <span
+class="math inline">\((u,v)\mapsto(qu+v,\,u)\)</span>.</em></p></li>
+<li><p><em>Write <span
+class="math inline">\((u,v)=\sigma_q(a,b)\)</span>. Then for all <span
+class="math inline">\(x,y\in\Z\)</span>, <span
+class="math display">\[ax+by=u(qx+y)+vx,\]</span> and the coefficient
+map <span class="math inline">\((x,y)\mapsto(qx+y,\,x)\)</span> is
+exactly the inverse bijection from (i).</em></p></li>
+<li><p><em>Consequently the two pairs generate the same values, <span
+class="math display">\[\{ax+by:x,y\in\Z\}=\{us+vt:s,t\in\Z\},\]</span>
+and an integer is a common divisor of <span
+class="math inline">\(a,b\)</span> if and only if it is a common divisor
+of <span class="math inline">\(u,v\)</span>.</em></p></li>
+</ol>
+</div>
+<div class="proof">
+<p><em>Proof.</em> For (i), compose in both orders. Applying <span
+class="math inline">\((u,v)\mapsto(qu+v,u)\)</span> to <span
+class="math inline">\(\sigma_q(a,b)=(b,\,a-qb)\)</span> returns <span
+class="math inline">\((qb+(a-qb),\,b)=(a,b)\)</span>, and applying <span
+class="math inline">\(\sigma_q\)</span> to <span
+class="math inline">\((qu+v,\,u)\)</span> returns <span
+class="math inline">\((u,\,(qu+v)-qu)=(u,v)\)</span>. A map with a
+two-sided inverse is a bijection.</p>
+<p>For (ii), substitute <span class="math inline">\(u=b\)</span> and
+<span class="math inline">\(v=a-qb\)</span> and expand: <span
+class="math display">\[u(qx+y)+vx=qbx+by+ax-qbx=ax+by.\]</span> The
+coefficient map <span
+class="math inline">\((x,y)\mapsto(qx+y,\,x)\)</span> is the inverse
+computed in (i).</p>
+<p>For (iii), the identity in (ii) shows that every integer of the form
+<span class="math inline">\(ax+by\)</span> is of the form <span
+class="math inline">\(us+vt\)</span>. Conversely, for any <span
+class="math inline">\(s,t\in\Z\)</span>, <span
+class="math display">\[us+vt=bs+(a-qb)t=at+b(s-qt)\]</span> is of the
+form <span class="math inline">\(ax+by\)</span>. The two combination
+sets are therefore equal. Finally, <span class="math inline">\(a=1\cdot
+a+0\cdot b\)</span> and <span class="math inline">\(b=0\cdot a+1\cdot
+b\)</span> lie in the combination set of <span
+class="math inline">\((a,b)\)</span>, and <a
+href="#prop:ch001-divisibility-calculus" data-reference-type="ref+label"
+data-reference="prop:ch001-divisibility-calculus">1.18</a> shows that a
+common divisor of a pair divides every combination of that pair. Hence
+an integer divides both <span class="math inline">\(a\)</span> and <span
+class="math inline">\(b\)</span> exactly when it divides every element
+of the shared combination set, and the same characterization applies to
+<span class="math inline">\(u\)</span> and <span
+class="math inline">\(v\)</span>. ◻</p>
+</div>
+<p>The lemma is a statement about bookkeeping, not yet about size. It
+never mentions a remainder inequality, and it holds for every <span
+class="math inline">\(q\)</span>, useful or not; division with remainder
+will select the one <span class="math inline">\(q\)</span> that makes
+the new pair smaller. What the lemma settles in advance is what a step
+can and cannot destroy. Because <span
+class="math inline">\(\sigma_q\)</span> is invertible, a step of the
+algorithm loses nothing that linear combinations can express: the pair
+changes, the expressible values do not. Read forward, clause (iii) gives
+the remainder invariance proved below. Read backward, clause (ii)
+converts any representation of an integer by the new pair into a
+representation by the old pair—the mechanism behind the extended
+algorithm’s coefficient rules. And because the coefficient map is itself
+a bijection, solutions of <span class="math inline">\(ax+by=c\)</span>
+travel losslessly through an entire trace, which is how the full
+solution family of the linear Diophantine equation will be classified
+later in the chapter.</p>
+<p>Later linear algebra will recognize <span
+class="math inline">\(\sigma_q\)</span> as an invertible linear change
+of coordinates of the integer grid, encoded by a square array of
+integers whose inverse is again integral; such substitutions compose and
+invert without leaving the integers. Nothing below depends on that
+language; we record the sighting because the same three-fold dividend—an
+invariant, transported witnesses, classified solutions—recurs wherever
+such substitutions act.</p>
+<p>The underlying procedure is ancient, although its present form is
+modern. In the surviving text of Euclid’s <em>Elements</em>, Book VII,
+Propositions 1–2 use repeated subtraction and the language of common
+measure to test coprimality and to find a greatest common measure <span
+class="citation" data-cites="euclidheath1926elements">(Euclid 1926, bk.
+VII, Props. 1–2)</span>. A quotient-remainder step batches many
+subtractions at once; the language of invariants makes explicit why this
+acceleration preserves the answer. What follows should therefore be read
+as a modern reconstruction of the mechanism, not as a verbatim account
+of the ancient argument.</p>
+<div id="prop:ch001-remainder-invariance" class="proposition">
+<p><strong>Proposition 1.33</strong> (Remainder invariance). <em>If
+<span class="math inline">\(a,b,q,r\in\Z\)</span> and <span
+class="math inline">\(a=bq+r\)</span>, then an integer <span
+class="math inline">\(c\)</span> divides both <span
+class="math inline">\(a,b\)</span> if and only if it divides both <span
+class="math inline">\(b,r\)</span>. Consequently, <span
+class="math display">\[\gcd(a,b)=\gcd(b,r).\]</span></em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Suppose <span class="math inline">\(c\mid a\)</span>
+and <span class="math inline">\(c\mid b\)</span>. Then <span
+class="math inline">\(r=a-bq\)</span> is an integer linear combination
+of <span class="math inline">\(a,b\)</span>, so <a
+href="#prop:ch001-divisibility-calculus" data-reference-type="ref+label"
+data-reference="prop:ch001-divisibility-calculus">1.18</a> gives <span
+class="math inline">\(c\mid r\)</span>. Thus <span
+class="math inline">\(c\)</span> divides <span
+class="math inline">\(b,r\)</span>.</p>
+<p>Conversely, suppose <span class="math inline">\(c\mid b\)</span> and
+<span class="math inline">\(c\mid r\)</span>. Since <span
+class="math inline">\(a=bq+r\)</span> is an integer linear combination
+of <span class="math inline">\(b,r\)</span>, the same proposition gives
+<span class="math inline">\(c\mid a\)</span>. Thus the two pairs have
+exactly the same common divisors. Their gcds satisfy the same universal
+property and are both nonnegative; uniqueness in <a
+href="#thm:ch001-gcd-bezout" data-reference-type="ref+label"
+data-reference="thm:ch001-gcd-bezout">1.27</a> makes them equal. ◻</p>
+</div>
+<p>This is <a href="#lem:ch001-invertible-substitution"
+data-reference-type="ref+label"
+data-reference="lem:ch001-invertible-substitution">1.32</a>(iii) in
+traditional dress: <span
+class="math inline">\((b,r)=\sigma_q(a,b)\)</span>, the two pairs share
+one combination set, and common divisors are exactly the divisors of
+every combination. The direct proof above and the lemma run through the
+same witness algebra; the lemma records the computation once, in a form
+that the extended algorithm and the classification of <span
+class="math inline">\(ax+by=c\)</span> will reuse.</p>
+<p>This proposition explains why a large pair can be replaced by a
+smaller one without approximation. The actual integers change, sometimes
+dramatically, but the entire set of their common divisors remains fixed.
+An invariant is precisely such a disciplined forgetting: it identifies
+what may be discarded because the question being asked cannot detect the
+loss.</p>
+<div class="algorithmframe">
+<ol>
+<li><p>Set <span class="math inline">\(r_0=|a|\)</span> and <span
+class="math inline">\(r_1=|b|\)</span>. If <span
+class="math inline">\(r_1=0\)</span>, return <span
+class="math inline">\(r_0\)</span>.</p></li>
+<li><p>For <span class="math inline">\(i=1,2,\ldots\)</span>, divide
+<span class="math inline">\(r_{i-1}\)</span> by the positive integer
+<span class="math inline">\(r_i\)</span>: <span
+class="math display">\[r_{i-1}=q_i r_i+r_{i+1},
+    \qquad 0\le r_{i+1}&lt;r_i.\]</span></p></li>
+<li><p>If <span class="math inline">\(r_{i+1}=0\)</span>, return <span
+class="math inline">\(r_i\)</span>; otherwise continue with the pair
+<span class="math inline">\((r_i,r_{i+1})\)</span>.</p></li>
+</ol>
+</div>
+<p>The recipe raises two independent questions. If it reaches zero, why
+is the last nonzero remainder the right answer? And why must zero ever
+be reached? The division theorem makes each step unambiguous; remainder
+invariance answers the first question; strict descent answers the
+second. An algorithm is not understood merely because its instructions
+can be followed—one must know both what survives the motion and why the
+motion cannot continue forever.</p>
+<div id="thm:ch001-euclidean-correctness" class="theorem">
+<p><strong>Theorem 1.34</strong> (Correctness and termination of the
+Euclidean algorithm). <em>For every pair <span
+class="math inline">\(a,b\in\Z\)</span>, the Euclidean algorithm
+terminates. Its returned value is <span
+class="math inline">\(\gcd(a,b)\)</span>.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> If <span class="math inline">\(r_1=0\)</span>, the
+algorithm returns <span class="math inline">\(|a|=\gcd(a,0)\)</span> by
+<a href="#cor:ch001-gcd-boundary" data-reference-type="ref+label"
+data-reference="cor:ch001-gcd-boundary">1.28</a>.</p>
+<p>Otherwise each continuing step has <span
+class="math inline">\(0&lt;r_{i+1}&lt;r_i\)</span>. Use the positive
+second remainder as the measure of the current state. It is a
+nonnegative integer and strictly decreases at every continuing step, so
+<a href="#thm:ch001-descent-termination" data-reference-type="ref+label"
+data-reference="thm:ch001-descent-termination">1.15</a> proves
+termination.</p>
+<p>At each division, <a href="#prop:ch001-remainder-invariance"
+data-reference-type="ref+label"
+data-reference="prop:ch001-remainder-invariance">1.33</a> gives <span
+class="math display">\[\gcd(r_{i-1},r_i)=\gcd(r_i,r_{i+1}).\]</span>
+Therefore the gcd remains equal to <span
+class="math inline">\(\gcd(|a|,|b|)=\gcd(a,b)\)</span> throughout the
+trace. At termination, for some <span class="math inline">\(N\)</span>
+we have <span class="math inline">\(r_N&gt;0\)</span> and <span
+class="math inline">\(r_{N+1}=0\)</span>. The invariant yields <span
+class="math display">\[\gcd(a,b)=\gcd(r_N,0)=r_N.\]</span> This is
+exactly the returned value. ◻</p>
+</div>
+<div id="ex:ch001-euclid-252-198" class="example">
+<p><strong>Example 1.35</strong> (The motivating computation, now
+justified). <em>We return to the opening pair so that every initially
+asserted line can now be checked against the exact hypotheses of the
+theorem. For <span class="math inline">\((a,b)=(252,198)\)</span> the
+trace is</em></p>
+<div class="center">
+<table>
+<tbody>
+<tr>
+<td style="text-align: right;"><em><span
+class="math inline">\(252\)</span></em></td>
+<td style="text-align: center;"><em><span
+class="math inline">\(=\)</span></em></td>
+<td style="text-align: left;"><em><span
+class="math inline">\(1\cdot198+54\)</span></em></td>
+<td style="text-align: left;"><em><span
+class="math inline">\(0\le54&lt;198\)</span>,</em></td>
+</tr>
+<tr>
+<td style="text-align: right;"><em><span
+class="math inline">\(198\)</span></em></td>
+<td style="text-align: center;"><em><span
+class="math inline">\(=\)</span></em></td>
+<td style="text-align: left;"><em><span
+class="math inline">\(3\cdot54+36\)</span></em></td>
+<td style="text-align: left;"><em><span
+class="math inline">\(0\le36&lt;54\)</span>,</em></td>
+</tr>
+<tr>
+<td style="text-align: right;"><em><span
+class="math inline">\(54\)</span></em></td>
+<td style="text-align: center;"><em><span
+class="math inline">\(=\)</span></em></td>
+<td style="text-align: left;"><em><span
+class="math inline">\(1\cdot36+18\)</span></em></td>
+<td style="text-align: left;"><em><span
+class="math inline">\(0\le18&lt;36\)</span>,</em></td>
+</tr>
+<tr>
+<td style="text-align: right;"><em><span
+class="math inline">\(36\)</span></em></td>
+<td style="text-align: center;"><em><span
+class="math inline">\(=\)</span></em></td>
+<td style="text-align: left;"><em><span
+class="math inline">\(2\cdot18+0\)</span></em></td>
+<td style="text-align: left;"><em>termination.</em></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><em>Each remainder bound verifies a legal division step. The last
+nonzero remainder is <span class="math inline">\(18\)</span>, so <a
+href="#thm:ch001-euclidean-correctness" data-reference-type="ref+label"
+data-reference="thm:ch001-euclidean-correctness">1.34</a> proves <span
+class="math inline">\(\gcd(252,198)=18\)</span>. A corrupted line such
+as <span class="math inline">\(198=4\cdot54-18\)</span> may be an
+equality, but it is not a legal Euclidean step because the remainder is
+negative. This trace proves the gcd and checks this one execution; it
+does not alone prove termination or correctness for arbitrary inputs,
+which is why the preceding invariant-and-descent theorem is essential.
+Equality has checked the arithmetic; admissibility is the more selective
+gatekeeper.</em></p>
+</div>
+<h3 data-number="1.7.1"
+id="extended-euclid-preserving-the-witnesses"><span
+class="header-section-number">1.7.1</span> Extended Euclid: preserving
+the witnesses</h3>
+<p>The basic algorithm preserves the gcd but discards the
+linear-combination witnesses. The extended algorithm carries them as an
+additional invariant. Initialize <span
+class="math display">\[\begin{array}{c|ccc}
+  i&amp;r_i&amp;s_i&amp;t_i\\ \hline
+  0&amp;|a|&amp;1&amp;0\\
+  1&amp;|b|&amp;0&amp;1
+\end{array}
+\qquad\text{so that}\qquad
+  r_i=s_i|a|+t_i|b|.\]</span> Whenever <span
+class="math inline">\(r_{i-1}=q_i r_i+r_{i+1}\)</span>, update <span
+class="math display">\[s_{i+1}=s_{i-1}-q_i s_i,
+  \qquad
+  t_{i+1}=t_{i-1}-q_i t_i.\]</span></p>
+<div id="thm:ch001-extended-euclid" class="theorem">
+<p><strong>Theorem 1.36</strong> (Extended Euclidean invariant). <em>At
+every stage of the extended Euclidean algorithm, <span
+class="math display">\[r_i=s_i|a|+t_i|b|.\]</span> At termination it
+returns integers <span class="math inline">\(x,y\)</span> satisfying
+<span class="math display">\[\gcd(a,b)=ax+by.\]</span></em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> If <span class="math inline">\(a=b=0\)</span>, the
+initial row already reads <span
+class="math inline">\(r_0=0=1\cdot|a|+0\cdot|b|\)</span>. The algorithm
+returns <span class="math inline">\(0\)</span>, and the coefficients
+<span class="math inline">\(x=1,y=0\)</span> satisfy the required
+identity. Hence assume <span
+class="math inline">\((a,b)\ne(0,0)\)</span>.</p>
+<p>The invariant holds at indices <span class="math inline">\(0\)</span>
+and <span class="math inline">\(1\)</span> by initialization. Suppose it
+holds at <span class="math inline">\(i-1\)</span> and <span
+class="math inline">\(i\)</span>. Then <span
+class="math display">\[\begin{aligned}
+r_{i+1}
+&amp;=r_{i-1}-q_i r_i\\
+&amp;=(s_{i-1}|a|+t_{i-1}|b|)
+   -q_i(s_i|a|+t_i|b|)\\
+&amp;=(s_{i-1}-q_i s_i)|a|
+   +(t_{i-1}-q_i t_i)|b|\\
+&amp;=s_{i+1}|a|+t_{i+1}|b|.
+\end{aligned}\]</span> Induction over the finite trace proves the
+invariant at every stage.</p>
+<p>By <a href="#thm:ch001-euclidean-correctness"
+data-reference-type="ref+label"
+data-reference="thm:ch001-euclidean-correctness">1.34</a>, the last
+nonzero remainder is <span class="math inline">\(d=\gcd(a,b)\)</span>.
+If <span class="math inline">\(|a|=\varepsilon_a a\)</span> and <span
+class="math inline">\(|b|=\varepsilon_b b\)</span>, where each <span
+class="math inline">\(\varepsilon\)</span> is <span
+class="math inline">\(1\)</span> or <span
+class="math inline">\(-1\)</span> (choose <span
+class="math inline">\(1\)</span> for a zero input), then <span
+class="math display">\[d=s|a|+t|b|=(s\varepsilon_a)a+(t\varepsilon_b)b.\]</span>
+Thus <span class="math inline">\(x=s\varepsilon_a\)</span> and <span
+class="math inline">\(y=t\varepsilon_b\)</span> are the required
+coefficients. ◻</p>
+</div>
+<p>This gives a second proof of Bézout’s identity. The proof in <a
+href="#thm:ch001-gcd-bezout" data-reference-type="ref+label"
+data-reference="thm:ch001-gcd-bezout">1.27</a> is existential and
+structural: minimality forces the gcd. Extended Euclid is constructive:
+an invariant transports explicit witnesses to the output.</p>
+<p>The update rule itself is <a
+href="#lem:ch001-invertible-substitution"
+data-reference-type="ref+label"
+data-reference="lem:ch001-invertible-substitution">1.32</a> at work. A
+division step pushes the remainder pair forward, <span
+class="math inline">\((r_i,r_{i+1})=\sigma_{q_i}(r_{i-1},r_i)\)</span>,
+and clause (ii) of the lemma, read from the new pair back to the old,
+rewrites any representation by <span
+class="math inline">\((r_i,r_{i+1})\)</span> as a representation of the
+same integer by <span class="math inline">\((r_{i-1},r_i)\)</span>, with
+coefficients given by explicit formulas. Classical back-substitution
+performs these rewritings after termination, starting from <span
+class="math inline">\(d=1\cdot r_N+0\cdot r_{N+1}\)</span>; the
+tabulated <span class="math inline">\(s_i,t_i\)</span> compose the same
+conversions eagerly, so that a representation in terms of the fixed pair
+<span class="math inline">\((|a|,|b|)\)</span> is available at every
+stage. Invertibility is why the transport can never fail: each step
+forgets the old remainders but not the ability to express them.</p>
+<p>The familiar name should not be mistaken for a certificate of
+priority. Granville argues, by reading the common-measure arguments of
+the <em>Elements</em> in their own setting, that the substance of the
+integer identity is already present in Euclid and that the attachment of
+Bézout’s name is much later <span class="citation"
+data-cites="granville2024notbezout">(Granville 2024)</span>. That is a
+documented historical interpretation, not a unanimous decree about whom
+the theorem “belongs to.” We retain the standard name because it is
+useful for navigation. The proof, however, depends only on the structure
+just exposed: a least positive linear combination, or equivalently
+coefficients transported through the remainder algorithm. A name
+remembers a convention; the invariant remembers why the claim is
+true.</p>
+<p>For the motivating inputs, the full trace is <span
+class="math display">\[\begin{array}{c|r|r|r|l}
+i&amp;r_i&amp;s_i&amp;t_i&amp; r_i=s_i(252)+t_i(198)\\ \hline
+0&amp;252&amp; 1&amp; 0&amp;252\\
+1&amp;198&amp; 0&amp; 1&amp;198\\
+2&amp; 54&amp; 1&amp;-1&amp;252-198\\
+3&amp; 36&amp;-3&amp; 4&amp;-3(252)+4(198)\\
+4&amp; 18&amp; 4&amp;-5&amp;4(252)-5(198)\\
+5&amp;  0&amp;-11&amp;14&amp;-11(252)+14(198)
+\end{array}\]</span> Every row can be checked by direct substitution.
+The coefficient pair in the last nonzero row is the desired certificate.
+For signed inputs the final sign conversion matters: the same
+computation for <span class="math inline">\((-252,198)\)</span> yields
+<span class="math display">\[18=(-4)(-252)-5(198),\]</span> not <span
+class="math inline">\(18=4(-252)-5(198)\)</span>. This sign check is why
+the theorem states the absolute-value invariant before translating
+coefficients back to the original inputs.</p>
+<p>The coefficient pair is not normally unique. For the same inputs,
+every integer <span class="math inline">\(t\)</span> gives another
+identity <span
+class="math display">\[18=252(4+11t)+198(-5-14t),\]</span> because the
+<span class="math inline">\(t\)</span>-dependent terms cancel. Extended
+Euclid selects one member of this family; it does not make its output
+canonical. This raises a question answered later in the chapter: not
+merely whether an equation <span class="math inline">\(ax+by=c\)</span>
+has a solution, but how all of its solutions are related. In the later
+language of congruences, when <span class="math inline">\(n\ge2\)</span>
+the special identity <span class="math inline">\(ax+ny=1\)</span> says
+that <span class="math inline">\(ax\)</span> differs from <span
+class="math inline">\(1\)</span> by a multiple of <span
+class="math inline">\(n\)</span>, so <span
+class="math inline">\(x\)</span> is a multiplicative inverse of <span
+class="math inline">\(a\)</span> modulo <span
+class="math inline">\(n\)</span>.</p>
+<h3 data-number="1.7.2"
+id="bézout-coefficients-as-checkable-evidence"><span
+class="header-section-number">1.7.2</span> Bézout coefficients as
+checkable evidence</h3>
+<p>The extended algorithm does more than report a number: it produces
+evidence that explains why the number is the gcd. A short Bézout
+certificate separates the cost of discovery from the cost of exact
+verification; the search may be performed in any convenient way, while
+the resulting equalities can be checked without repeating it.</p>
+<div id="prop:ch001-gcd-certificate" class="proposition">
+<p><strong>Proposition 1.37</strong> (A complete gcd certificate).
+<em>Let <span class="math inline">\(a,b,d,x,y\in\Z\)</span>. If <span
+class="math display">\[d\ge0,\qquad d\mid a,\qquad d\mid b,\qquad
+d=ax+by,\]</span> then <span
+class="math inline">\(d=\gcd(a,b)\)</span>.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> The first three conditions say that <span
+class="math inline">\(d\)</span> is a nonnegative common divisor. If
+<span class="math inline">\(c\)</span> is any common divisor of <span
+class="math inline">\(a\)</span> and <span
+class="math inline">\(b\)</span>, then <a
+href="#prop:ch001-divisibility-calculus" data-reference-type="ref+label"
+data-reference="prop:ch001-divisibility-calculus">1.18</a> gives <span
+class="math inline">\(c\mid(ax+by)=d\)</span>. Thus <span
+class="math inline">\(d\)</span> satisfies all three clauses in the
+definition of the gcd, and uniqueness gives <span
+class="math inline">\(d=\gcd(a,b)\)</span>. ◻</p>
+</div>
+<p>For <span class="math inline">\((a,b)=(252,198)\)</span> one checks
+<span class="math display">\[252=18\cdot14,\qquad 198=18\cdot11,
+  \qquad 18=4\cdot252-5\cdot198.\]</span> These equalities prove the
+claim without replaying the Euclidean search. Both parts of the
+certificate matter. For instance, <span
+class="math inline">\(8=-14+22\)</span> is a true linear identity, but
+<span class="math inline">\(8\)</span> divides neither <span
+class="math inline">\(14\)</span> nor <span
+class="math inline">\(22\)</span>, so it does not certify their gcd. A
+Bézout identity shows that every common divisor divides the proposed
+number; the two divisibility checks show that the proposed number is
+itself a common divisor.</p>
+<h3 data-number="1.7.3"
+id="a-finite-step-bound-without-asymptotic-machinery"><span
+class="header-section-number">1.7.3</span> A finite step bound without
+asymptotic machinery</h3>
+<p>Termination alone gives no scale. We can obtain a concrete bound
+using only integer powers of <span class="math inline">\(2\)</span>.
+Locally define <span class="math display">\[2^0=1,
+  \qquad
+  2^{n+1}=2\cdot2^n\quad(n\in\N_0);\]</span> equivalently, <span
+class="math inline">\(2^n\)</span> is the finite product of <span
+class="math inline">\(n\)</span> copies of <span
+class="math inline">\(2\)</span>, with the empty product equal to <span
+class="math inline">\(1\)</span>. Ordinary induction proves <span
+class="math inline">\(2^n\ge n+1\)</span>: the claim is true at <span
+class="math inline">\(n=0\)</span>, and <span
+class="math display">\[2^{n+1}=2\cdot2^n\ge2(n+1)\ge n+2.\]</span> For a
+positive integer <span class="math inline">\(B\)</span>, let its
+<em>binary length</em> <span class="math inline">\(L(B)\)</span> be the
+least positive integer <span class="math inline">\(L\)</span> with <span
+class="math inline">\(B&lt;2^L\)</span>. The candidate predicate is
+inhabited because <span class="math inline">\(B&lt;2^B\)</span> for
+<span class="math inline">\(B\ge1\)</span>, and well-ordering chooses
+its least element.</p>
+<div id="prop:ch001-two-step-decrease" class="proposition">
+<p><strong>Proposition 1.38</strong> (Two-step decrease). <em>After
+arranging <span class="math inline">\(r_0\ge r_1&gt;0\)</span>, the
+Euclidean algorithm performs at most <span
+class="math inline">\(2L(r_1)\)</span> divisions.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Consider three successive remainders <span
+class="math inline">\(r_i&gt;r_{i+1}&gt;r_{i+2}\ge0\)</span>, the first
+two positive. If <span class="math inline">\(2r_{i+1}\le r_i\)</span>,
+then <span class="math display">\[2r_{i+2}&lt;2r_{i+1}\le r_i.\]</span>
+If <span class="math inline">\(2r_{i+1}&gt;r_i\)</span>, the quotient in
+dividing <span class="math inline">\(r_i\)</span> by <span
+class="math inline">\(r_{i+1}\)</span> must be <span
+class="math inline">\(1\)</span>: it is at least <span
+class="math inline">\(1\)</span>, while any quotient of at least <span
+class="math inline">\(2\)</span> would force <span
+class="math inline">\(2r_{i+1}\le r_i\)</span>. Hence <span
+class="math inline">\(r_{i+2}=r_i-r_{i+1}\)</span> and <span
+class="math display">\[2r_{i+2}=2r_i-2r_{i+1}&lt;r_i.\]</span> Thus
+<span class="math inline">\(2r_{i+2}&lt;r_i\)</span> in both cases.</p>
+<p>If <span class="math inline">\(2L(r_1)\)</span> divisions occurred
+without reaching zero, repeated application would give a positive
+integer <span class="math inline">\(r_{2L(r_1)+1}\)</span> satisfying
+<span
+class="math display">\[2^{L(r_1)}r_{2L(r_1)+1}&lt;r_1&lt;2^{L(r_1)}.\]</span>
+But a positive integer remainder is at least <span
+class="math inline">\(1\)</span>, so the left side is at least <span
+class="math inline">\(2^{L(r_1)}\)</span>, a contradiction. The
+algorithm must stop no later. ◻</p>
+</div>
+<p>This is a count of exact division steps, not a machine-time claim.
+Turning it into a running-time estimate requires a model for integer
+representation and for the bit cost of arithmetic.</p>
+<div id="ex:ch001-euclid-step-bound" class="example">
+<p><strong>Example 1.39</strong> (Reading the finite step bound).
+<em>Let <span class="math inline">\(F_0=0\)</span>, <span
+class="math inline">\(F_1=1\)</span>, and <span
+class="math inline">\(F_{k+2}=F_{k+1}+F_k\)</span>. The inputs <span
+class="math inline">\(55=F_{10}\)</span> and <span
+class="math inline">\(89=F_{11}\)</span> are consecutive Fibonacci
+numbers. They make the descent unusually gradual because many successive
+quotients equal <span class="math inline">\(1\)</span>: <span
+class="math display">\[\begin{aligned}
+89&amp;=1(55)+34,&amp;55&amp;=1(34)+21,&amp;34&amp;=1(21)+13,\\
+21&amp;=1(13)+8,&amp;13&amp;=1(8)+5,&amp;8&amp;=1(5)+3,\\
+5&amp;=1(3)+2,&amp;3&amp;=1(2)+1,&amp;2&amp;=2(1)+0.
+\end{aligned}\]</span> There are <span class="math inline">\(9\)</span>
+divisions. Since <span
+class="math inline">\(2^5=32&lt;55&lt;64=2^6\)</span>, the binary length
+is <span class="math inline">\(L(55)=6\)</span>, and <a
+href="#prop:ch001-two-step-decrease" data-reference-type="ref+label"
+data-reference="prop:ch001-two-step-decrease">1.38</a> guarantees at
+most <span class="math inline">\(2L(55)=12\)</span> divisions. The bound
+is valid but not exact on this input; its purpose is a transparent
+finite scale derived with only integer tools. It does not yet measure
+bit operations or prove the sharp Fibonacci worst-case theorem.</em></p>
+</div>
+<p>Gabriel Lamé’s 1844 note made the Euclidean algorithm’s step count
+famous, but the analysis had already developed in stages. Shallit
+records a weak bound by A.-A.-L. Reynaud in 1811, the essential result
+in work of Émile Léger in 1837, and a complete proof by P.-J.-E. Finck
+in 1841 <span class="citation" data-cites="shallit1994origins">(Shallit
+1994, 401)</span>. Our elementary two-step estimate is not one of those
+historical results. It marks the same conceptual advance: after
+correctness and termination comes a quantitative question about how long
+the descent can last.</p>
+<h2 data-number="1.8" id="sec:ch001-diophantine"><span
+class="header-section-number">1.8</span> Coprimality and Linear
+Diophantine Equations</h2>
+<p>The Bézout identity found one value of the form <span
+class="math inline">\(ax+by\)</span>, and the preceding trace showed
+that its coefficients can vary. We now ask for the whole picture. Which
+integers can occur as <span class="math inline">\(ax+by\)</span> when
+<span class="math inline">\(x\)</span> and <span
+class="math inline">\(y\)</span> range over <span
+class="math inline">\(\Z\)</span>? If a given value occurs, how many
+coefficient pairs produce it?</p>
+<p>The adjective <em>Diophantine</em> is retrospective. In the
+<em>Arithmetica</em>, Diophantus sought particular positive rational
+solutions; the modern convention that a Diophantine equation asks for
+integer solutions is not simply his problem rewritten in current symbols
+<span class="citation"
+data-cites="heath1910diophantus hettle2015arithmetica">(Heath 1910,
+92–93; Hettle 2015, 139–66)</span>. This shift in domain is not a
+historical curiosity detached from the theorem. Over the positive
+rationals, the equation <span class="math inline">\(ax+by=c\)</span>
+asks a different question, and the integer gcd is no longer the complete
+obstruction developed below. The word has survived while the permitted
+witnesses have changed; writing <span
+class="math inline">\(x,y\in\Z\)</span> is therefore part of the
+mathematical claim, not an annotation after it.</p>
+<p>The gcd already suggests the answer. Because it divides both <span
+class="math inline">\(a\)</span> and <span
+class="math inline">\(b\)</span>, it must divide every attainable value.
+Bézout’s identity says, conversely, that the gcd itself is attainable,
+so all of its multiples are attainable as well. The obstruction and the
+construction are therefore the same number viewed in opposite
+directions.</p>
+<p>To describe every solution rather than merely produce one, we need a
+modest cancellation principle. It explains when a factor known to divide
+a product can pass through one of the two factors—precisely the move
+that failed for <span class="math inline">\(6\mid2\cdot3\)</span>.</p>
+<div id="prop:ch001-coprime-cancellation" class="proposition">
+<p><strong>Proposition 1.40</strong> (Coprime cancellation). <em>If
+<span class="math inline">\(\gcd(m,n)=1\)</span> and <span
+class="math inline">\(m\mid nc\)</span>, then <span
+class="math inline">\(m\mid c\)</span>.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> There exist <span
+class="math inline">\(x,y\in\Z\)</span> with <span
+class="math inline">\(mx+ny=1\)</span>. Multiplying by <span
+class="math inline">\(c\)</span> gives <span
+class="math display">\[c=m(xc)+n(yc).\]</span> The integer <span
+class="math inline">\(m\)</span> divides the first term. It divides the
+second because <span class="math inline">\(m\mid nc\)</span> implies
+<span class="math inline">\(m\mid ncy\)</span>. Therefore <span
+class="math inline">\(m\)</span> divides their sum <span
+class="math inline">\(c\)</span>. ◻</p>
+</div>
+<p>The hypothesis is essential: <span
+class="math inline">\(6\mid3\cdot2\)</span> but <span
+class="math inline">\(6\nmid2\)</span>, and <span
+class="math inline">\(\gcd(6,3)\ne1\)</span>.</p>
+<p>With this cancellation principle available, the gcd criterion can now
+be strengthened from existence of one solution to a description of every
+solution.</p>
+<div id="thm:ch001-linear-diophantine" class="theorem">
+<p><strong>Theorem 1.41</strong> (Linear Diophantine equations). <em>Let
+<span class="math inline">\(a,b,c\in\Z\)</span> and let <span
+class="math inline">\(d=\gcd(a,b)\)</span>.</em></p>
+<ol>
+<li><p><em>The equation <span class="math inline">\(ax+by=c\)</span> has
+an integer solution if and only if <span class="math inline">\(d\mid
+c\)</span>.</em></p></li>
+<li><p><em>Suppose <span class="math inline">\((a,b)\ne(0,0)\)</span>.
+Then <span class="math inline">\(d&gt;0\)</span>; because <span
+class="math inline">\(d\)</span> divides <span
+class="math inline">\(a\)</span> and <span
+class="math inline">\(b\)</span>, there are unique integers <span
+class="math inline">\(A,B\)</span> with <span
+class="math inline">\(a=dA\)</span> and <span
+class="math inline">\(b=dB\)</span>. If <span
+class="math inline">\((x_0,y_0)\)</span> is one solution, every solution
+is of the form <span class="math display">\[x=x_0+Bt,
+    \qquad
+    y=y_0-At,
+    \qquad t\in\Z,\]</span> and every pair of this form is a
+solution.</em></p></li>
+</ol>
+</div>
+<p>Part (ii) has a simple motion hidden inside its formulas. After
+removing the common factor <span class="math inline">\(d\)</span>,
+changing a solution by <span class="math display">\[(\Delta x,\Delta
+y)=(B,-A)\]</span> changes the left side by <span
+class="math display">\[a\Delta x+b\Delta
+y=(dA)B+(dB)(-A)=d(AB-BA)=0.\]</span> Thus <span
+class="math inline">\((B,-A)\)</span> is a direction along which one can
+move from one integer solution to another without changing the equation.
+Geometrically, it points along the line <span
+class="math inline">\(ax+by=c\)</span>, whereas both <span
+class="math inline">\((A,B)\)</span> and <span
+class="math inline">\((a,b)\)</span> are normal to that line. The
+substantive claim is the converse: after the coefficients have been made
+coprime, every integer displacement that stays on the line is an integer
+multiple of this one. The proof below establishes that completeness,
+including the coordinate-axis case in which <span
+class="math inline">\(B=0\)</span>.</p>
+<div class="proof">
+<p><em>Proof.</em> For (i), suppose <span
+class="math inline">\(ax+by=c\)</span>. Since <span
+class="math inline">\(d\mid a\)</span> and <span
+class="math inline">\(d\mid b\)</span>, <a
+href="#prop:ch001-divisibility-calculus" data-reference-type="ref+label"
+data-reference="prop:ch001-divisibility-calculus">1.18</a> gives <span
+class="math inline">\(d\mid c\)</span>.</p>
+<p>Conversely, suppose <span class="math inline">\(d\mid c\)</span>, so
+<span class="math inline">\(c=dh\)</span> for some <span
+class="math inline">\(h\in\Z\)</span>. Bézout gives <span
+class="math inline">\(d=ax_1+by_1\)</span>. Multiplying by <span
+class="math inline">\(h\)</span> yields <span
+class="math display">\[c=a(hx_1)+b(hy_1),\]</span> so <span
+class="math inline">\((hx_1,hy_1)\)</span> is an integer solution.</p>
+<p>For (ii), <a href="#cor:ch001-gcd-boundary"
+data-reference-type="ref+label"
+data-reference="cor:ch001-gcd-boundary">1.28</a> gives <span
+class="math inline">\(d&gt;0\)</span>. Since <span
+class="math inline">\(d\)</span> divides both <span
+class="math inline">\(a\)</span> and <span
+class="math inline">\(b\)</span>, there are integers <span
+class="math inline">\(A,B\)</span> with <span
+class="math inline">\(a=dA\)</span> and <span
+class="math inline">\(b=dB\)</span>; they are unique because
+cancellation by the nonzero integer <span
+class="math inline">\(d\)</span> is valid. The pair <span
+class="math inline">\((A,B)\)</span> is not <span
+class="math inline">\((0,0)\)</span>, since otherwise <span
+class="math inline">\(a=b=0\)</span>.</p>
+<p>Choose Bézout coefficients <span class="math inline">\(u,v\)</span>
+for <span class="math inline">\(a,b\)</span>. Then <span
+class="math display">\[d=au+bv=d(Au+Bv).\]</span> Cancelling the nonzero
+integer <span class="math inline">\(d\)</span> gives <span
+class="math inline">\(Au+Bv=1\)</span>. Let <span
+class="math inline">\(g=\gcd(A,B)\)</span>. Because <span
+class="math inline">\((A,B)\ne(0,0)\)</span>, we have <span
+class="math inline">\(g&gt;0\)</span> by <a
+href="#cor:ch001-gcd-boundary" data-reference-type="ref+label"
+data-reference="cor:ch001-gcd-boundary">1.28</a>. The divisibility
+calculus gives <span class="math inline">\(g\mid(Au+Bv)=1\)</span>. Thus
+<span class="math inline">\(1=gk\)</span> for some integer <span
+class="math inline">\(k\)</span>. Positivity of <span
+class="math inline">\(g\)</span> and the product <span
+class="math inline">\(gk=1\)</span> forces <span
+class="math inline">\(k&gt;0\)</span>. Hence <span
+class="math inline">\(g,k\ge1\)</span>; if <span
+class="math inline">\(g&gt;1\)</span>, discreteness would give <span
+class="math inline">\(g\ge2\)</span> and therefore <span
+class="math inline">\(gk\ge2\)</span>, a contradiction. Thus <span
+class="math inline">\(g=1\)</span>.</p>
+<p>The existence question is now finished, and the normalized
+coefficients are coprime. To classify every solution, compare an
+arbitrary one with the chosen starting point and study only the
+displacement between them.</p>
+<p>Let <span class="math inline">\((x,y)\)</span> be any solution.
+Subtracting the equation for <span
+class="math inline">\((x_0,y_0)\)</span> gives <span
+class="math inline">\(a(x-x_0)+b(y-y_0)=0\)</span>. Substituting <span
+class="math inline">\(a=dA\)</span> and <span
+class="math inline">\(b=dB\)</span> yields <span
+class="math display">\[d\bigl(A(x-x_0)+B(y-y_0)\bigr)=0.\]</span>
+Cancelling the nonzero integer <span class="math inline">\(d\)</span>
+gives <span class="math display">\[A(x-x_0)+B(y-y_0)=0.\]</span> If
+<span class="math inline">\(B\ne0\)</span>, then <span
+class="math inline">\(B\mid A(x-x_0)\)</span>. Symmetry of the gcd gives
+<span class="math inline">\(\gcd(B,A)=\gcd(A,B)=1\)</span>, so <a
+href="#prop:ch001-coprime-cancellation" data-reference-type="ref+label"
+data-reference="prop:ch001-coprime-cancellation">1.40</a> gives <span
+class="math inline">\(B\mid x-x_0\)</span>. Write <span
+class="math inline">\(x-x_0=Bt\)</span>. Substitution and cancellation
+of nonzero <span class="math inline">\(B\)</span> give <span
+class="math inline">\(y-y_0=-At\)</span>. This is the displayed
+form.</p>
+<p>The preceding cancellation used <span
+class="math inline">\(B\ne0\)</span>, so the axis case must be handled
+rather than hidden inside a division by zero. In that case the same
+direction formula remains valid, but its parameter is recovered from the
+free <span class="math inline">\(y\)</span>-coordinate instead.</p>
+<p>If <span class="math inline">\(B=0\)</span>, then <span
+class="math inline">\(\gcd(A,0)=|A|=1\)</span>, so <span
+class="math inline">\(A=1\)</span> or <span
+class="math inline">\(A=-1\)</span>. The difference equation forces
+<span class="math inline">\(x=x_0\)</span>, while <span
+class="math inline">\(y\)</span> is arbitrary. The same displayed
+formula covers this case: choose <span
+class="math inline">\(t=-A(y-y_0)\)</span>. Then <span
+class="math inline">\(Bt=0\)</span>, and <span
+class="math inline">\(-At=A^2(y-y_0)=y-y_0\)</span> because <span
+class="math inline">\(A^2=1\)</span>.</p>
+<p>Finally, direct substitution shows that every displayed pair is a
+solution: <span class="math display">\[a(x_0+Bt)+b(y_0-At)
+=ax_0+by_0+(dA)Bt-(dB)At=c.\]</span> Thus the parametrization is both
+necessary and sufficient. ◻</p>
+</div>
+<p>For a nonzero pair <span class="math inline">\((a,b)\)</span>, the
+solution set is thus either empty or a single integer-parameter family.
+One particular solution fixes a starting point; the vector <span
+class="math inline">\((B,-A)\)</span> moves between solutions without
+changing <span class="math inline">\(ax+by\)</span>. Later linear
+algebra and the geometry of lattices will make this description visual:
+an affine line in the plane meets the integer grid in a regularly spaced
+chain, and the gcd decides whether it meets the grid at all. Nothing
+from that later language is needed for the proof above, but it reveals
+the shape already present in the formulas.</p>
+<p>The invertible-substitution lemma explains why the classification had
+to come out this way, and it pays the third dividend announced at the
+opening of the Euclidean section. By <a
+href="#lem:ch001-invertible-substitution"
+data-reference-type="ref+label"
+data-reference="lem:ch001-invertible-substitution">1.32</a>(ii), a
+division step converts solutions bijectively: <span
+class="math inline">\((x,y)\)</span> satisfies <span
+class="math inline">\(ax+by=c\)</span> exactly when <span
+class="math inline">\((qx+y,\,x)\)</span> satisfies the substituted
+equation whose coefficient pair is <span
+class="math inline">\(\sigma_q(a,b)\)</span>. A sign change <span
+class="math inline">\((a,b)\mapsto(-a,b)\)</span> is equally invertible,
+with <span class="math inline">\((x,y)\mapsto(-x,y)\)</span>. Composing
+the steps of a Euclidean trace therefore transports <span
+class="math inline">\(ax+by=c\)</span>, solution set and all, to the
+terminal equation <span class="math inline">\(ds+0t=c\)</span>, where
+the whole theorem is visible at a glance: solutions exist exactly when
+<span class="math inline">\(d\mid c\)</span>, and then they form a
+single one-parameter family—<span class="math inline">\(s\)</span> fixed
+at the integer <span class="math inline">\(h\)</span> with <span
+class="math inline">\(c=dh\)</span>, and <span
+class="math inline">\(t\)</span> free to range over <span
+class="math inline">\(\Z\)</span>. Pulling that family back through the
+chain of bijections, each given by integer-linear formulas, returns the
+complete solution set of the original equation as one integer-parameter
+chain, with the homogeneous direction <span
+class="math inline">\((B,-A)\)</span> arising, up to sign, as the image
+of the free direction <span class="math inline">\((0,1)\)</span>. The
+elementary proof above computes the family; the transport argument shows
+in advance that nothing outside one chain could exist.</p>
+<div class="example">
+<p><strong>Example 1.42</strong> (Solvable and impossible equations).
+<em>The same gcd can appear first as a generator and then as an
+obstruction. Because <span
+class="math inline">\(\gcd(252,198)=18\)</span> and <span
+class="math inline">\(18=4(252)-5(198)\)</span>, the equation <span
+class="math display">\[252x+198y=126=7\cdot18\]</span> has the
+particular solution <span
+class="math inline">\((x_0,y_0)=(28,-35)\)</span>. Since <span
+class="math inline">\(252=18(14)\)</span> and <span
+class="math inline">\(198=18(11)\)</span>, we have <span
+class="math inline">\(A=14\)</span> and <span
+class="math inline">\(B=11\)</span>, so all solutions are <span
+class="math display">\[x=28+11t,
+  \qquad y=-35-14t,
+  \qquad t\in\Z.\]</span> Substitution cancels the <span
+class="math inline">\(t\)</span> terms and returns <span
+class="math inline">\(126\)</span>.</em></p>
+<p><em>In contrast, <span class="math inline">\(252x+198y=125\)</span>
+has no integer solution because <span
+class="math inline">\(18\nmid125\)</span>. The gcd is therefore a
+complete obstruction, not merely a computational aid. The criterion
+decides integer solvability; it does not by itself impose positivity,
+minimize a coefficient, or choose a preferred solution from the
+one-parameter family.</em></p>
+</div>
+<p>The two halves of the example occupy asymmetric epistemic positions,
+and the asymmetry deserves to be repaired. For the solvable equation we
+produced a pair, and anyone can confirm <span
+class="math inline">\(252(28)+198(-35)=126\)</span> by two
+multiplications and an addition—the verification owes nothing to the
+search that found the pair. The impossible equation was settled by the
+words “because <span class="math inline">\(18\nmid125\)</span>,” which
+lean on two further claims: that <span class="math inline">\(18\)</span>
+really is the gcd of the coefficients, and that indivisibility really is
+a final obstruction. Each of these claims is also finitely checkable.
+The gcd certificate of <a href="#prop:ch001-gcd-certificate"
+data-reference-type="ref+label"
+data-reference="prop:ch001-gcd-certificate">1.37</a> witnesses the
+first; the uniqueness of division with remainder witnesses the second.
+Assembling the pieces gives short evidence for both possible
+answers.</p>
+<div id="prop:ch001-solvability-certificate" class="proposition">
+<p><strong>Proposition 1.43</strong> (Two-sided solvability
+certificates). <em>Let <span
+class="math inline">\(a,b,c\in\Z\)</span>.</em></p>
+<ol>
+<li><p><em>If integers <span class="math inline">\(x,y\)</span> satisfy
+<span class="math inline">\(ax+by=c\)</span>, then that single verified
+equality proves the equation solvable.</em></p></li>
+<li><p><em>If integers <span
+class="math inline">\(d,u,v,A,B,m,r\)</span> satisfy <span
+class="math display">\[d=au+bv,\qquad a=dA,\qquad b=dB,\qquad
+c=dm+r,\qquad 0&lt;r&lt;d,\]</span> then <span
+class="math inline">\(ax+by=c\)</span> has no integer
+solution.</em></p></li>
+</ol>
+<p><em>Moreover, when <span
+class="math inline">\((a,b)\ne(0,0)\)</span>, exactly one of the two
+kinds of certificate exists, and the extended Euclidean algorithm
+together with division with remainder computes it.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Part (i) is the definition of solvability made
+explicit.</p>
+<p>For (ii), the inequality <span
+class="math inline">\(0&lt;r&lt;d\)</span> forces <span
+class="math inline">\(d&gt;0\)</span>. The equalities <span
+class="math inline">\(a=dA\)</span>, <span
+class="math inline">\(b=dB\)</span>, and <span
+class="math inline">\(d=au+bv\)</span> then satisfy every hypothesis of
+<a href="#prop:ch001-gcd-certificate" data-reference-type="ref+label"
+data-reference="prop:ch001-gcd-certificate">1.37</a>, so <span
+class="math inline">\(d=\gcd(a,b)\)</span>. Suppose some pair <span
+class="math inline">\((x,y)\)</span> solved the equation. Then <a
+href="#thm:ch001-linear-diophantine" data-reference-type="ref+label"
+data-reference="thm:ch001-linear-diophantine">1.41</a>(i) would give
+<span class="math inline">\(d\mid c\)</span>, say <span
+class="math inline">\(c=dn\)</span>, and <span
+class="math inline">\(c=dn+0\)</span> with <span
+class="math inline">\(0\le0&lt;d\)</span> would be a second division of
+<span class="math inline">\(c\)</span> by <span
+class="math inline">\(d\)</span>. Uniqueness in <a
+href="#thm:ch001-division-algorithm" data-reference-type="ref+label"
+data-reference="thm:ch001-division-algorithm">1.20</a> forces <span
+class="math inline">\(r=0\)</span>, contradicting <span
+class="math inline">\(r&gt;0\)</span>. Hence no solution exists.</p>
+<p>For the final claim, let <span
+class="math inline">\(d=\gcd(a,b)\)</span>; by <a
+href="#cor:ch001-gcd-boundary" data-reference-type="ref+label"
+data-reference="cor:ch001-gcd-boundary">1.28</a>, <span
+class="math inline">\(d&gt;0\)</span>. The extended Euclidean algorithm
+produces <span class="math inline">\(u,v\)</span> with <span
+class="math inline">\(d=au+bv\)</span>, the divisibilities <span
+class="math inline">\(d\mid a\)</span> and <span
+class="math inline">\(d\mid b\)</span> produce <span
+class="math inline">\(A,B\)</span>, and <a
+href="#thm:ch001-division-algorithm" data-reference-type="ref+label"
+data-reference="thm:ch001-division-algorithm">1.20</a> produces the
+unique <span class="math inline">\(m,r\)</span> with <span
+class="math inline">\(c=dm+r\)</span> and <span
+class="math inline">\(0\le r&lt;d\)</span>. If <span
+class="math inline">\(r=0\)</span>, then <span
+class="math inline">\(d\mid c\)</span>, and the construction in <a
+href="#thm:ch001-linear-diophantine" data-reference-type="ref+label"
+data-reference="thm:ch001-linear-diophantine">1.41</a>(i) yields a
+solution <span class="math inline">\((x,y)\)</span>—a certificate of the
+first kind; no certificate of the second kind can exist, because (ii)
+would deny the solution just produced. If <span
+class="math inline">\(r&gt;0\)</span>, the seven integers above form a
+certificate of the second kind, and no certificate of the first kind can
+exist, because (ii) forbids a solution. ◻</p>
+</div>
+<p>The excluded pair <span class="math inline">\((0,0)\)</span> hides
+nothing: the equation <span class="math inline">\(0x+0y=c\)</span>
+displays its own status, solvable exactly when <span
+class="math inline">\(c=0\)</span>.</p>
+<p>The interesting asymmetry was always on the negative side. “No
+integers <span class="math inline">\(x,y\)</span> satisfy <span
+class="math inline">\(ax+by=c\)</span>” quantifies over infinitely many
+candidate pairs, and no amount of failed trials could exhaust them. The
+proposition compresses that infinite quantifier into seven integers,
+four equalities, and one two-sided inequality: whoever holds them can
+convince a skeptic by arithmetic alone, with no appeal to how they were
+found and no rerun of the Euclidean search. Discovery and verification
+have again come apart, as they did for the gcd certificate, but now on
+both sides of a yes-or-no question. Not every question of arithmetic is
+so balanced: for many natural problems, short evidence is known for one
+answer and unknown for the other. When we study computation in its own
+right, this distinction—which questions carry short certificates for
+yes, for no, or for both—becomes a central organizing concern, and the
+present equation is a first fully worked specimen. That reading is
+orientation, not a theorem of this chapter.</p>
+<p>The completeness of this description deserves a moment of
+appreciation, because it is historically exceptional. Fermat owned
+Bachet’s edition of the <em>Arithmetica</em>, and in its margin, beside
+the problem of splitting a square into two squares, he noted at some
+unknown date—tradition places it in the 1630s—that a cube cannot be
+split into two cubes, nor a fourth power into two fourth powers, nor in
+general any higher power into two like powers, and that he had found a
+truly marvelous proof which the margin was too small to contain. The
+annotated copy itself is lost; the remark survives only because his son
+Samuel printed the marginal notes in a 1670 edition of Diophantus, five
+years after Fermat’s death <span class="citation"
+data-cites="fermat1891oeuvres1">(Fermat 1891, Obs. II, vol. I,
+p. 291)</span>. No proof by Fermat was ever found, and the claim
+resisted every attack until Andrew Wiles proved it in 1995 by a route
+through elliptic curves and modular forms that no seventeenth-century
+margin could have anticipated <span class="citation"
+data-cites="wiles1995modular">(Wiles 1995)</span>. The equation
+classified in this section and the equation in Fermat’s margin differ by
+little more than an exponent. On one side of that step stands a complete
+elementary theory, decided by a single divisibility test; on the other,
+three and a half centuries of mathematics. A reader trained on this
+chapter’s certificates will also recognize the epistemic moral: a
+claimed proof that cannot be exhibited cannot be checked, and until 1995
+the margin note was a conjecture wearing the costume of a theorem.</p>
+<h2 data-number="1.9" id="sec:ch001-primes"><span
+class="header-section-number">1.9</span> Primes and Unique
+Factorization</h2>
+<p>Additive questions led to linear combinations and the gcd.
+Multiplication raises a different problem: can every positive integer be
+decomposed into indivisible pieces, and if the choices made during
+decomposition vary, does the final result remain the same? These are two
+questions, not one. Termination of repeated factoring will give
+existence; a separate divisibility property of the pieces will be needed
+for uniqueness.</p>
+<p>The intended pieces are the primes. Their definition is simple, but
+the canonical factorization theorem is not hidden inside the definition;
+it must be earned by the arguments that follow.</p>
+<div id="def:ch001-prime" class="definition">
+<p><strong>Definition 1.44</strong> (Prime and composite). <em>A
+positive integer <span class="math inline">\(p&gt;1\)</span> is
+<em>prime</em> if its only positive divisors are <span
+class="math inline">\(1\)</span> and <span
+class="math inline">\(p\)</span>. A positive integer <span
+class="math inline">\(n&gt;1\)</span> is <em>composite</em> if <span
+class="math inline">\(n=ab\)</span> for integers <span
+class="math inline">\(a,b\)</span> with <span
+class="math inline">\(1&lt;a&lt;n\)</span> and <span
+class="math inline">\(1&lt;b&lt;n\)</span>.</em></p>
+</div>
+<p>The restriction <span class="math inline">\(p&gt;1\)</span> separates
+the indivisible factors from the multiplicative identity. Its importance
+will become fully visible when we ask for uniqueness rather than merely
+for a decomposition.</p>
+<p>This boundary was not fixed by ordinary language alone. Historical
+sources show periods in which unity was not regarded as a number at all
+and later periods in which some authors did list <span
+class="math inline">\(1\)</span> among the primes <span class="citation"
+data-cites="caldwell2012smallestprime caldwell2012primalityone">(Caldwell
+and Xiong 2012; Caldwell et al. 2012)</span>. It would be a mistake to
+narrate those conventions simply as a march from ignorance to the
+present definition: the surrounding meanings of <em>number</em>,
+<em>unity</em>, and <em>prime</em> had changed. Our reason for the
+modern boundary is structural and will be proved inside the chapter.
+Excluding the multiplicative identity lets a prime factorization be
+canonical without allowing an arbitrary number of invisible factors
+<span class="math inline">\(1\)</span>.</p>
+<p>The older convention is not a museum piece; it sits inside one of the
+most famous open problems in mathematics. In a letter to Euler dated
+June 7, 1742, Christian Goldbach added in the margin <span
+class="citation" data-cites="fuss1843correspondance">(Fuss 1843,
+Letter XLIII, pp. 125–129)</span> that every integer greater than <span
+class="math inline">\(2\)</span> appears to be a sum of three primes.
+Euler replied on June 30 that he considered the underlying even
+case—every even number is a sum of two primes—“a completely certain
+theorem,” while admitting that he could not prove it <span
+class="citation" data-cites="fuss1843correspondance">(Fuss 1843,
+Letter XLIV, p. 135)</span>. Both correspondents counted <span
+class="math inline">\(1\)</span> among the primes, so their statements
+must be translated before they can even be compared with the modern
+ones. The finite evidence accumulated since is staggering: every even
+number up to <span class="math inline">\(4\cdot10^{18}\)</span> has been
+checked by computer <span class="citation"
+data-cites="oliveiraesilva2014goldbach">(Oliveira e Silva, Herzog, and
+Pardi 2014)</span>. By the standard fixed at the start of this chapter,
+that heroic computation settles nothing beyond its horizon. After nearly
+three centuries, Euler’s certainty remains exactly what it was: a
+conviction, resting on overwhelming evidence and no proof. Later
+chapters on analytic number theory will show how much deep mathematics
+grew out of the attempt to close that gap.</p>
+<div id="ex:ch001-prime-ladder" class="example">
+<p><strong>Example 1.45</strong> (Small primes and the boundary at <span
+class="math inline">\(1\)</span>). <em>If a positive integer <span
+class="math inline">\(d\)</span> divides a positive integer <span
+class="math inline">\(n\)</span>, its witness is positive and hence
+<span class="math inline">\(d\le n\)</span>; therefore the following
+finite checks are exhaustive. The number <span
+class="math inline">\(2\)</span> is prime: its only positive candidates
+for divisors are <span class="math inline">\(1\)</span> and <span
+class="math inline">\(2\)</span>. The number <span
+class="math inline">\(5\)</span> is a nontrivial prime: <span
+class="math display">\[5=2(2)+1,\qquad5=3(1)+2,\qquad5=4(1)+1,\]</span>
+so none of <span class="math inline">\(2,3,4\)</span> divides it,
+leaving only <span class="math inline">\(1\)</span> and <span
+class="math inline">\(5\)</span> as positive divisors. In contrast,
+<span class="math inline">\(21=3\cdot7\)</span> is composite, and the
+displayed proper factors are the required witnesses.</em></p>
+<p><em>The integer <span class="math inline">\(1\)</span> is neither
+prime nor composite under the definition; it is the multiplicative
+identity and would destroy uniqueness if admitted as a prime. The
+integer <span class="math inline">\(-5\)</span> is outside the positive
+definition, although its absolute value has prime factor <span
+class="math inline">\(5\)</span>. These boundary cases separate
+multiplicative factorization from sign and from the role of the
+identity. The finite checks above verify only these small instances; a
+general primality algorithm is a different problem.</em></p>
+</div>
+<p>Checking a few small integers does not show that every larger
+composite can be factored all the way down to primes. The definition
+supplies a proper factor, but the process becomes a proof only when
+those factors are known to be strictly smaller and endless descent has
+been excluded. Strong induction is the natural instrument because the
+factor discovered at one stage may be any smaller integer, not just the
+immediately preceding one.</p>
+<div id="lem:ch001-prime-divisor" class="lemma">
+<p><strong>Lemma 1.46</strong> (Existence of a prime divisor). <em>Every
+integer <span class="math inline">\(n&gt;1\)</span> has a positive prime
+divisor.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Apply <a href="#thm:ch001-strong-induction"
+data-reference-type="ref+label"
+data-reference="thm:ch001-strong-induction">1.13</a> to the shifted
+predicate <span class="math display">\[P(m):\quad m+2\text{ has a
+positive prime divisor}
+  \qquad(m\in\N_0).\]</span> Fix <span
+class="math inline">\(m\in\N_0\)</span>, assume <span
+class="math inline">\(P(j)\)</span> for every <span
+class="math inline">\(j&lt;m\)</span>, and put <span
+class="math inline">\(n=m+2\)</span>. If <span
+class="math inline">\(n\)</span> is prime, then <span
+class="math inline">\(n\)</span> divides itself and is the required
+prime divisor. If <span class="math inline">\(n\)</span> is not prime,
+the negation of the definition supplies a positive divisor <span
+class="math inline">\(a\)</span> of <span
+class="math inline">\(n\)</span> with <span
+class="math inline">\(a\ne1\)</span> and <span
+class="math inline">\(a\ne n\)</span>. Write <span
+class="math inline">\(n=ab\)</span>. The witness <span
+class="math inline">\(b\)</span> is positive: if <span
+class="math inline">\(b\le0\)</span>, multiplication by the positive
+integer <span class="math inline">\(a\)</span> would give <span
+class="math inline">\(ab\le0\)</span>, contrary to <span
+class="math inline">\(n=ab&gt;0\)</span>. Hence <span
+class="math inline">\(b\ge1\)</span> and <span
+class="math inline">\(a\le ab=n\)</span>. Because <span
+class="math inline">\(a\)</span> is a positive integer different from
+<span class="math inline">\(1\)</span> and <span
+class="math inline">\(n\)</span>, we have <span
+class="math display">\[1&lt;a&lt;n.\]</span> Thus <span
+class="math inline">\(a-2\in\N_0\)</span>, and subtracting <span
+class="math inline">\(2\)</span> from <span
+class="math inline">\(a&lt;n=m+2\)</span> gives <span
+class="math inline">\(a-2&lt;m\)</span>. The strong induction hypothesis
+<span class="math inline">\(P(a-2)\)</span> supplies a prime divisor
+<span class="math inline">\(p\)</span> of <span
+class="math inline">\(a\)</span>. Since <span
+class="math inline">\(p\mid a\)</span> and <span
+class="math inline">\(a\mid n\)</span>, transitivity gives <span
+class="math inline">\(p\mid n\)</span>. This proves the strong step,
+hence <span class="math inline">\(P(m)\)</span> for every <span
+class="math inline">\(m\in\N_0\)</span>. ◻</p>
+</div>
+<p>The descent to <span class="math inline">\(a&lt;n\)</span> is the
+load-bearing step. Merely repeating “factor a composite number” would
+not prove that the process ends.</p>
+<p>We now know that prime pieces exist, but existence alone says nothing
+about whether different factorization choices lead to the same pieces.
+To compare two products, a prime seen on one side must somehow be
+located on the other. The next theorem provides exactly that passage
+through a product. It also repairs, for prime divisors, the invalid
+cancellation rule encountered earlier.</p>
+<div id="thm:ch001-euclids-lemma" class="theorem">
+<p><strong>Theorem 1.47</strong> (Euclid’s lemma). <em>Let <span
+class="math inline">\(p\)</span> be prime and let <span
+class="math inline">\(a,b\in\Z\)</span>. If <span
+class="math inline">\(p\mid ab\)</span>, then <span
+class="math inline">\(p\mid a\)</span> or <span
+class="math inline">\(p\mid b\)</span>.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> If <span class="math inline">\(p\mid a\)</span>, the
+first conclusion holds. Suppose instead that <span
+class="math inline">\(p\nmid a\)</span>. The gcd <span
+class="math inline">\(g=\gcd(p,a)\)</span> divides the nonzero integer
+<span class="math inline">\(p\)</span>, so <span
+class="math inline">\(g\ne0\)</span>; since <span
+class="math inline">\(g\ge0\)</span>, it is a positive divisor of <span
+class="math inline">\(p\)</span>. Every positive divisor of the prime
+<span class="math inline">\(p\)</span> is <span
+class="math inline">\(1\)</span> or <span
+class="math inline">\(p\)</span>. Because <span
+class="math inline">\(p\)</span> does not divide <span
+class="math inline">\(a\)</span>, the gcd cannot be <span
+class="math inline">\(p\)</span>; hence it is <span
+class="math inline">\(1\)</span>. From <span class="math inline">\(p\mid
+ab\)</span> and <a href="#prop:ch001-coprime-cancellation"
+data-reference-type="ref+label"
+data-reference="prop:ch001-coprime-cancellation">1.40</a>, we conclude
+<span class="math inline">\(p\mid b\)</span>. ◻</p>
+</div>
+<p>Primality is essential. The earlier counterexample <span
+class="math inline">\(6\mid2\cdot3\)</span> shows that the conclusion
+fails for a composite divisor.</p>
+<p>Applying the two-factor statement repeatedly lets a prime pass
+through any finite product. This modest induction is the precise bridge
+from Euclid’s lemma to uniqueness of factorization.</p>
+<div id="cor:ch001-prime-finite-product" class="corollary">
+<p><strong>Corollary 1.48</strong> (A prime dividing a finite product).
+<em>Let <span class="math inline">\(k\in\N_{&gt;0}\)</span>. If a prime
+<span class="math inline">\(p\)</span> divides <span
+class="math inline">\(a_1a_2\cdots a_k\)</span>, then <span
+class="math inline">\(p\)</span> divides at least one factor <span
+class="math inline">\(a_i\)</span>.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Induct on the number <span
+class="math inline">\(k\)</span> of factors. For <span
+class="math inline">\(k=1\)</span> the claim is immediate. For <span
+class="math inline">\(k&gt;1\)</span>, write the product as <span
+class="math inline">\(a_1(a_2\cdots a_k)\)</span>. Euclid’s lemma says
+that <span class="math inline">\(p\mid a_1\)</span> or <span
+class="math inline">\(p\mid a_2\cdots a_k\)</span>. In the second case,
+the induction hypothesis supplies a divisible factor among <span
+class="math inline">\(a_2,\ldots,a_k\)</span>. ◻</p>
+</div>
+<p>Prime divisors exist, and Euclid’s lemma controls how they pass
+through a product. What remains is to show that these two facts make
+decomposition canonical. The difficulty becomes visible before the
+theorem is stated. The number <span class="math inline">\(756\)</span>
+admits visibly different first choices: <span
+class="math display">\[\begin{aligned}
+756&amp;=27\cdot28=(3^3)(4\cdot7)=2^2\cdot3^3\cdot7,\\
+756&amp;=3\cdot252=3(7\cdot36)=3\cdot7(4\cdot9)
+   =2^2\cdot3^3\cdot7.
+\end{aligned}\]</span></p>
+<p>The equations record the products but hide where the choices were
+made. The two trees in <a href="#fig:ch001-756-factor-trees"
+data-reference-type="ref+label"
+data-reference="fig:ch001-756-factor-trees">1.2</a> expose those
+choices. Every internal node is the product of its children; teal leaves
+are prime and cannot be split further inside the positive integers.</p>
+<figure id="fig:ch001-756-factor-trees">
+<img class="figure-light" src="figures/ch001-756-factor-trees.svg" alt="ch001 756 factor trees">
+
+<figcaption>Different choices produce trees of different shapes and
+depths, but both terminate in the same prime multiset. Existence
+explains why the leaves can all be made prime; uniqueness must explain
+why their multiset cannot depend on the path.</figcaption>
+</figure>
+<p>The left tree splits both large factors early; the right tree carries
+a large factor through two more stages. Their shapes and depths differ,
+yet their terminal prime multisets agree. Why must this happen for every
+pair of factor trees, rather than only in a reassuring example?
+Existence will follow from descent through proper factors; uniqueness
+will require Euclid’s lemma to match a prime across two products.</p>
+<div id="thm:ch001-fta" class="theorem">
+<p><strong>Theorem 1.49</strong> (Fundamental theorem of arithmetic).
+<em>Every integer <span class="math inline">\(n&gt;1\)</span> can be
+written as a finite product of primes. If <span
+class="math display">\[n=p_1p_2\cdots p_r=q_1q_2\cdots q_s\]</span> are
+two prime factorizations, where <span
+class="math inline">\(r,s\in\N_{&gt;0}\)</span>, then <span
+class="math inline">\(r=s\)</span> and, after reordering the factors,
+<span class="math inline">\(p_i=q_i\)</span> for every <span
+class="math inline">\(i\)</span>. Thus the factorization is unique up to
+order.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> <em>Existence.</em> Apply <a
+href="#thm:ch001-strong-induction" data-reference-type="ref+label"
+data-reference="thm:ch001-strong-induction">1.13</a> to the shifted
+predicate <span class="math display">\[E(m):\quad m+2\text{ has a prime
+factorization}
+  \qquad(m\in\N_0).\]</span> Fix <span
+class="math inline">\(m\in\N_0\)</span>, assume <span
+class="math inline">\(E(j)\)</span> for every <span
+class="math inline">\(j&lt;m\)</span>, and put <span
+class="math inline">\(n=m+2\)</span>. If <span
+class="math inline">\(n\)</span> is prime, its one-factor product is a
+prime factorization. Suppose instead that <span
+class="math inline">\(n\)</span> is not prime. As in the proof of <a
+href="#lem:ch001-prime-divisor" data-reference-type="ref+label"
+data-reference="lem:ch001-prime-divisor">1.46</a>, there is a positive
+divisor <span class="math inline">\(a\)</span> of <span
+class="math inline">\(n\)</span> with <span
+class="math inline">\(a\ne1,n\)</span>. Write <span
+class="math inline">\(n=ab\)</span>. Since <span
+class="math inline">\(a,n&gt;0\)</span>, the witness <span
+class="math inline">\(b\)</span> is positive; hence <span
+class="math inline">\(b\ge1\)</span> and <span
+class="math inline">\(a\le ab=n\)</span>. Therefore <span
+class="math inline">\(a\ne1,n\)</span> gives <span
+class="math inline">\(1&lt;a&lt;n\)</span>. Moreover, <span
+class="math inline">\(b\ne1\)</span>, because otherwise <span
+class="math inline">\(a=n\)</span>; and <span
+class="math inline">\(b&lt;n\)</span>, because <span
+class="math inline">\(a&gt;1\)</span>, <span
+class="math inline">\(b&gt;0\)</span>, and <span
+class="math inline">\(n=ab\)</span>. Hence <span
+class="math display">\[1&lt;a,b&lt;n.\]</span> Both <span
+class="math inline">\(a-2\)</span> and <span
+class="math inline">\(b-2\)</span> lie in <span
+class="math inline">\(\N_0\)</span> and are strictly smaller than <span
+class="math inline">\(m\)</span>. The strong induction hypotheses <span
+class="math inline">\(E(a-2)\)</span> and <span
+class="math inline">\(E(b-2)\)</span> factor <span
+class="math inline">\(a\)</span> and <span
+class="math inline">\(b\)</span> into primes. Concatenating those two
+finite products gives a prime factorization of <span
+class="math inline">\(n\)</span>. Thus the strong step proves <span
+class="math inline">\(E(m)\)</span>, and strong induction establishes
+existence for every integer <span
+class="math inline">\(n&gt;1\)</span>.</p>
+<p><em>Uniqueness.</em> Apply strong induction separately to <span
+class="math display">\[U(m):\quad\text{every prime factorization of }m+2
+  \text{ is unique up to order}.\]</span> Fix <span
+class="math inline">\(m\in\N_0\)</span>, assume <span
+class="math inline">\(U(j)\)</span> for every <span
+class="math inline">\(j&lt;m\)</span>, put <span
+class="math inline">\(n=m+2\)</span>, and suppose <span
+class="math display">\[n=p_1\cdots p_r=q_1\cdots q_s\]</span> are two
+prime factorizations. Since <span class="math inline">\(n&gt;1\)</span>
+whereas the empty product is <span class="math inline">\(1\)</span>,
+both factor lists are nonempty. The prime <span
+class="math inline">\(p_1\)</span> divides the product on the right, so
+<a href="#cor:ch001-prime-finite-product"
+data-reference-type="ref+label"
+data-reference="cor:ch001-prime-finite-product">1.48</a> gives <span
+class="math inline">\(p_1\mid q_j\)</span> for some <span
+class="math inline">\(j\)</span>. Because <span
+class="math inline">\(q_j\)</span> is prime and <span
+class="math inline">\(p_1&gt;1\)</span>, its only positive divisors
+force <span class="math inline">\(p_1=q_j\)</span>. Reorder the <span
+class="math inline">\(q\)</span> factors so that this matching factor
+comes first, then cancel the nonzero integer <span
+class="math inline">\(p_1\)</span>: <span
+class="math display">\[p_2\cdots p_r=q_2\cdots q_s=:h.\]</span> The
+common value <span class="math inline">\(h\)</span> is positive: an
+empty product equals <span class="math inline">\(1\)</span>, and every
+nonempty product here has positive factors. If <span
+class="math inline">\(h=1\)</span>, neither remaining product can be
+nonempty. Indeed, a one-factor product is a prime and hence at least
+<span class="math inline">\(2\)</span>; multiplying by another prime,
+which is again at least <span class="math inline">\(2\)</span>, keeps
+the product at least <span class="math inline">\(2\)</span>. Ordinary
+induction on the number of factors proves the claim. Thus both remaining
+lists are empty. If <span class="math inline">\(h&gt;1\)</span>, then
+<span class="math inline">\(n=p_1h\)</span> and <span
+class="math display">\[n-h=(p_1-1)h&gt;0,\]</span> so <span
+class="math inline">\(1&lt;h&lt;n\)</span>. Hence <span
+class="math inline">\(h-2\in\N_0\)</span> and <span
+class="math inline">\(h-2&lt;m\)</span>. The strong induction hypothesis
+<span class="math inline">\(U(h-2)\)</span> says that the remaining
+prime lists agree up to order. Restoring the matched factor <span
+class="math inline">\(p_1\)</span> proves uniqueness for <span
+class="math inline">\(n\)</span>. Thus the strong step proves <span
+class="math inline">\(U(m)\)</span>, and strong induction establishes
+uniqueness for every <span class="math inline">\(n&gt;1\)</span>. ◻</p>
+</div>
+<p>The two halves use different mechanisms. Existence needs descent and
+makes no claim of canonicity. Uniqueness needs the prime-product
+divisibility theorem; without Euclid’s lemma, cancellation cannot
+identify which factors match.</p>
+<p>The modern formulation emerged because different problems demanded
+different parts of it, not because one author leapt directly from Euclid
+to the finished theorem. Euclid’s Books VII and IX contain prime-divisor
+mechanisms from which a modern uniqueness proof can be built, but they
+do not package existence and uniqueness as the single theorem stated
+above. Around the turn of the fourteenth century, Kamāl al-Dīn
+al-Fārisī’s work on amicable numbers created a more specific pressure:
+the problem required both finite prime decomposition and enough control
+of it to determine all divisors of an integer. In later divisor-centered
+work by Prestet, Euler, and Legendre, factorization continued to
+function as an organizing tool. Gauss’s Article 16 then isolated
+uniqueness as a theorem in its own right. This problem-driven
+development, reconstructed by Ağargün and Özkan, refines the customary
+attribution of the first clear modern statement to Gauss <span
+class="citation"
+data-cites="agargun2001fta hardywright2008numbers">(Ağargün and Özkan
+2001, 207–14; Hardy and Wright 2008, note to Sec. 1.3, p. 12; Sec. 12.5,
+pp. 234–235)</span>. The history mirrors the proof just completed:
+existence, control of divisors, and uniqueness answer different needs,
+and the component mechanisms may be available long before a mathematical
+community reorganizes them around one canonical theorem.</p>
+<p>The uniqueness proof depends on a feature special enough to deserve
+notice: Euclid’s lemma allows a prime factor to pass through a finite
+product and meet one factor. In more general rings an element can be
+irreducible without having this property, and unique factorization may
+fail. The later algebraic theory will identify the additional
+hypotheses; the proof above shows exactly where they will be needed.</p>
+<p>The restriction <span class="math inline">\(n&gt;1\)</span> now has a
+precise role. A negative integer is a sign <span
+class="math inline">\(-1\)</span> times the unique factorization of its
+absolute value; <span class="math inline">\(1\)</span> corresponds to
+the empty product; and <span class="math inline">\(0\)</span> has no
+factorization into positive primes because every such finite product is
+nonzero. Extending the language to all integers therefore requires
+conventions for sign and the empty product, not a change to the theorem
+proved above.</p>
+<h3 data-number="1.9.1" id="primes-beyond-every-finite-bound"><span
+class="header-section-number">1.9.1</span> Primes beyond every finite
+bound</h3>
+<p>Unique factorization describes the primes inside any one integer, but
+could the total supply of primes still be finite? To escape a proposed
+bound, we want an integer that no prime beneath that bound can divide.
+The factorial collects all of the small divisors into one product;
+adding <span class="math inline">\(1\)</span> then defeats each of them
+with the same remainder. For <span
+class="math inline">\(m\in\N_0\)</span>, write <span
+class="math display">\[m!=\begin{cases}
+       1,&amp;m=0,\\
+       1\cdot2\cdots m,&amp;m&gt;0.
+     \end{cases}\]</span></p>
+<p>Euclid’s <em>Elements</em>, Book IX, Proposition 20 gives an ancient
+form of the unboundedness argument: any assigned finite collection of
+primes can be surpassed <span class="citation"
+data-cites="euclidheath1926elements">(Euclid 1926, bk. IX,
+Prop. 20)</span>. The factorial construction below is a convenient
+modern way to express the same quantified idea; it is not the literal
+form of Euclid’s proof.</p>
+<div id="thm:ch001-primes-unbounded" class="theorem">
+<p><strong>Theorem 1.50</strong> (Primes are unbounded). <em>For every
+<span class="math inline">\(N\in\N_0\)</span>, there exists a prime
+<span class="math inline">\(p&gt;N\)</span>.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Let <span class="math inline">\(M=(N+1)!+1\)</span>.
+Since <span class="math inline">\(M&gt;1\)</span>, <a
+href="#lem:ch001-prime-divisor" data-reference-type="ref+label"
+data-reference="lem:ch001-prime-divisor">1.46</a> gives a prime <span
+class="math inline">\(p\)</span> with <span class="math inline">\(p\mid
+M\)</span>. Suppose <span class="math inline">\(p\le N+1\)</span>.
+Because <span class="math inline">\(p\)</span> is one of the positive
+factors in <span class="math inline">\((N+1)!\)</span>, we have <span
+class="math inline">\(p\mid(N+1)!\)</span>. The prime <span
+class="math inline">\(p\)</span> also divides <span
+class="math inline">\(M\)</span>, so it divides their difference <span
+class="math display">\[M-(N+1)!=1.\]</span> But no integer greater than
+<span class="math inline">\(1\)</span> divides <span
+class="math inline">\(1\)</span>. This contradiction shows <span
+class="math inline">\(p&gt;N+1\)</span>, and therefore <span
+class="math inline">\(p&gt;N\)</span>. ◻</p>
+</div>
+<p>The argument proves the stronger quantified statement directly; it
+does not begin by assuming that a finite list contains every prime.</p>
+<p>For <span class="math inline">\(N=4\)</span>, the proof constructs
+<span class="math display">\[M=5!+1=121=11^2.\]</span> The construction
+has one last surprise: it guarantees novelty, not primality. The number
+<span class="math inline">\(121\)</span> is composite, but its prime
+divisor <span class="math inline">\(11\)</span> still lies beyond the
+proposed bound. Factorial plus one therefore produces a number with a
+new prime divisor, not necessarily a prime number. Unboundedness comes
+from performing the construction for every bound, not from the
+accidental behavior of any one output.</p>
+<h2 data-number="1.10" id="sec:ch001-what-arithmetic-reveals"><span
+class="header-section-number">1.10</span> What Arithmetic Reveals</h2>
+<p>At the beginning of the chapter, <span
+class="math inline">\(18\)</span> was only a plausible answer to a
+question about <span class="math inline">\(252\)</span> and <span
+class="math inline">\(198\)</span>. We can now see it from several
+directions at once. It is the nonnegative common divisor divisible by
+every other common divisor; it is an integer linear combination, <span
+class="math display">\[18=4(252)-5(198);\]</span> and it is the last
+nonzero remainder in a calculation in which every step preserves the
+common divisors of the original pair. These are not three coincidental
+descriptions. The Bézout identity certifies the universal clause.
+Remainder invariance then preserves the common-divisor information at
+every Euclidean step, while strict descent guarantees that a last
+nonzero remainder is eventually reached; together these facts identify
+it with the object whose existence the structural argument had already
+guaranteed. What first looked like an answer has become a meeting point
+of logic, structure, and computation.</p>
+<p>One reason these arguments work so cleanly over the integers is their
+discreteness. Induction prevented a first failure, well-ordering allowed
+a least witness to be chosen, and descent turned numerical order into a
+statement about the duration of a process. In the Euclidean algorithm
+the distinction became especially clear: the invariant explains why each
+simplification is faithful, while the decreasing remainder explains why
+simplification cannot continue forever. Once both facts were known, it
+became meaningful to ask a finer question—not whether the algorithm
+ends, but how rapidly its descent can proceed. Thus a proof of
+termination opened naturally into the study of complexity.</p>
+<p>Another distinction accompanied us more quietly. A mathematical
+object need not be identical with the route by which we reach it. Bézout
+coefficients are usually not unique, and a factorization may branch
+through different intermediate factors; nevertheless the gcd and the
+final multiset of prime factors are canonical. Conversely, for fixed
+<span class="math inline">\(a\)</span> and <span
+class="math inline">\(b&gt;0\)</span>, the equation <span
+class="math inline">\(a=bq+r\)</span> has infinitely many presentations
+until the remainder window <span class="math inline">\(0\le
+r&lt;b\)</span> selects one of them. An existence proof may follow one
+of many routes; a uniqueness proof must show that the resulting object
+does not depend on the permitted choices. Learning to separate an object
+from its presentation is one of the first steps from arithmetic toward
+abstract mathematics.</p>
+<p>That separation now forces the next question. Fix <span
+class="math inline">\(b&gt;0\)</span>. Division assigns each integer a
+unique remainder in <span
+class="math display">\[\{0,1,\ldots,b-1\},\]</span> and adding a
+multiple of <span class="math inline">\(b\)</span> does not change that
+remainder. If a problem can detect only the remainder, then infinitely
+many different integers have become indistinguishable for that problem.
+What does it mean to treat them as one object? When does a rule on
+chosen representatives give an unambiguous rule on the resulting
+objects? The next chapter develops the language needed to answer these
+questions: functions formalize rules with a uniquely determined output,
+equivalence relations formalize a prescribed notion of sameness, and
+quotients replace each resulting family of indistinguishable
+representatives by a single new object. In that language, when <span
+class="math inline">\(b\ge2\)</span>, an identity such as <span
+class="math display">\[ax+by=1\]</span> will say that the class of <span
+class="math inline">\(x\)</span> is a multiplicative inverse of the
+class of <span class="math inline">\(a\)</span> modulo <span
+class="math inline">\(b\)</span>. The next abstraction therefore begins
+with information that the arithmetic of this chapter has already taught
+us how to preserve—and with distinctions it has taught us when to
+forget.</p>
+<h1 class="refs-heading">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent"
+data-entry-spacing="0" role="list">
+<div id="ref-agargun2001fta" class="csl-entry" role="listitem">
+Ağargün, A. Göksel, and E. Mehmet Özkan. 2001. <span>“A Historical
+Survey of the Fundamental Theorem of Arithmetic.”</span> <em>Historia
+Mathematica</em> 28 (3): 207–14. <a
+href="https://doi.org/10.1006/hmat.2001.2318">https://doi.org/10.1006/hmat.2001.2318</a>.
+</div>
+<div id="ref-caldwell2012primalityone" class="csl-entry"
+role="listitem">
+Caldwell, Chris K., Angela Reddick, Yeng Xiong, and Wilfrid Keller.
+2012. <span>“The History of the Primality of One: A Selection of
+Sources.”</span> <em>Journal of Integer Sequences</em> 15. <a
+href="https://cs.uwaterloo.ca/journals/JIS/VOL15/Caldwell2/cald6.html">https://cs.uwaterloo.ca/journals/JIS/VOL15/Caldwell2/cald6.html</a>.
+</div>
+<div id="ref-caldwell2012smallestprime" class="csl-entry"
+role="listitem">
+Caldwell, Chris K., and Yeng Xiong. 2012. <span>“What Is the Smallest
+Prime?”</span> <em>Journal of Integer Sequences</em> 15. <a
+href="https://cs.uwaterloo.ca/journals/JIS/VOL15/Caldwell1/cald5.html">https://cs.uwaterloo.ca/journals/JIS/VOL15/Caldwell1/cald5.html</a>.
+</div>
+<div id="ref-cook2023fregelogic" class="csl-entry" role="listitem">
+Cook, Roy T. 2023. <span>“Frege’s Logic.”</span> February 7, 2023. <a
+href="https://plato.stanford.edu/entries/frege-logic/">https://plato.stanford.edu/entries/frege-logic/</a>.
+</div>
+<div id="ref-euclidheath1926elements" class="csl-entry" role="listitem">
+Euclid. 1926. <em>The Thirteen Books of Euclid’s Elements</em>.
+Translated by Thomas L. Heath. 2nd ed. Cambridge University Press. <a
+href="https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0086">https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0086</a>.
+</div>
+<div id="ref-fermat1891oeuvres1" class="csl-entry" role="listitem">
+Fermat, Pierre de. 1891. <em><span>Œ</span>uvres de Fermat</em>. Edited
+by Paul Tannery and Charles Henry. Vol. 1. Paris: Gauthier-Villars et
+fils. <a
+href="https://archive.org/details/oeuvresdefermat01ferm">https://archive.org/details/oeuvresdefermat01ferm</a>.
+</div>
+<div id="ref-fermat1894oeuvres" class="csl-entry" role="listitem">
+———. 1894. <em><span>Œ</span>uvres de Fermat</em>. Edited by Paul
+Tannery and Charles Henry. Vol. 2. Paris: Gauthier-Villars et fils. <a
+href="https://archive.org/details/oeuvresdefermatp02ferm">https://archive.org/details/oeuvresdefermatp02ferm</a>.
+</div>
+<div id="ref-frege1879begriffsschrift" class="csl-entry"
+role="listitem">
+Frege, Gottlob. 1879. <em>Begriffsschrift: Eine Der Arithmetischen
+Nachgebildete Formelsprache Des Reinen Denkens</em>. Halle: Louis
+Nebert. <a
+href="https://gdz.sub.uni-goettingen.de/id/PPN538957069">https://gdz.sub.uni-goettingen.de/id/PPN538957069</a>.
+</div>
+<div id="ref-fuss1843correspondance" class="csl-entry" role="listitem">
+Fuss, Paul Heinrich, ed. 1843. <em>Correspondance Mathématique Et
+Physique de Quelques Célèbres Géomètres Du XVIIIème Siècle</em>. Vol. 1.
+St. Pétersbourg: Académie impériale des sciences. <a
+href="https://archive.org/details/correspondancem00fussgoog">https://archive.org/details/correspondancem00fussgoog</a>.
+</div>
+<div id="ref-granville2024notbezout" class="csl-entry" role="listitem">
+Granville, Andrew. 2024. <span>“It Is Not b<span>é</span>zout’s
+Identity.”</span> <a
+href="https://arxiv.org/abs/2406.15642">https://arxiv.org/abs/2406.15642</a>.
+</div>
+<div id="ref-hara1962pascal" class="csl-entry" role="listitem">
+Hara, Kokiti. 1962. <span>“Pascal Et l’induction
+Math<span>é</span>matique.”</span> <em>Revue d’histoire Des Sciences Et
+de Leurs Applications</em> 15 (3–4): 287–302. <a
+href="https://doi.org/10.3406/rhs.1962.4427">https://doi.org/10.3406/rhs.1962.4427</a>.
+</div>
+<div id="ref-hardywright2008numbers" class="csl-entry" role="listitem">
+Hardy, G. H., and E. M. Wright. 2008. <em>An Introduction to the Theory
+of Numbers</em>. 6th ed. Oxford University Press.
+</div>
+<div id="ref-heath1910diophantus" class="csl-entry" role="listitem">
+Heath, Thomas Little. 1910. <em>Diophantus of Alexandria: A Study in the
+History of Greek Algebra</em>. 2nd ed. Cambridge University Press. <a
+href="https://archive.org/details/diophantusofalex00heatiala">https://archive.org/details/diophantusofalex00heatiala</a>.
+</div>
+<div id="ref-hettle2015arithmetica" class="csl-entry" role="listitem">
+Hettle, Cyrus. 2015. <span>“The Symbolic and Mathematical Influence of
+Diophantus’s Arithmetica.”</span> <em>Journal of Humanistic
+Mathematics</em> 5 (1): 139–66. <a
+href="https://doi.org/10.5642/jhummath.201501.08">https://doi.org/10.5642/jhummath.201501.08</a>.
+</div>
+<div id="ref-lehman2010mcs" class="csl-entry" role="listitem">
+Lehman, Eric, F. Thomson Leighton, and Albert R. Meyer. 2010.
+<em>Mathematics for Computer Science</em>. MIT OpenCourseWare. <a
+href="https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/">https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/</a>.
+</div>
+<div id="ref-oliveiraesilva2014goldbach" class="csl-entry"
+role="listitem">
+Oliveira e Silva, Tomás, Siegfried Herzog, and Silvio Pardi. 2014.
+<span>“Empirical Verification of the Even <span>G</span>oldbach
+Conjecture and Computation of Prime Gaps up to <span
+class="math inline">\(4\cdot10^{18}\)</span>.”</span> <em>Mathematics of
+Computation</em> 83 (288): 2033–60. <a
+href="https://doi.org/10.1090/S0025-5718-2013-02787-1">https://doi.org/10.1090/S0025-5718-2013-02787-1</a>.
+</div>
+<div id="ref-rabinovitch1970induction" class="csl-entry"
+role="listitem">
+Rabinovitch, Nachum L. 1970. <span>“Rabbi Levi Ben Gershon and the
+Origins of Mathematical Induction.”</span> <em>Archive for History of
+Exact Sciences</em> 6 (3): 237–48. <a
+href="https://doi.org/10.1007/BF00327237">https://doi.org/10.1007/BF00327237</a>.
+</div>
+<div id="ref-rashed1972induction" class="csl-entry" role="listitem">
+Rashed, Roshdi. 1972. <span>“L’induction Math<span>é</span>matique:
+Al-Karaj<span>ī</span>, as-Samaw’al.”</span> <em>Archive for History of
+Exact Sciences</em> 9 (1): 1–21. <a
+href="https://doi.org/10.1007/BF00348537">https://doi.org/10.1007/BF00348537</a>.
+</div>
+<div id="ref-shallit1994origins" class="csl-entry" role="listitem">
+Shallit, Jeffrey. 1994. <span>“Origins of the Analysis of the Euclidean
+Algorithm.”</span> <em>Historia Mathematica</em> 21 (4): 401–19. <a
+href="https://doi.org/10.1006/hmat.1994.1031">https://doi.org/10.1006/hmat.1994.1031</a>.
+</div>
+<div id="ref-wiles1995modular" class="csl-entry" role="listitem">
+Wiles, Andrew. 1995. <span>“Modular Elliptic Curves and
+<span>F</span>ermat’s <span>L</span>ast <span>T</span>heorem.”</span>
+<em>Annals of Mathematics</em> 141 (3): 443–551. <a
+href="https://doi.org/10.2307/2118559">https://doi.org/10.2307/2118559</a>.
+</div>
+</div>
+    </article>
+
+    <nav class="post-nav-bottom">
+      <a href="../../">← Back to all posts</a>
+    </nav>
+  </main>
+
+    <aside class="toc-sidebar">
+    <div class="toc-sidebar-title">Contents</div>
+    <ul>
+    <li><a href="#sec:ch001-motivating-problem"
+    id="toc-sec:ch001-motivating-problem"><span
+    class="toc-section-number">1.1</span> A Question About Two
+    Integers</a></li>
+    <li><a href="#sec:ch001-proof-language"
+    id="toc-sec:ch001-proof-language"><span
+    class="toc-section-number">1.2</span> A Working Language for Claims
+    and Proofs</a>
+    <ul>
+    <li><a href="#statements-predicates-and-domains"
+    id="toc-statements-predicates-and-domains"><span
+    class="toc-section-number">1.2.1</span> Statements, predicates, and
+    domains</a></li>
+    <li><a href="#quantifier-order-and-dependence"
+    id="toc-quantifier-order-and-dependence"><span
+    class="toc-section-number">1.2.2</span> Quantifier order and
+    dependence</a></li>
+    <li><a href="#proof-design-follows-logical-form"
+    id="toc-proof-design-follows-logical-form"><span
+    class="toc-section-number">1.2.3</span> Proof design follows logical
+    form</a></li>
+    </ul></li>
+    <li><a href="#sec:ch001-foundation-boundary"
+    id="toc-sec:ch001-foundation-boundary"><span
+    class="toc-section-number">1.3</span> Integers and
+    Induction</a></li>
+    <li><a href="#sec:ch001-divisibility"
+    id="toc-sec:ch001-divisibility"><span
+    class="toc-section-number">1.4</span> Divisibility: Turning a
+    Relation into a Witness</a></li>
+    <li><a href="#sec:ch001-division" id="toc-sec:ch001-division"><span
+    class="toc-section-number">1.5</span> Division with
+    Remainder</a></li>
+    <li><a href="#sec:ch001-gcd" id="toc-sec:ch001-gcd"><span
+    class="toc-section-number">1.6</span> Greatest Common Divisors as a
+    Universal Property</a></li>
+    <li><a href="#sec:ch001-euclidean-algorithm"
+    id="toc-sec:ch001-euclidean-algorithm"><span
+    class="toc-section-number">1.7</span> The Euclidean Algorithm:
+    Invariant Plus Descent</a>
+    <ul>
+    <li><a href="#extended-euclid-preserving-the-witnesses"
+    id="toc-extended-euclid-preserving-the-witnesses"><span
+    class="toc-section-number">1.7.1</span> Extended Euclid: preserving
+    the witnesses</a></li>
+    <li><a href="#bézout-coefficients-as-checkable-evidence"
+    id="toc-bézout-coefficients-as-checkable-evidence"><span
+    class="toc-section-number">1.7.2</span> Bézout coefficients as
+    checkable evidence</a></li>
+    <li><a href="#a-finite-step-bound-without-asymptotic-machinery"
+    id="toc-a-finite-step-bound-without-asymptotic-machinery"><span
+    class="toc-section-number">1.7.3</span> A finite step bound without
+    asymptotic machinery</a></li>
+    </ul></li>
+    <li><a href="#sec:ch001-diophantine"
+    id="toc-sec:ch001-diophantine"><span
+    class="toc-section-number">1.8</span> Coprimality and Linear
+    Diophantine Equations</a></li>
+    <li><a href="#sec:ch001-primes" id="toc-sec:ch001-primes"><span
+    class="toc-section-number">1.9</span> Primes and Unique
+    Factorization</a>
+    <ul>
+    <li><a href="#primes-beyond-every-finite-bound"
+    id="toc-primes-beyond-every-finite-bound"><span
+    class="toc-section-number">1.9.1</span> Primes beyond every finite
+    bound</a></li>
+    </ul></li>
+    <li><a href="#sec:ch001-what-arithmetic-reveals"
+    id="toc-sec:ch001-what-arithmetic-reveals"><span
+    class="toc-section-number">1.10</span> What Arithmetic
+    Reveals</a></li>
+    </ul>
+  </aside>
+  </div>
+
+<footer class="site-footer">
+  © 2026 Jiawei Zhang · <a href="https://javyduck.github.io/">javyduck.github.io</a>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+{
+  "site_title": "Jiawei Zhang · Blog",
+  "intro": "Notes on mathematics from first principles, AI safety research, and occasional random thoughts.",
+  "categories": {
+    "math": "Math",
+    "research": "Research",
+    "musings": "Musings"
+  },
+  "posts": [
+    {
+      "slug": "hello-world",
+      "title": "Why This Blog (and What Posts Can Contain)",
+      "date": "2026-07-17",
+      "category": "musings",
+      "description": "A short hello: what this blog is for, and a demo of Markdown, LaTeX math, code, and images in posts.",
+      "format": "markdown",
+      "source": "content/hello-world/index.md"
+    },
+    {
+      "slug": "integers-divisibility-and-proof",
+      "title": "Integers, Divisibility, and the Logic of Proof",
+      "date": "2026-07-17",
+      "category": "math",
+      "description": "Chapter 1 of my first-principles mathematics notes: quantifiers and proof methods, induction and well-ordering, the division algorithm, gcd and Bézout's identity, and the fundamental theorem of arithmetic.",
+      "format": "latex",
+      "source": "../../../math/chapters/001-integers_divisibility_and_proof/src/chapter.tex",
+      "chapter": 1,
+      "bibliography": "../../../math/common/bib/references.bib"
+    }
+  ]
+}

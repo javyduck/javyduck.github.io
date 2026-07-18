@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 140" font-family="Georgia, serif">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#800000"/>
+      <stop offset="1" stop-color="#244A73"/>
+    </linearGradient>
+  </defs>
+  <rect x="10" y="10" width="500" height="120" rx="10" fill="none" stroke="url(#g)" stroke-width="2"/>
+  <text x="260" y="66" text-anchor="middle" font-size="22" font-style="italic" fill="#8a8078">
+    “Man is but a thinking reed.”
+  </text>
+  <text x="260" y="98" text-anchor="middle" font-size="14" fill="#8a8a8a">
+    — Blaise Pascal
+  </text>
+</svg>

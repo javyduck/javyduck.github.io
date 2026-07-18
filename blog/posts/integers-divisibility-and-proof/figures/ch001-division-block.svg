@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 850 160" font-family="Georgia, 'Times New Roman', serif" font-size="15">
+<line x1="19.0" y1="104.0" x2="655.0" y2="104.0" stroke="#333333" stroke-width="1.3"/>
+<path d="M 665.0 104.0 l -11 -4.5 v 9 z" fill="#333333"/>
+<line x1="57.0" y1="97.0" x2="57.0" y2="111.0" stroke="#333333" stroke-width="1.3"/>
+<text x="57.0" y="130.0" text-anchor="middle" font-style="italic" fill="#333333">5q</text>
+<line x1="152.0" y1="97.0" x2="152.0" y2="111.0" stroke="#333333" stroke-width="1.3"/>
+<text x="152.0" y="130.0" text-anchor="middle" font-style="italic" fill="#333333">5q+1</text>
+<line x1="247.0" y1="97.0" x2="247.0" y2="111.0" stroke="#333333" stroke-width="1.3"/>
+<text x="247.0" y="130.0" text-anchor="middle" font-style="italic" fill="#333333">5q+2</text>
+<line x1="342.0" y1="97.0" x2="342.0" y2="111.0" stroke="#333333" stroke-width="1.3"/>
+<text x="342.0" y="130.0" text-anchor="middle" font-style="italic" fill="#333333">5q+3</text>
+<line x1="437.0" y1="97.0" x2="437.0" y2="111.0" stroke="#333333" stroke-width="1.3"/>
+<text x="437.0" y="130.0" text-anchor="middle" font-style="italic" fill="#333333">5q+4</text>
+<line x1="532.0" y1="97.0" x2="532.0" y2="111.0" stroke="#333333" stroke-width="1.3"/>
+<text x="532.0" y="130.0" text-anchor="middle" font-style="italic" fill="#333333">5(q+1)</text>
+<line x1="57.0" y1="48.8" x2="532.0" y2="48.8" stroke="#244A73" stroke-width="3"/>
+<circle cx="342.0" cy="104.0" r="4.2" fill="#9A6B16"/>
+<text x="342.0" y="85.8" text-anchor="middle" font-style="italic" fill="#9A6B16">a = 5q+3</text>
+<path d="M 57.0 29.3 Q 57.0 21.3 66.0 21.3 L 190.5 21.3 Q 199.5 21.3 199.5 14.3 Q 199.5 21.3 208.5 21.3 L 333.0 21.3 Q 342.0 21.3 342.0 29.3" fill="none" stroke="#1C6B65" stroke-width="1.6"/>
+<text x="199.5" y="6.3" text-anchor="middle" font-style="italic" fill="#1C6B65">r = 3</text>
+<text x="574.8" y="31.2" fill="#333333" font-size="14.5"><tspan font-style="italic">0 ≤ r &lt; 5</tspan> selects</text>
+<text x="574.8" y="52.0" fill="#333333" font-size="14.5">one point in the block</text>
+</svg>

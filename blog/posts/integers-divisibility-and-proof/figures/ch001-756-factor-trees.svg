@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 290" font-family="Georgia, 'Times New Roman', serif" font-size="14.5">
+<line x1="134.8" y1="52.2" x2="57.8" y2="96.2" stroke="#244A73" stroke-width="1.1"/>
+<line x1="134.8" y1="52.2" x2="211.8" y2="96.2" stroke="#244A73" stroke-width="1.1"/>
+<line x1="57.8" y1="96.2" x2="24.8" y2="140.2" stroke="#244A73" stroke-width="1.1"/>
+<line x1="57.8" y1="96.2" x2="90.8" y2="140.2" stroke="#244A73" stroke-width="1.1"/>
+<line x1="90.8" y1="140.2" x2="71.5" y2="184.2" stroke="#244A73" stroke-width="1.1"/>
+<line x1="90.8" y1="140.2" x2="110.0" y2="184.2" stroke="#244A73" stroke-width="1.1"/>
+<line x1="211.8" y1="96.2" x2="178.8" y2="140.2" stroke="#244A73" stroke-width="1.1"/>
+<line x1="211.8" y1="96.2" x2="244.8" y2="140.2" stroke="#244A73" stroke-width="1.1"/>
+<line x1="178.8" y1="140.2" x2="159.5" y2="184.2" stroke="#244A73" stroke-width="1.1"/>
+<line x1="178.8" y1="140.2" x2="198.0" y2="184.2" stroke="#244A73" stroke-width="1.1"/>
+<rect x="112.8" y="39.2" width="44" height="26" rx="3" fill="#f7f9fc" stroke="#244A73" stroke-width="1.2"/>
+<text x="134.8" y="57.2" text-anchor="middle" fill="#333333">756</text>
+<rect x="40.8" y="83.2" width="34" height="26" rx="3" fill="#f7f9fc" stroke="#244A73" stroke-width="1.2"/>
+<text x="57.8" y="101.2" text-anchor="middle" fill="#333333">27</text>
+<rect x="194.8" y="83.2" width="34" height="26" rx="3" fill="#f7f9fc" stroke="#244A73" stroke-width="1.2"/>
+<text x="211.8" y="101.2" text-anchor="middle" fill="#333333">28</text>
+<rect x="11.8" y="127.2" width="26" height="26" rx="3" fill="#ebf3f2" stroke="#1C6B65" stroke-width="1.2"/>
+<text x="24.8" y="145.2" text-anchor="middle" fill="#333333" font-weight="bold">3</text>
+<rect x="77.8" y="127.2" width="26" height="26" rx="3" fill="#f7f9fc" stroke="#244A73" stroke-width="1.2"/>
+<text x="90.8" y="145.2" text-anchor="middle" fill="#333333">9</text>
+<rect x="165.8" y="127.2" width="26" height="26" rx="3" fill="#f7f9fc" stroke="#244A73" stroke-width="1.2"/>
+<text x="178.8" y="145.2" text-anchor="middle" fill="#333333">4</text>
+<rect x="231.8" y="127.2" width="26" height="26" rx="3" fill="#ebf3f2" stroke="#1C6B65" stroke-width="1.2"/>
+<text x="244.8" y="145.2" text-anchor="middle" fill="#333333" font-weight="bold">7</text>
+<rect x="58.5" y="171.2" width="26" height="26" rx="3" fill="#ebf3f2" stroke="#1C6B65" stroke-width="1.2"/>
+<text x="71.5" y="189.2" text-anchor="middle" fill="#333333" font-weight="bold">3</text>
+<rect x="97.0" y="171.2" width="26" height="26" rx="3" fill="#ebf3f2" stroke="#1C6B65" stroke-width="1.2"/>
+<text x="110.0" y="189.2" text-anchor="middle" fill="#333333" font-weight="bold">3</text>
+<rect x="146.5" y="171.2" width="26" height="26" rx="3" fill="#ebf3f2" stroke="#1C6B65" stroke-width="1.2"/>
+<text x="159.5" y="189.2" text-anchor="middle" fill="#333333" font-weight="bold">2</text>
+<rect x="185.0" y="171.2" width="26" height="26" rx="3" fill="#ebf3f2" stroke="#1C6B65" stroke-width="1.2"/>
+<text x="198.0" y="189.2" text-anchor="middle" fill="#333333" font-weight="bold">2</text>
+<text x="134.8" y="18.1" text-anchor="middle" font-weight="bold" fill="#244A73" font-size="14">first split 27·28</text>
+<text x="134.8" y="220.0" text-anchor="middle" fill="#1C6B65" font-size="12.5" font-style="italic">prime leaves: 2, 2, 3, 3, 3, 7</text>
+<line x1="552.8" y1="52.2" x2="453.8" y2="96.2" stroke="#244A73" stroke-width="1.1"/>
+<line x1="552.8" y1="52.2" x2="596.8" y2="96.2" stroke="#244A73" stroke-width="1.1"/>
+<line x1="596.8" y1="96.2" x2="558.2" y2="140.2" stroke="#244A73" stroke-width="1.1"/>
+<line x1="596.8" y1="96.2" x2="635.2" y2="140.2" stroke="#244A73" stroke-width="1.1"/>
+<line x1="635.2" y1="140.2" x2="602.2" y2="184.2" stroke="#244A73" stroke-width="1.1"/>
+<line x1="635.2" y1="140.2" x2="668.2" y2="184.2" stroke="#244A73" stroke-width="1.1"/>
+<line x1="602.2" y1="184.2" x2="583.0" y2="228.3" stroke="#244A73" stroke-width="1.1"/>
+<line x1="602.2" y1="184.2" x2="621.5" y2="228.3" stroke="#244A73" stroke-width="1.1"/>
+<line x1="668.2" y1="184.2" x2="649.0" y2="228.3" stroke="#244A73" stroke-width="1.1"/>
+<line x1="668.2" y1="184.2" x2="687.5" y2="228.3" stroke="#244A73" stroke-width="1.1"/>
+<rect x="530.8" y="39.2" width="44" height="26" rx="3" fill="#f7f9fc" stroke="#244A73" stroke-width="1.2"/>
+<text x="552.8" y="57.2" text-anchor="middle" fill="#333333">756</text>
+<rect x="440.8" y="83.2" width="26" height="26" rx="3" fill="#ebf3f2" stroke="#1C6B65" stroke-width="1.2"/>
+<text x="453.8" y="101.2" text-anchor="middle" fill="#333333" font-weight="bold">3</text>
+<rect x="574.8" y="83.2" width="44" height="26" rx="3" fill="#f7f9fc" stroke="#244A73" stroke-width="1.2"/>
+<text x="596.8" y="101.2" text-anchor="middle" fill="#333333">252</text>
+<rect x="545.2" y="127.2" width="26" height="26" rx="3" fill="#ebf3f2" stroke="#1C6B65" stroke-width="1.2"/>
+<text x="558.2" y="145.2" text-anchor="middle" fill="#333333" font-weight="bold">7</text>
+<rect x="618.2" y="127.2" width="34" height="26" rx="3" fill="#f7f9fc" stroke="#244A73" stroke-width="1.2"/>
+<text x="635.2" y="145.2" text-anchor="middle" fill="#333333">36</text>
+<rect x="589.2" y="171.2" width="26" height="26" rx="3" fill="#f7f9fc" stroke="#244A73" stroke-width="1.2"/>
+<text x="602.2" y="189.2" text-anchor="middle" fill="#333333">4</text>
+<rect x="655.2" y="171.2" width="26" height="26" rx="3" fill="#f7f9fc" stroke="#244A73" stroke-width="1.2"/>
+<text x="668.2" y="189.2" text-anchor="middle" fill="#333333">9</text>
+<rect x="570.0" y="215.3" width="26" height="26" rx="3" fill="#ebf3f2" stroke="#1C6B65" stroke-width="1.2"/>
+<text x="583.0" y="233.3" text-anchor="middle" fill="#333333" font-weight="bold">2</text>
+<rect x="608.5" y="215.3" width="26" height="26" rx="3" fill="#ebf3f2" stroke="#1C6B65" stroke-width="1.2"/>
+<text x="621.5" y="233.3" text-anchor="middle" fill="#333333" font-weight="bold">2</text>
+<rect x="636.0" y="215.3" width="26" height="26" rx="3" fill="#ebf3f2" stroke="#1C6B65" stroke-width="1.2"/>
+<text x="649.0" y="233.3" text-anchor="middle" fill="#333333" font-weight="bold">3</text>
+<rect x="674.5" y="215.3" width="26" height="26" rx="3" fill="#ebf3f2" stroke="#1C6B65" stroke-width="1.2"/>
+<text x="687.5" y="233.3" text-anchor="middle" fill="#333333" font-weight="bold">3</text>
+<text x="552.8" y="18.1" text-anchor="middle" font-weight="bold" fill="#244A73" font-size="14">first split 3·252</text>
+<text x="572.0" y="264.0" text-anchor="middle" fill="#1C6B65" font-size="12.5" font-style="italic">prime leaves: 2, 2, 3, 3, 3, 7</text>
+</svg>
