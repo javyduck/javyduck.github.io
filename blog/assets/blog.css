@@ -114,12 +114,18 @@ a:hover { color: var(--accent-soft); }
   cursor: pointer;
   border: none;
   background: none;
-  font-size: 17px;
-  line-height: 1;
-  padding: 4px;
+  line-height: 0;
+  padding: 7px 10px;
+  border-radius: 8px;
   color: var(--text-soft);
+  display: inline-flex;
+  align-items: center;
 }
-.theme-toggle:hover { color: var(--accent); }
+
+.theme-toggle:hover {
+  color: var(--accent);
+  background: var(--bg-soft);
+}
 
 /* ------------------------------------------------------------------ */
 /* Index page                                                          */
