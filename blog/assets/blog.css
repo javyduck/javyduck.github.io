@@ -656,12 +656,16 @@ a.series-nav-card:hover { border-color: var(--accent); }
   border: none;
   background: none;
   color: var(--text-faint);
-  font-size: 13px;
-  padding: 2px 6px;
+  font-size: 18px;
+  line-height: 1;
+  padding: 4px 12px;
   border-radius: 6px;
 }
 
-.toc-toggle:hover, .toc-reopen:hover { color: var(--accent); }
+.toc-toggle:hover, .toc-reopen:hover {
+  color: var(--accent);
+  background: var(--bg-soft);
+}
 
 .toc-reopen {
   display: none;
