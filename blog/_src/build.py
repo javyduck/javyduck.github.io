@@ -99,6 +99,22 @@ def label_references(body):
     return body
 
 
+def series_neighbors(config, post):
+    """Return (series_id, series_def, prev_post, next_post) for a series
+    member, ordered by part number."""
+    sid = post.get("series")
+    if not sid:
+        return None, None, None, None
+    sdef = config.get("series", {}).get(sid, {})
+    members = sorted(
+        [p for p in config["posts"] if p.get("series") == sid],
+        key=lambda p: p.get("part", 0))
+    idx = next(i for i, p in enumerate(members) if p["slug"] == post["slug"])
+    prev_p = members[idx - 1] if idx > 0 else None
+    next_p = members[idx + 1] if idx + 1 < len(members) else None
+    return sid, sdef, prev_p, next_p
+
+
 def build_post(pandoc, post, config):
     slug = post["slug"]
     out_dir = BLOG_DIR / "posts" / slug
@@ -116,6 +132,37 @@ def build_post(pandoc, post, config):
            "-V", "category=%s" % post["category"],
            "-V", "description=%s" % post.get("description", ""),
            "-V", "readingtime=PLACEHOLDER"]
+
+    sid, sdef, prev_p, next_p = series_neighbors(config, post)
+    if sid:
+        crumb = ('<nav class="post-breadcrumb"><a href="../../series/%s/">%s</a>'
+                 '<span class="crumb-sep">/</span>'
+                 '<span>Chapter %d</span></nav>'
+                 % (sid, html.escape(sdef.get("title", sid)), post.get("part", 0)))
+        cmd += ["-V", "breadcrumbhtml=%s" % crumb]
+
+        nav_cells = []
+        if prev_p:
+            nav_cells.append(
+                '<a class="series-nav-card" href="../%s/">'
+                '<span class="series-nav-label">← Previous · Chapter %d</span>'
+                '<span class="series-nav-title">%s</span></a>'
+                % (prev_p["slug"], prev_p.get("part", 0), html.escape(prev_p["title"])))
+        else:
+            nav_cells.append('<span class="series-nav-card empty"></span>')
+        if next_p:
+            nav_cells.append(
+                '<a class="series-nav-card next" href="../%s/">'
+                '<span class="series-nav-label">Next · Chapter %d →</span>'
+                '<span class="series-nav-title">%s</span></a>'
+                % (next_p["slug"], next_p.get("part", 0), html.escape(next_p["title"])))
+        else:
+            nav_cells.append(
+                '<span class="series-nav-card next empty">'
+                '<span class="series-nav-label">Next chapter</span>'
+                '<span class="series-nav-title">Coming soon</span></span>')
+        cmd += ["-V", "seriesnavhtml=<nav class=\"series-nav\">%s</nav>"
+                % "".join(nav_cells)]
 
     giscus = config.get("giscus", {})
     if giscus.get("categoryId"):
@@ -160,8 +207,12 @@ def build_post(pandoc, post, config):
     page = page.replace("PLACEHOLDER", str(reading_time(new_body)))
     page = unwrap_toc(page)
 
-    # Drop the TOC sidebar when a post has almost no headings.
-    aside = re.search(r'<aside class="toc-sidebar">.*?</aside>', page, flags=re.S)
+    # Drop the TOC sidebar (and its reopen button) when a post has almost
+    # no headings.
+    aside = re.search(
+        r'<aside class="toc-sidebar">.*?</aside>\s*'
+        r'(?:<button class="toc-reopen".*?</button>)?',
+        page, flags=re.S)
     if aside and aside.group(0).count("<li>") < 2:
         page = page.replace(aside.group(0), "")
 
@@ -169,86 +220,28 @@ def build_post(pandoc, post, config):
     print("built posts/%s/index.html" % slug)
 
 
-def build_index(config):
-    posts = sorted(config["posts"], key=lambda p: p["date"], reverse=True)
-    cats = config["categories"]
-
-    counts = {}
-    for p in posts:
-        counts[p["category"]] = counts.get(p["category"], 0) + 1
-
-    chips = ['<button class="chip active" data-category="all">All'
-             '<span class="count">%d</span></button>' % len(posts)]
-    for key, label in cats.items():
-        if key in counts:
-            chips.append(
-                '<button class="chip" data-category="%s">%s'
-                '<span class="count">%d</span></button>'
-                % (key, html.escape(label), counts[key]))
-
-    def item_html(p, show_tag=True):
-        label = cats.get(p["category"], p["category"])
-        tag = ('<span class="tag">%s</span>' % html.escape(label)) if show_tag else ""
-        search_blob = html.escape(" ".join(
-            [p["title"], p.get("description", ""), p["category"], label]).lower())
-        return (
-            '<div class="post-item" data-category="{cat}" data-search="{search}">\n'
-            '  <span class="post-date">{date}</span>\n'
-            '  <div>\n'
-            '    <a class="post-link" href="posts/{slug}/">{title}</a>{tag}\n'
-            '    <p class="post-desc">{desc}</p>\n'
-            '  </div>\n'
-            '</div>'
-        ).format(cat=p["category"], search=search_blob,
-                 date=display_date(p["date"]), slug=p["slug"],
-                 title=html.escape(p["title"]), tag=tag,
-                 desc=html.escape(p.get("description", "")))
-
-    # ----- view 1: grouped by year -----
-    by_date = []
-    current_year = None
-    for p in posts:
-        year = p["date"][:4]
-        if year != current_year:
-            if current_year is not None:
-                by_date.append("</div>")
-            by_date.append('<div class="year-group">\n'
-                           '<div class="year-heading">%s</div>' % year)
-            current_year = year
-        by_date.append(item_html(p))
-    if current_year is not None:
-        by_date.append("</div>")
-
-    # ----- view 2: grouped by topic -----
-    by_topic = []
-    for key, label in cats.items():
-        cat_posts = [p for p in posts if p["category"] == key]
-        if not cat_posts:
-            continue
-        by_topic.append('<div class="year-group" data-category-group="%s">\n'
-                        '<div class="year-heading">%s</div>' % (key, html.escape(label)))
-        by_topic.extend(item_html(p, show_tag=False) for p in cat_posts)
-        by_topic.append("</div>")
-
-    page = """<!DOCTYPE html>
+def page_chrome(rel, title, description, content):
+    """Shared page shell for index / topic / series pages. `rel` is the
+    relative path prefix back to the blog root ("" or "../../")."""
+    return """<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Blog | Jiawei Zhang</title>
-<meta name="description" content="%(intro)s">
+<title>%(title)s</title>
+<meta name="description" content="%(description)s">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%%22http://www.w3.org/2000/svg%%22 viewBox=%%220 0 100 100%%22><text y=%%22.9em%%22 font-size=%%2290%%22>🍪</text></svg>">
-<link rel="stylesheet" href="assets/blog.css">
-<script src="assets/blog.js"></script>
+<link rel="stylesheet" href="%(rel)sassets/blog.css">
+<script src="%(rel)sassets/blog.js"></script>
 <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </head>
 <body>
 
 <header class="site-header">
   <div class="site-header-inner">
-    <a class="site-title" href="./">Jiawei Zhang<span style="color:var(--accent)">&nbsp;· Blog</span></a>
+    <a class="site-title" href="%(rel)s./">Jiawei Zhang<span class="site-title-accent">&nbsp;· Blog</span></a>
     <nav class="site-nav">
-      <a href="./" class="active">Posts</a>
+      <a href="%(rel)s./">Posts</a>
       <a href="https://javyduck.github.io/">About</a>
       <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">☾</button>
     </nav>
@@ -256,32 +249,7 @@ def build_index(config):
 </header>
 
 <main class="index-wrap">
-  <p class="index-intro">%(intro)s</p>
-
-  <input class="search-box" type="search" id="post-search"
-         placeholder="Search posts by title, description, or topic…" autocomplete="off">
-
-  <div class="index-controls">
-    <div class="category-chips">
-      %(chips)s
-    </div>
-    <div class="view-toggle">
-      <button class="view-btn active" data-view="date">By date</button>
-      <button class="view-btn" data-view="topic">By topic</button>
-    </div>
-  </div>
-
-  <div id="view-date" data-page-size="%(page_size)d">
-  %(by_date)s
-  </div>
-
-  <div id="view-topic" style="display:none">
-  %(by_topic)s
-  </div>
-
-  <p class="no-results" id="no-results">No posts match your search.</p>
-
-  <nav class="pager" id="pager"></nav>
+%(content)s
 </main>
 
 <footer class="site-footer">
@@ -292,14 +260,209 @@ def build_index(config):
 
 </body>
 </html>
+""" % {"title": html.escape(title), "description": html.escape(description),
+       "rel": rel, "content": content}
+
+
+def item_html(p, cats, rel, show_tag=True):
+    label = cats.get(p["category"], p["category"])
+    tag = ('<a class="tag" href="%stopics/%s/">%s</a>'
+           % (rel, p["category"], html.escape(label))) if show_tag else ""
+    search_blob = html.escape(" ".join(
+        [p["title"], p.get("description", ""), p["category"], label]).lower())
+    return (
+        '<div class="post-item" data-category="{cat}" data-search="{search}">\n'
+        '  <span class="post-date">{date}</span>\n'
+        '  <div>\n'
+        '    <a class="post-link" href="{rel}posts/{slug}/">{title}</a>{tag}\n'
+        '    <p class="post-desc">{desc}</p>\n'
+        '  </div>\n'
+        '</div>'
+    ).format(cat=p["category"], search=search_blob,
+             date=display_date(p["date"]), rel=rel, slug=p["slug"],
+             title=html.escape(p["title"]), tag=tag,
+             desc=html.escape(p.get("description", "")))
+
+
+def year_grouped(posts, cats, rel, show_tag=True):
+    out = []
+    current_year = None
+    for p in posts:
+        year = p["date"][:4]
+        if year != current_year:
+            if current_year is not None:
+                out.append("</div>")
+            out.append('<div class="year-group">\n'
+                       '<div class="year-heading">%s</div>' % year)
+            current_year = year
+        out.append(item_html(p, cats, rel, show_tag))
+    if current_year is not None:
+        out.append("</div>")
+    return "\n\n".join(out)
+
+
+def series_card(sid, sdef, members, rel):
+    latest = max(members, key=lambda p: p["date"]) if members else None
+    meta = "%d chapter%s" % (len(members), "" if len(members) == 1 else "s")
+    if latest:
+        meta += " · updated %s" % display_date(latest["date"])
+    return (
+        '<a class="series-card" href="%(rel)sseries/%(sid)s/">\n'
+        '  <span class="section-label">Series</span>\n'
+        '  <span class="series-card-title">%(title)s</span>\n'
+        '  <span class="series-card-desc">%(desc)s</span>\n'
+        '  <span class="series-card-meta">%(meta)s</span>\n'
+        '</a>'
+    ) % {"rel": rel, "sid": sid, "title": html.escape(sdef.get("title", sid)),
+         "desc": html.escape(sdef.get("description", "")),
+         "meta": meta}
+
+
+def build_index(config):
+    posts = sorted(config["posts"], key=lambda p: p["date"], reverse=True)
+    cats = config["categories"]
+    series = config.get("series", {})
+
+    cards = []
+    for sid, sdef in series.items():
+        members = [p for p in posts if p.get("series") == sid]
+        if members:
+            cards.append(series_card(sid, sdef, members, ""))
+
+    topic_links = []
+    for key, label in cats.items():
+        n = sum(1 for p in posts if p["category"] == key)
+        if n:
+            topic_links.append(
+                '<a class="topic-link" href="topics/%s/">%s'
+                '<span class="count">%d</span></a>'
+                % (key, html.escape(label), n))
+
+    content = """
+  <p class="index-intro">%(intro)s</p>
+
+  <input class="search-box" type="search" id="post-search"
+         placeholder="Search posts…" autocomplete="off">
+
+  %(series_section)s
+
+  <section class="home-section">
+    <div class="section-label">Recent posts</div>
+    <div id="post-list" data-page-size="%(page_size)d">
+    %(recent)s
+    </div>
+    <p class="no-results" id="no-results">No posts match your search.</p>
+    <nav class="pager" id="pager"></nav>
+  </section>
+
+  <section class="home-section" id="topics-section">
+    <div class="section-label">Browse by topic</div>
+    <div class="topic-links">
+      %(topics)s
+    </div>
+  </section>
 """ % {"intro": html.escape(config["intro"]),
-       "chips": "\n    ".join(chips),
-       "by_date": "\n\n  ".join(by_date),
-       "by_topic": "\n\n  ".join(by_topic),
+       "series_section": (
+           '<section class="home-section" id="series-section">\n'
+           '<div class="series-grid">\n%s\n</div>\n</section>' % "\n".join(cards)
+           if cards else ""),
+       "recent": year_grouped(posts, cats, ""),
+       "topics": "\n      ".join(topic_links),
        "page_size": int(config.get("page_size", 10))}
 
-    (BLOG_DIR / "index.html").write_text(page)
+    (BLOG_DIR / "index.html").write_text(
+        page_chrome("", "Blog | Jiawei Zhang", config["intro"], content))
     print("built index.html")
+
+
+def build_topic_pages(config):
+    posts = sorted(config["posts"], key=lambda p: p["date"], reverse=True)
+    cats = config["categories"]
+    series = config.get("series", {})
+
+    for key, label in cats.items():
+        cat_posts = [p for p in posts if p["category"] == key]
+        if not cat_posts:
+            continue
+        out_dir = BLOG_DIR / "topics" / key
+        out_dir.mkdir(parents=True, exist_ok=True)
+
+        cards = []
+        for sid, sdef in series.items():
+            if sdef.get("topic") == key:
+                members = [p for p in posts if p.get("series") == sid]
+                if members:
+                    cards.append(series_card(sid, sdef, members, "../../"))
+
+        content = """
+  <nav class="page-crumb"><a href="../../">Blog</a><span class="crumb-sep">/</span><span>%(label)s</span></nav>
+  <h1 class="page-title">%(label)s</h1>
+  <p class="index-intro">%(count)d post%(plural)s</p>
+
+  %(series_section)s
+
+  <section class="home-section">
+  %(items)s
+  </section>
+""" % {"label": html.escape(label), "count": len(cat_posts),
+       "plural": "" if len(cat_posts) == 1 else "s",
+       "series_section": (
+           '<section class="home-section">\n<div class="series-grid">\n'
+           '%s\n</div>\n</section>' % "\n".join(cards) if cards else ""),
+       "items": year_grouped(cat_posts, cats, "../../", show_tag=False)}
+
+        (out_dir / "index.html").write_text(page_chrome(
+            "../../", "%s | Jiawei Zhang" % label,
+            "Posts about %s" % label, content))
+        print("built topics/%s/index.html" % key)
+
+
+def build_series_pages(config):
+    posts = config["posts"]
+    series = config.get("series", {})
+
+    for sid, sdef in series.items():
+        members = sorted([p for p in posts if p.get("series") == sid],
+                         key=lambda p: p.get("part", 0))
+        if not members:
+            continue
+        out_dir = BLOG_DIR / "series" / sid
+        out_dir.mkdir(parents=True, exist_ok=True)
+
+        rows = []
+        for p in members:
+            rows.append(
+                '<a class="chapter-row" href="../../posts/%(slug)s/">\n'
+                '  <span class="chapter-num">%(part)02d</span>\n'
+                '  <span class="chapter-body">\n'
+                '    <span class="chapter-title">%(title)s</span>\n'
+                '    <span class="chapter-desc">%(desc)s</span>\n'
+                '    <span class="chapter-meta">%(date)s</span>\n'
+                '  </span>\n'
+                '</a>'
+                % {"slug": p["slug"], "part": p.get("part", 0),
+                   "title": html.escape(p["title"]),
+                   "desc": html.escape(p.get("description", "")),
+                   "date": display_date(p["date"])})
+
+        content = """
+  <nav class="page-crumb"><a href="../../">Blog</a><span class="crumb-sep">/</span><span>Series</span></nav>
+  <h1 class="page-title serif">%(title)s</h1>
+  <p class="series-lede">%(desc)s</p>
+  <p class="index-intro">%(count)d chapter%(plural)s so far · more on the way</p>
+
+  <div class="chapter-list">
+  %(rows)s
+  </div>
+""" % {"title": html.escape(sdef.get("title", sid)),
+       "desc": html.escape(sdef.get("description", "")),
+       "count": len(members), "plural": "" if len(members) == 1 else "s",
+       "rows": "\n\n  ".join(rows)}
+
+        (out_dir / "index.html").write_text(page_chrome(
+            "../../", "%s | Jiawei Zhang" % sdef.get("title", sid),
+            sdef.get("description", ""), content))
+        print("built series/%s/index.html" % sid)
 
 
 def main():
@@ -317,6 +480,8 @@ def main():
         build_post(pandoc, post, config)
 
     build_index(config)
+    build_topic_pages(config)
+    build_series_pages(config)
 
 
 if __name__ == "__main__":

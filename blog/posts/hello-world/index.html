@@ -28,6 +28,7 @@
 <div class="post-wrap">
   <main class="post-main">
     <header class="post-header">
+      
       <h1 class="post-title">Why This Blog (and What Posts Can Contain)</h1>
       <div class="post-meta">
         <span>Jul 17, 2026</span>
@@ -73,6 +74,8 @@ href="../integers-divisibility-and-proof/">Chapter 1 of the math
 notes</a>.</p>
     </article>
 
+    
+
     <nav class="post-nav-bottom">
       <a href="../../">← Back to all posts</a>
     </nav>
@@ -88,7 +91,10 @@ notes</a>.</p>
       </main>
 
     <aside class="toc-sidebar">
-    <div class="toc-sidebar-title">Contents</div>
+    <div class="toc-sidebar-head">
+      <span class="toc-sidebar-title">Contents</span>
+      <button class="toc-toggle" onclick="toggleToc()" title="Hide contents" aria-label="Hide contents">⟫</button>
+    </div>
     <ul>
     <li><a href="#why-this-blog" id="toc-why-this-blog">Why this
     blog</a></li>
@@ -96,6 +102,7 @@ notes</a>.</p>
     id="toc-what-posts-can-contain">What posts can contain</a></li>
     </ul>
   </aside>
+  <button class="toc-reopen" onclick="toggleToc()" title="Show contents" aria-label="Show contents">⟪&nbsp;Contents</button>
   </div>
 
 <footer class="site-footer">

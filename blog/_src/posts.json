@@ -13,6 +13,13 @@
     "research": "Research",
     "musings": "Musings"
   },
+  "series": {
+    "math-notes": {
+      "title": "Mathematics from First Principles",
+      "description": "A chapter-by-chapter reconstruction of mathematics — from integers and proof up through analysis, algebra, and beyond — written as a complete, self-contained formation program.",
+      "topic": "math"
+    }
+  },
   "posts": [
     {
       "slug": "hello-world",
@@ -31,6 +38,8 @@
       "description": "Chapter 1 of my first-principles mathematics notes: quantifiers and proof methods, induction and well-ordering, the division algorithm, gcd and Bézout's identity, and the fundamental theorem of arithmetic.",
       "format": "latex",
       "source": "../../../math/chapters/001-integers_divisibility_and_proof/src/chapter.tex",
+      "series": "math-notes",
+      "part": 1,
       "chapter": 1,
       "bibliography": "../../../math/common/bib/references.bib"
     }
