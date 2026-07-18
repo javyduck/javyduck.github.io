@@ -301,11 +301,15 @@ def year_grouped(posts, cats, rel, show_tag=True):
     return "\n\n".join(out)
 
 
-def series_card(sid, sdef, members, rel):
+def series_meta(members):
     latest = max(members, key=lambda p: p["date"]) if members else None
     meta = "%d chapter%s" % (len(members), "" if len(members) == 1 else "s")
     if latest:
         meta += " · updated %s" % display_date(latest["date"])
+    return meta
+
+
+def series_card(sid, sdef, members, rel):
     return (
         '<a class="series-card" href="%(rel)sseries/%(sid)s/">\n'
         '  <span class="section-label">Series</span>\n'
@@ -315,7 +319,39 @@ def series_card(sid, sdef, members, rel):
         '</a>'
     ) % {"rel": rel, "sid": sid, "title": html.escape(sdef.get("title", sid)),
          "desc": html.escape(sdef.get("description", "")),
-         "meta": meta}
+         "meta": series_meta(members)}
+
+
+def series_accordion(sid, sdef, members, rel):
+    """Collapsed overview row that expands inline to the chapter list."""
+    members = sorted(members, key=lambda p: p.get("part", 0))
+    rows = "\n".join(
+        '<a class="series-acc-row" href="%sposts/%s/">'
+        '<span class="series-acc-num">%02d</span>'
+        '<span class="series-acc-name">%s</span>'
+        '<span class="series-acc-date">%s</span></a>'
+        % (rel, p["slug"], p.get("part", 0), html.escape(p["title"]),
+           display_date(p["date"]))
+        for p in members)
+    return (
+        '<details class="series-acc">\n'
+        '  <summary>\n'
+        '    <span class="series-acc-head">\n'
+        '      <span class="series-card-title">%(title)s</span>\n'
+        '      <span class="series-card-meta">%(meta)s</span>\n'
+        '    </span>\n'
+        '    <span class="series-acc-chevron">⌄</span>\n'
+        '  </summary>\n'
+        '  <div class="series-acc-body">\n'
+        '    <p class="series-card-desc">%(desc)s</p>\n'
+        '    %(rows)s\n'
+        '    <a class="series-acc-more" href="%(rel)sseries/%(sid)s/">View series page →</a>\n'
+        '  </div>\n'
+        '</details>'
+    ) % {"title": html.escape(sdef.get("title", sid)),
+         "meta": series_meta(members),
+         "desc": html.escape(sdef.get("description", "")),
+         "rows": rows, "rel": rel, "sid": sid}
 
 
 def build_index(config):
@@ -323,11 +359,11 @@ def build_index(config):
     cats = config["categories"]
     series = config.get("series", {})
 
-    cards = []
+    accordions = []
     for sid, sdef in series.items():
         members = [p for p in posts if p.get("series") == sid]
         if members:
-            cards.append(series_card(sid, sdef, members, ""))
+            accordions.append(series_accordion(sid, sdef, members, ""))
 
     topic_links = []
     for key, label in cats.items():
@@ -344,8 +380,6 @@ def build_index(config):
   <input class="search-box" type="search" id="post-search"
          placeholder="Search posts…" autocomplete="off">
 
-  %(series_section)s
-
   <section class="home-section">
     <div class="section-label">Recent posts</div>
     <div id="post-list" data-page-size="%(page_size)d">
@@ -354,6 +388,8 @@ def build_index(config):
     <p class="no-results" id="no-results">No posts match your search.</p>
     <nav class="pager" id="pager"></nav>
   </section>
+
+  %(series_section)s
 
   <section class="home-section" id="topics-section">
     <div class="section-label">Browse by topic</div>
@@ -364,8 +400,8 @@ def build_index(config):
 """ % {"intro": html.escape(config["intro"]),
        "series_section": (
            '<section class="home-section" id="series-section">\n'
-           '<div class="series-grid">\n%s\n</div>\n</section>' % "\n".join(cards)
-           if cards else ""),
+           '<div class="section-label">Series</div>\n%s\n</section>'
+           % "\n".join(accordions) if accordions else ""),
        "recent": year_grouped(posts, cats, ""),
        "topics": "\n      ".join(topic_links),
        "page_size": int(config.get("page_size", 10))}
