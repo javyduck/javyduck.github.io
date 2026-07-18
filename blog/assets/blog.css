@@ -545,11 +545,7 @@ html[data-theme="dark"] .post-content figure img.figure-light {
   color: var(--text);
 }
 
-.proof > p:last-child::after {
-  content: "∎";
-  float: right;
-  color: var(--text-faint);
-}
+/* pandoc already emits a QED box at the end of each proof */
 
 .algorithmframe {
   border-left-color: var(--box-theorem);

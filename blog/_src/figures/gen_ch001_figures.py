@@ -24,8 +24,8 @@ def fig_division_block():
     def Y(y): return (1.6 - y) * UY
 
     p = []
-    p.append('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 850 160" '
-             'font-family="%s" font-size="15">' % SERIF)
+    p.append('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -16 850 176" '
+             'width="850" height="176" font-family="%s" font-size="15">' % SERIF)
 
     # axis
     ax_y = Y(0)
@@ -89,7 +89,7 @@ def fig_factor_trees():
 
     p = []
     p.append('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 290" '
-             'font-family="%s" font-size="14.5">' % SERIF)
+             'width="720" height="290" font-family="%s" font-size="14.5">' % SERIF)
 
     def tree(shift, title, nodes, edges, note, note_pos):
         # edges first so node boxes cover the line ends
