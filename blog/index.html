@@ -26,6 +26,9 @@
 <main class="index-wrap">
   <p class="index-intro">Notes on mathematics from first principles, AI safety research, and occasional random thoughts.</p>
 
+  <input class="search-box" type="search" id="post-search"
+         placeholder="Search posts by title, description, or topic…" autocomplete="off">
+
   <div class="index-controls">
     <div class="category-chips">
       <button class="chip active" data-category="all">All<span class="count">2</span></button>
@@ -38,11 +41,11 @@
     </div>
   </div>
 
-  <div id="view-date">
+  <div id="view-date" data-page-size="10">
   <div class="year-group">
 <div class="year-heading">2026</div>
 
-  <div class="post-item" data-category="musings">
+  <div class="post-item" data-category="musings" data-search="why this blog (and what posts can contain) a short hello: what this blog is for, and a demo of markdown, latex math, code, and images in posts. musings musings">
   <span class="post-date">Jul 17, 2026</span>
   <div>
     <a class="post-link" href="posts/hello-world/">Why This Blog (and What Posts Can Contain)</a><span class="tag">Musings</span>
@@ -50,7 +53,7 @@
   </div>
 </div>
 
-  <div class="post-item" data-category="math">
+  <div class="post-item" data-category="math" data-search="integers, divisibility, and the logic of proof chapter 1 of my first-principles mathematics notes: quantifiers and proof methods, induction and well-ordering, the division algorithm, gcd and bézout&#x27;s identity, and the fundamental theorem of arithmetic. math math">
   <span class="post-date">Jul 17, 2026</span>
   <div>
     <a class="post-link" href="posts/integers-divisibility-and-proof/">Integers, Divisibility, and the Logic of Proof</a><span class="tag">Math</span>
@@ -65,7 +68,7 @@
   <div class="year-group" data-category-group="math">
 <div class="year-heading">Math</div>
 
-  <div class="post-item" data-category="math">
+  <div class="post-item" data-category="math" data-search="integers, divisibility, and the logic of proof chapter 1 of my first-principles mathematics notes: quantifiers and proof methods, induction and well-ordering, the division algorithm, gcd and bézout&#x27;s identity, and the fundamental theorem of arithmetic. math math">
   <span class="post-date">Jul 17, 2026</span>
   <div>
     <a class="post-link" href="posts/integers-divisibility-and-proof/">Integers, Divisibility, and the Logic of Proof</a>
@@ -78,7 +81,7 @@
   <div class="year-group" data-category-group="musings">
 <div class="year-heading">Musings</div>
 
-  <div class="post-item" data-category="musings">
+  <div class="post-item" data-category="musings" data-search="why this blog (and what posts can contain) a short hello: what this blog is for, and a demo of markdown, latex math, code, and images in posts. musings musings">
   <span class="post-date">Jul 17, 2026</span>
   <div>
     <a class="post-link" href="posts/hello-world/">Why This Blog (and What Posts Can Contain)</a>
@@ -88,6 +91,10 @@
 
   </div>
   </div>
+
+  <p class="no-results" id="no-results">No posts match your search.</p>
+
+  <nav class="pager" id="pager"></nav>
 </main>
 
 <footer class="site-footer">

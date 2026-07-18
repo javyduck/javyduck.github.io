@@ -99,7 +99,7 @@ def label_references(body):
     return body
 
 
-def build_post(pandoc, post):
+def build_post(pandoc, post, config):
     slug = post["slug"]
     out_dir = BLOG_DIR / "posts" / slug
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -116,6 +116,13 @@ def build_post(pandoc, post):
            "-V", "category=%s" % post["category"],
            "-V", "description=%s" % post.get("description", ""),
            "-V", "readingtime=PLACEHOLDER"]
+
+    giscus = config.get("giscus", {})
+    if giscus.get("categoryId"):
+        cmd += ["-V", "giscusrepo=%s" % giscus["repo"],
+                "-V", "giscusrepoid=%s" % giscus["repoId"],
+                "-V", "giscuscategory=%s" % giscus["category"],
+                "-V", "giscuscategoryid=%s" % giscus["categoryId"]]
 
     if post.get("bibliography"):
         bib = (SRC_DIR / post["bibliography"]).resolve()
@@ -182,17 +189,20 @@ def build_index(config):
     def item_html(p, show_tag=True):
         label = cats.get(p["category"], p["category"])
         tag = ('<span class="tag">%s</span>' % html.escape(label)) if show_tag else ""
+        search_blob = html.escape(" ".join(
+            [p["title"], p.get("description", ""), p["category"], label]).lower())
         return (
-            '<div class="post-item" data-category="%s">\n'
-            '  <span class="post-date">%s</span>\n'
+            '<div class="post-item" data-category="{cat}" data-search="{search}">\n'
+            '  <span class="post-date">{date}</span>\n'
             '  <div>\n'
-            '    <a class="post-link" href="posts/%s/">%s</a>%s\n'
-            '    <p class="post-desc">%s</p>\n'
+            '    <a class="post-link" href="posts/{slug}/">{title}</a>{tag}\n'
+            '    <p class="post-desc">{desc}</p>\n'
             '  </div>\n'
             '</div>'
-            % (p["category"], display_date(p["date"]), p["slug"],
-               html.escape(p["title"]), tag,
-               html.escape(p.get("description", ""))))
+        ).format(cat=p["category"], search=search_blob,
+                 date=display_date(p["date"]), slug=p["slug"],
+                 title=html.escape(p["title"]), tag=tag,
+                 desc=html.escape(p.get("description", "")))
 
     # ----- view 1: grouped by year -----
     by_date = []
@@ -248,6 +258,9 @@ def build_index(config):
 <main class="index-wrap">
   <p class="index-intro">%(intro)s</p>
 
+  <input class="search-box" type="search" id="post-search"
+         placeholder="Search posts by title, description, or topic…" autocomplete="off">
+
   <div class="index-controls">
     <div class="category-chips">
       %(chips)s
@@ -258,13 +271,17 @@ def build_index(config):
     </div>
   </div>
 
-  <div id="view-date">
+  <div id="view-date" data-page-size="%(page_size)d">
   %(by_date)s
   </div>
 
   <div id="view-topic" style="display:none">
   %(by_topic)s
   </div>
+
+  <p class="no-results" id="no-results">No posts match your search.</p>
+
+  <nav class="pager" id="pager"></nav>
 </main>
 
 <footer class="site-footer">
@@ -278,7 +295,8 @@ def build_index(config):
 """ % {"intro": html.escape(config["intro"]),
        "chips": "\n    ".join(chips),
        "by_date": "\n\n  ".join(by_date),
-       "by_topic": "\n\n  ".join(by_topic)}
+       "by_topic": "\n\n  ".join(by_topic),
+       "page_size": int(config.get("page_size", 10))}
 
     (BLOG_DIR / "index.html").write_text(page)
     print("built index.html")
@@ -296,7 +314,7 @@ def main():
     for post in config["posts"]:
         if args.only and post["slug"] != args.only:
             continue
-        build_post(pandoc, post)
+        build_post(pandoc, post, config)
 
     build_index(config)
 

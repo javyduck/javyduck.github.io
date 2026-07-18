@@ -33,7 +33,7 @@
         <span>Jul 17, 2026</span>
         <span>·</span>
         <span class="tag">math</span>
-        <span>·</span><span>70 min read</span>
+        <span>·</span><span>72 min read</span>
         <span id="busuanzi_container_page_pv" style="display:none">·
           <span id="busuanzi_value_page_pv"></span> views</span>
       </div>
@@ -1469,6 +1469,41 @@ from below both succeed, and one Euclidean computation prices them both.
 A second description of the lcm—by maximum prime exponents, the mirror
 of the gcd’s minima—must wait until unique factorization is proved later
 in this chapter.</p>
+<p>Nothing in the universal definition is special to two inputs. A gcd
+of a finite list <span class="math inline">\(a_1,\dots,a_k\)</span> of
+integers is a nonnegative common divisor of all of them that every
+common divisor divides, and the two-argument theory already pays for the
+general case: an integer divides both <span
+class="math inline">\(\gcd(a,b)\)</span> and <span
+class="math inline">\(c\)</span> exactly when it divides all of <span
+class="math inline">\(a\)</span>, <span
+class="math inline">\(b\)</span>, and <span
+class="math inline">\(c\)</span>, so the pairs <span
+class="math inline">\((\gcd(a,b),c)\)</span> and <span
+class="math inline">\((a,b,c)\)</span> have identical common divisors
+and <span class="math display">\[\gcd(a,b,c)=\gcd(\gcd(a,b),c).\]</span>
+Iterating collapses any finite list into a chain of two-argument
+computations, and since every step preserves the set of common divisors,
+the grouping and the order of the inputs are irrelevant. One genuinely
+new phenomenon does appear with a third input. Call a list <em>jointly
+coprime</em> when the gcd of the whole list is <span
+class="math inline">\(1\)</span>, and <em>pairwise coprime</em> when
+every two of its entries have gcd <span
+class="math inline">\(1\)</span>. Pairwise coprimality implies joint
+coprimality—a common divisor of the list divides each pair’s gcd—but the
+converse fails, and the smallest witness is worth memorizing. For the
+list <span class="math inline">\(6,10,15\)</span>, <span
+class="math display">\[\gcd(6,10)=2,\qquad \gcd(6,15)=3,\qquad
+\gcd(10,15)=5,\]</span> so no pair is coprime; yet <span
+class="math inline">\(\gcd(6,10,15)=\gcd(\gcd(6,10),15)=\gcd(2,15)=1\)</span>,
+since a common divisor of all three would divide both <span
+class="math inline">\(2\)</span> and <span
+class="math inline">\(3\)</span> and hence their gcd <span
+class="math inline">\(1\)</span>. The three numbers share no factor
+collectively although every two of them share one. When later chapters
+split a problem along several moduli at once, it is the stronger
+pairwise notion they will need, and this example is the standing
+reminder that the two notions come apart.</p>
 <p>We have now proved that the universal definition recovers the
 familiar largest positive common divisor. Its advantage is that the
 divisibility invariant is visible in the definition itself. In a
@@ -2562,6 +2597,55 @@ class="math inline">\(m\in\N_0\)</span>. ◻</p>
 <p>The descent to <span class="math inline">\(a&lt;n\)</span> is the
 load-bearing step. Merely repeating “factor a composite number” would
 not prove that the process ends.</p>
+<p>The lemma also sharpens, at no extra cost, into a search bound. If
+<span class="math inline">\(n\)</span> is composite, choose a
+factorization <span class="math inline">\(n=ab\)</span> with <span
+class="math inline">\(1&lt;a\le b&lt;n\)</span>; multiplying <span
+class="math inline">\(a\le b\)</span> by the positive integer <span
+class="math inline">\(a\)</span> gives <span
+class="math inline">\(a^2\le ab=n\)</span>, and a prime divisor <span
+class="math inline">\(p\)</span> of <span
+class="math inline">\(a\)</span> divides <span
+class="math inline">\(n\)</span> and satisfies <span
+class="math inline">\(p\le a\)</span>, hence <span
+class="math inline">\(p^2\le n\)</span>. A composite number is therefore
+always exposed by some prime whose square does not exceed it. This is
+the bound that prices trial division in the exercises, and it also
+certifies the oldest wholesale method for producing primes, the
+<em>sieve of Eratosthenes</em>.</p>
+<div id="ex:ch001-sieve" class="example">
+<p><strong>Example 1.47</strong> (A small sieve). <em>To list every
+prime up to <span class="math inline">\(30\)</span>, write down <span
+class="math inline">\(2,3,\dots,30\)</span> and repeat one move: circle
+the first number that is neither circled nor crossed out, then cross out
+its proper multiples. Circling <span class="math inline">\(2\)</span>
+crosses out <span class="math inline">\(4,6,8,\dots,30\)</span>;
+circling <span class="math inline">\(3\)</span> crosses out <span
+class="math inline">\(9,15,21,27\)</span> among the survivors; circling
+<span class="math inline">\(5\)</span> crosses out <span
+class="math inline">\(25\)</span>. The next candidate is <span
+class="math inline">\(7\)</span>, and here the bound ends the work:
+<span class="math inline">\(7^2=49&gt;30\)</span>, while a composite
+<span class="math inline">\(n\le30\)</span> must have a prime divisor
+<span class="math inline">\(p\)</span> with <span
+class="math inline">\(p^2\le n\le30\)</span>, hence <span
+class="math inline">\(p\le5\)</span>—so every composite in the range is
+already crossed out. What survives is exactly the list of primes up to
+<span class="math inline">\(30\)</span>: <span
+class="math display">\[2,\quad3,\quad5,\quad7,\quad11,\quad13,\quad17,\quad19,\quad23,\quad29
+.\]</span> Correctness rests on the two facts just proved and nothing
+else. Every crossed-out number is a proper multiple of a circled number
+smaller than itself, hence composite; conversely every composite <span
+class="math inline">\(n\le30\)</span> has a prime divisor <span
+class="math inline">\(p\)</span> with <span class="math inline">\(p^2\le
+n\)</span>, and <span class="math inline">\(p\)</span> is circled in
+some round—primes are never crossed out—so <span
+class="math inline">\(n\)</span> is crossed out during that round if it
+has survived so far. The sieve performs no division at all: it replaces
+twenty-nine separate primality questions by one synchronized sweep of
+crossings-out, which is why, essentially unmodified, it remains the
+standard way to tabulate the primes below a large bound.</em></p>
+</div>
 <p>We now know that prime pieces exist, but existence alone says nothing
 about whether different factorization choices lead to the same pieces.
 To compare two products, a prime seen on one side must somehow be
@@ -2569,7 +2653,7 @@ located on the other. The next theorem provides exactly that passage
 through a product. It also repairs, for prime divisors, the invalid
 cancellation rule encountered earlier.</p>
 <div id="thm:ch001-euclids-lemma" class="theorem">
-<p><strong>Theorem 1.47</strong> (Euclid’s lemma). <em>Let <span
+<p><strong>Theorem 1.48</strong> (Euclid’s lemma). <em>Let <span
 class="math inline">\(p\)</span> be prime and let <span
 class="math inline">\(a,b\in\Z\)</span>. If <span
 class="math inline">\(p\mid ab\)</span>, then <span
@@ -2604,7 +2688,7 @@ fails for a composite divisor.</p>
 through any finite product. This modest induction is the precise bridge
 from Euclid’s lemma to uniqueness of factorization.</p>
 <div id="cor:ch001-prime-finite-product" class="corollary">
-<p><strong>Corollary 1.48</strong> (A prime dividing a finite product).
+<p><strong>Corollary 1.49</strong> (A prime dividing a finite product).
 <em>Let <span class="math inline">\(k\in\N_{&gt;0}\)</span>. If a prime
 <span class="math inline">\(p\)</span> divides <span
 class="math inline">\(a_1a_2\cdots a_k\)</span>, then <span
@@ -2653,7 +2737,7 @@ pair of factor trees, rather than only in a reassuring example?
 Existence will follow from descent through proper factors; uniqueness
 will require Euclid’s lemma to match a prime across two products.</p>
 <div id="thm:ch001-fta" class="theorem">
-<p><strong>Theorem 1.49</strong> (Fundamental theorem of arithmetic).
+<p><strong>Theorem 1.50</strong> (Fundamental theorem of arithmetic).
 <em>Every integer <span class="math inline">\(n&gt;1\)</span> can be
 written as a finite product of primes. If <span
 class="math display">\[n=p_1p_2\cdots p_r=q_1q_2\cdots q_s\]</span> are
@@ -2724,7 +2808,7 @@ both factor lists are nonempty. The prime <span
 class="math inline">\(p_1\)</span> divides the product on the right, so
 <a href="#cor:ch001-prime-finite-product"
 data-reference-type="ref+label"
-data-reference="cor:ch001-prime-finite-product">1.48</a> gives <span
+data-reference="cor:ch001-prime-finite-product">1.49</a> gives <span
 class="math inline">\(p_1\mid q_j\)</span> for some <span
 class="math inline">\(j\)</span>. Because <span
 class="math inline">\(q_j\)</span> is prime and <span
@@ -2818,7 +2902,7 @@ Prop. 20)</span>. The factorial construction below is a convenient
 modern way to express the same quantified idea; it is not the literal
 form of Euclid’s proof.</p>
 <div id="thm:ch001-primes-unbounded" class="theorem">
-<p><strong>Theorem 1.50</strong> (Primes are unbounded). <em>For every
+<p><strong>Theorem 1.51</strong> (Primes are unbounded). <em>For every
 <span class="math inline">\(N\in\N_0\)</span>, there exists a prime
 <span class="math inline">\(p&gt;N\)</span>.</em></p>
 </div>
@@ -3040,7 +3124,8 @@ href="https://doi.org/10.2307/2118559">https://doi.org/10.2307/2118559</a>.
     <nav class="post-nav-bottom">
       <a href="../../">← Back to all posts</a>
     </nav>
-  </main>
+
+      </main>
 
     <aside class="toc-sidebar">
     <div class="toc-sidebar-title">Contents</div>

@@ -122,10 +122,63 @@ a:hover { color: var(--accent-soft); }
 /* ------------------------------------------------------------------ */
 
 .index-wrap {
-  max-width: 760px;
+  max-width: 980px;
   margin: 0 auto;
   padding: 40px 24px 80px;
 }
+
+.search-box {
+  width: 100%;
+  margin-bottom: 22px;
+  padding: 9px 16px;
+  font-size: 15.5px;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.search-box:focus { border-color: var(--accent); background: var(--bg); }
+.search-box::placeholder { color: var(--text-faint); }
+
+.no-results {
+  color: var(--text-faint);
+  font-size: 15.5px;
+  padding: 30px 0;
+  display: none;
+}
+
+.pager {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 40px;
+}
+
+.pager button {
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-soft);
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.pager button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+
+.pager button.current {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.pager button:disabled { opacity: 0.4; cursor: default; }
 
 .index-intro {
   color: var(--text-soft);
@@ -525,6 +578,22 @@ html[data-theme="dark"] .post-content figure img.figure-light {
 
 #refs { font-size: 15px; color: var(--text-soft); }
 #refs .csl-entry { margin-bottom: 10px; }
+
+/* ------------------------------------------------------------------ */
+/* Comments                                                            */
+/* ------------------------------------------------------------------ */
+
+.comments {
+  margin-top: 46px;
+  padding-top: 30px;
+  border-top: 1px solid var(--border);
+}
+
+.comments-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 18px;
+}
 
 /* ------------------------------------------------------------------ */
 /* Footer                                                              */

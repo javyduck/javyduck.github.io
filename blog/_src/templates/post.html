@@ -46,6 +46,17 @@ $body$
     <nav class="post-nav-bottom">
       <a href="../../">← Back to all posts</a>
     </nav>
+
+    $if(giscusrepo)$
+    <section class="comments">
+      <h2 class="comments-title">Comments</h2>
+      <div id="giscus-container"
+           data-giscus-repo="$giscusrepo$"
+           data-giscus-repo-id="$giscusrepoid$"
+           data-giscus-category="$giscuscategory$"
+           data-giscus-category-id="$giscuscategoryid$"></div>
+    </section>
+    $endif$
   </main>
 
   $if(table-of-contents)$

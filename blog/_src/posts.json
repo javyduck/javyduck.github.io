@@ -1,6 +1,13 @@
 {
   "site_title": "Jiawei Zhang · Blog",
   "intro": "Notes on mathematics from first principles, AI safety research, and occasional random thoughts.",
+  "page_size": 10,
+  "giscus": {
+    "repo": "javyduck/javyduck.github.io",
+    "repoId": "R_kgDOIgmCQw",
+    "category": "Announcements",
+    "categoryId": ""
+  },
   "categories": {
     "math": "Math",
     "research": "Research",

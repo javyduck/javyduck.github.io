@@ -38,3 +38,17 @@ Everything under `posts/` and `index.html` is generated — edit templates in
 
 View counts come from busuanzi (free, no account); they only count on the
 real domain, not localhost.
+
+## Comments (giscus)
+
+Comments use [giscus](https://giscus.app) backed by GitHub Discussions.
+One-time setup:
+
+1. Enable Discussions: repo Settings → General → Features → check
+   "Discussions".
+2. Install the giscus app on this repo: https://github.com/apps/giscus
+3. Open https://giscus.app, enter `javyduck/javyduck.github.io`, choose the
+   "Announcements" category, and copy the `data-category-id` value from the
+   generated snippet into `giscus.categoryId` in `_src/posts.json`.
+4. Rebuild (`python3 _src/build.py`). Posts render a Comments section only
+   when `categoryId` is set.
