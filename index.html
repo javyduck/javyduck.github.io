@@ -1,532 +1,355 @@
-<!DOCTYPE HTML>
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
   <title>Jiawei Zhang</title>
-  
   <meta name="author" content="Jiawei Zhang">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  
   <link rel="stylesheet" type="text/css" href="stylesheet.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍪</text></svg>">
-
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍪</text></svg>">
 </head>
 
 <body>
-  <table style="width:100%;max-width:900px;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
-    <tr style="padding:0px">
-      <td style="padding:0px">
-        <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
-          <tr style="padding:0px">
-            <td style="padding:2.5%;width:65%;vertical-align:middle">
-              <p style="text-align:center">
-                <name>Jiawei Zhang</name>
-              </p>
-          <p>
-            I am currently pursuing my <b>Ph.D. in Computer Science at the University of Chicago</b>, advised by <a href="https://aisecure.github.io/">Prof. Bo Li</a> and <a href="https://zhangce.github.io/">Prof. Ce Zhang</a>, I also closely collaborate with <a href="https://dawnsong.io/">Prof. Dawn Song</a>. I am an <a href="https://alignment.anthropic.com/2024/anthropic-fellows-program/"><b>Anthropic Fellow for AI safety research</b></a>, working on LLM agentic safety — aiming to automatically construct secure environments and perform automatic red-teaming on agentic models with minimal human intervention. Before joining UChicago, I was temporarily pursuing my Ph.D. studies at the <a href="https://siebelschool.illinois.edu/">Siebel School of Computing and Data Science</a> at the University of Illinois Urbana-Champaign, where I also earned my M.S. in Computer Science. Prior to that, I completed my Bachelor's degree at Zhejiang University.
-          </p>
+<div class="page">
 
-           <p>
-              I study <strong>Safe AGI</strong>, with a focus on <strong>making LLMs and LLM agents reliable at scale</strong>. My research runs as a closed loop:
-              <strong>(i) scalable red-teaming</strong> to elicit realistic, long-horizon failures. I participated in internal red-teaming evaluations of <strong>OpenAI o1</strong>, <strong>Google DeepMind</strong>, and <strong>ElevenLabs TTS</strong> with <a href="https://www.virtueai.com/" target="_blank">Virtue AI</a>. In parallel, I study <strong>agentic reliability</strong> for LLM agents, focusing on agent-specific vulnerabilities (e.g., prompt injection and malicious action execution) as well as <strong>environment security construction</strong> for agentic systems;
-              <strong>(ii) defense &amp; alignment</strong> that transforms safety requirements into actionable safeguards, spanning <strong>certified robustness</strong> for worst-case guarantees and <strong>interpretability-guided defenses</strong> that translate mechanistic insights into generalizable mitigations; and
-              <strong>(iii) better safety-aware reasoning for autonomous driving</strong> by incorporating richer world knowledge via reinforcement learning for vision–language–action models.
-              </p>
+  <!-- ============================ Hero ============================ -->
+  <header class="hero">
+    <div class="hero-text">
+      <h1 class="hero-name">Jiawei <span class="accent">Zhang</span></h1>
+      <p class="hero-tagline">Ph.D. student in Computer Science · Safe AGI · University of Chicago</p>
 
-              <p style="text-align:center">
-                <a href="mailto:jwz@uchicago.edu">Email</a> &nbsp/&nbsp
-                <a href="data/Jiawei_CV.pdf">CV</a> &nbsp/&nbsp
-                <!-- <a href="data/Jiawei-bio.txt">Bio</a> &nbsp/&nbsp -->
-                <a href="https://www.linkedin.com/in/jiawei-zhang-61603b1a2/">LinkedIn</a> &nbsp/&nbsp
-                <a href="https://scholar.google.com/citations?hl=en&user=vCY9ZRcAAAAJ">Google Scholar</a> &nbsp/&nbsp
-                <a href="https://x.com/jiaweiz_7">Twitter</a> &nbsp/&nbsp
-                <a href="https://github.com/javyduck/">Github</a>
-              </p>
-            </td>
-            <td style="padding:1.5%;width:36%;max-width:50%; vertical-align:top; text-align:center;">
-            <div style="margin-top:100px;"> <!-- move the picture up -->
-              <a href="images/jiawei.jpg">
-                <img style="width:80%;max-width:80%;" alt="profile photo" src="images/jiawei_circle.jpg" class="hoverZoomLink">
-              </a>
-            </div>
-            <p style="font-style:italic; font-size:16px; color:#555; margin-top:8px;">
-              "Man is but a reed, the most feeble thing in nature; but he is a thinking reed."
-            </p>
-          </td>
-          </tr>
-          
-        </tbody></table>
-        
-        <style>
-  .pub-year {
-    font-size: 20px;
-    font-weight: 500;
-    color: #800000;
-    letter-spacing: 0.05em;
-    margin-top: 44px;
-    margin-bottom: 18px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid #ead7d7;
-  }
+      <p>
+        I am currently pursuing my <b>Ph.D. in Computer Science at the University of Chicago</b>, advised by <a href="https://aisecure.github.io/">Prof. Bo Li</a> and <a href="https://zhangce.github.io/">Prof. Ce Zhang</a>, I also closely collaborate with <a href="https://dawnsong.io/">Prof. Dawn Song</a>. I am an <a href="https://alignment.anthropic.com/2024/anthropic-fellows-program/"><b>Anthropic Fellow for AI safety research</b></a>, working on LLM agentic safety — aiming to automatically construct secure environments and perform automatic red-teaming on agentic models with minimal human intervention. Before joining UChicago, I was temporarily pursuing my Ph.D. studies at the <a href="https://siebelschool.illinois.edu/">Siebel School of Computing and Data Science</a> at the University of Illinois Urbana-Champaign, where I also earned my M.S. in Computer Science. Prior to that, I completed my Bachelor's degree at Zhejiang University.
+      </p>
 
-  .pub-box {
-    background-color: #ffffff;
-    border: 1px solid #ececec;
-    border-left: 3px solid #800000;
-    border-radius: 6px;
-    padding: 16px 22px;
-    margin-bottom: 12px;
-    transition: box-shadow 0.2s ease, transform 0.2s ease, border-left-color 0.2s ease;
-  }
+      <p>
+        I study <strong>Safe AGI</strong>, with a focus on <strong>making LLMs and LLM agents reliable at scale</strong>. My research runs as a closed loop:
+        <strong>(i) scalable red-teaming</strong> to elicit realistic, long-horizon failures. I participated in internal red-teaming evaluations of <strong>OpenAI o1</strong>, <strong>Google DeepMind</strong>, and <strong>ElevenLabs TTS</strong> with <a href="https://www.virtueai.com/" target="_blank">Virtue AI</a>. In parallel, I study <strong>agentic reliability</strong> for LLM agents, focusing on agent-specific vulnerabilities (e.g., prompt injection and malicious action execution) as well as <strong>environment security construction</strong> for agentic systems;
+        <strong>(ii) defense &amp; alignment</strong> that transforms safety requirements into actionable safeguards, spanning <strong>certified robustness</strong> for worst-case guarantees and <strong>interpretability-guided defenses</strong> that translate mechanistic insights into generalizable mitigations; and
+        <strong>(iii) better safety-aware reasoning for autonomous driving</strong> by incorporating richer world knowledge via reinforcement learning for vision–language–action models.
+      </p>
 
-  .pub-box:hover {
-    box-shadow: 0px 4px 14px rgba(128, 0, 0, 0.08);
-    transform: translateY(-1px);
-    border-left-color: #b34747;
-  }
+      <nav class="hero-links">
+        <a href="mailto:jwz@uchicago.edu">Email</a>
+        <a href="data/Jiawei_CV.pdf">CV</a>
+        <a href="https://www.linkedin.com/in/jiawei-zhang-61603b1a2/">LinkedIn</a>
+        <a href="https://scholar.google.com/citations?hl=en&user=vCY9ZRcAAAAJ">Google Scholar</a>
+        <a href="https://x.com/jiaweiz_7">Twitter</a>
+        <a href="https://github.com/javyduck/">Github</a>
+      </nav>
+    </div>
 
-  .pub-title {
-    font-weight: 600;
-    font-size: 16.5px;
-    color: #1a1a1a;
-    margin-bottom: 6px;
-    letter-spacing: 0.005em;
-  }
+    <div class="hero-side">
+      <a href="images/jiawei.jpg">
+        <img class="hero-photo" alt="profile photo" src="images/jiawei_circle.jpg">
+      </a>
+      <p class="hero-quote">"Man is but a reed, the most feeble thing in nature; but he is a thinking reed."</p>
+    </div>
+  </header>
 
-  .pub-authors {
-    color: #3a3a3a;
-    font-size: 15px;
-    margin-bottom: 4px;
-  }
+  <!-- ===================== Industry Experience ==================== -->
+  <section class="section">
+    <span class="section-label">Experience</span>
+    <h2 class="section-title">Industry Experience</h2>
 
-  .pub-venue {
-    font-style: italic;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-size: 15px !important;
-    line-height: 1.3 !important;
-    color: #6a6a6a;
-    font-weight: 400 !important;
-    margin-top: 3px;
-    margin-bottom: 2px;
-    display: block;
-  }
-
-  .pub-venue i {
-    font-style: italic;
-    font-size: inherit !important;
-    line-height: inherit !important;
-  }
-
-  .pub-link {
-    margin-top: 4px;
-  }
-
-  .pub-link a {
-    color: #800000;
-    font-weight: 500;
-    font-size: 14.5px;
-    text-decoration: none;
-  }
-
-  .pub-link a:hover {
-    color: #b34747;
-    text-decoration: none;
-    border-bottom: none;
-  }
-
-  .intern-box {
-    display: flex;
-    align-items: center;
-    background-color: #ffffff;
-    border: 1px solid #ececec;
-    border-left: 3px solid #800000;
-    border-radius: 6px;
-    padding: 16px 22px;
-    margin-bottom: 12px;
-    transition: box-shadow 0.2s ease, transform 0.2s ease, border-left-color 0.2s ease;
-  }
-
-  .intern-box:hover {
-    box-shadow: 0px 4px 14px rgba(128, 0, 0, 0.08);
-    transform: translateY(-1px);
-    border-left-color: #b34747;
-  }
-
-  .intern-logo {
-    width: 200px;
-    height: 60px;
-    border-radius: 8px;
-    margin-right: 18px;
-    flex-shrink: 0;
-    object-fit: contain;
-  }
-
-  .intern-info {
-    flex: 1;
-  }
-
-  .intern-company {
-    font-weight: 700;
-    font-size: 17px;
-    color: #111;
-    margin-bottom: 4px;
-  }
-
-  .intern-date {
-    font-size: 15px;
-    color: #555;
-    margin-bottom: 3px;
-  }
-
-  .intern-advisor {
-    font-size: 15px;
-    color: #666;
-    font-style: italic;
-  }
-
-  .intern-role {
-    font-size: 15px;
-    color: #444;
-    margin-bottom: 3px;
-  }
-</style>
-
-<table style="width:100%;border:0;border-spacing:0;margin:auto;">
-  <tbody>
-    <tr>
-      <td style="padding:20px;vertical-align:middle;">
-        <heading>Industry Experience</heading>
-
-        <div style="margin-top: 20px;"></div>
-
-        <div class="intern-box">
-          <img class="intern-logo" src="https://upload.wikimedia.org/wikipedia/commons/7/78/Anthropic_logo.svg" alt="Anthropic">
-          <div class="intern-info">
-            <div class="intern-company">Anthropic</div>
-            <div class="intern-role">AI Safety Research Fellow</div>
-            <div class="intern-date">Jan 2026 – Present</div>
-          </div>
-        </div>
-
-        <div class="intern-box">
-          <img class="intern-logo" src="https://upload.wikimedia.org/wikipedia/sco/2/21/Nvidia_logo.svg" alt="NVIDIA">
-          <div class="intern-info">
-            <div class="intern-company">NVIDIA Research</div>
-            <div class="intern-role">Autonomous Driving Research Intern, Santa Clara</div>
-            <div class="intern-date">Oct 2025 – Jan 2026</div>
-            <div class="intern-advisor">Advised by Dr. Boris Ivanovic and Prof. Marco Pavone</div>
-          </div>
-        </div>
-
-        <div class="intern-box">
-          <img class="intern-logo" src="data/ByteDance Seedream Logo PNG SVG-01.png" alt="ByteDance">
-          <div class="intern-info">
-            <div class="intern-company">ByteDance Seed Research</div>
-            <div class="intern-role">Responsible AI Research Intern, San Jose</div>
-            <div class="intern-date">June 2025 – Sept 2025</div>
-            <div class="intern-advisor">Advised by Dr. Xiaojun Xu and Dr. Hang Li</div>
-          </div>
-        </div>
-
-        <div class="intern-box">
-          <img class="intern-logo" src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg" alt="Meta">
-          <div class="intern-info">
-            <div class="intern-company">Meta AI</div>
-            <div class="intern-role">GenAI Research Collaborator (External)</div>
-            <div class="intern-date">Sept 2024 – June 2025</div>
-            <div class="intern-advisor">Advised by Dr. Shuang Yang</div>
-          </div>
-        </div>
-
-        <div class="intern-box">
-          <img class="intern-logo" src="https://s.yimg.com/ny/api/res/1.2/B2KpaX_.DZsGOGk9eRXIdQ--/YXBwaWQ9aGlnaGxhbmRlcjt3PTI0MDA7aD02ODY-/https://media.zenfs.com/en/business-wire.com/3ce419965b02def34af568b9163830f4" alt="Nuro">
-          <div class="intern-info">
-            <div class="intern-company">Nuro AI</div>
-            <div class="intern-role">Machine Learning Research Intern (Pathfinder), Mountain View</div>
-            <div class="intern-date">May 2024 – Aug 2024</div>
-            <div class="intern-advisor">Advised by Dr. Aleksandr Petiushko</div>
-          </div>
-        </div>
-
-        <div class="intern-box">
-          <img class="intern-logo" src="data/seaai.png" alt="Sea">
-          <div class="intern-info">
-            <div class="intern-company">Sea AI Lab</div>
-            <div class="intern-role">Machine Learning Research Intern, Singapore</div>
-            <div class="intern-date">May 2023 – Aug 2023</div>
-            <div class="intern-advisor">Advised by Dr. Tianyu Pang and Dr. Chao Du</div>
-          </div>
-        </div>
-
-        <div style="margin-top: 40px;"></div>
-
-        <heading>Selected Publications <span style="font-size:14px; color:#555; font-style:italic; font-weight:normal;">(* denotes co-first authorship)</span></heading>
-
-
-        <div class="pub-year">2026</div>
-
-        <div class="pub-box">
-          <div class="pub-title">DecodingTrust-Agent Platform (DTap): A Controllable and Interactive Red-Teaming Platform for AI Agents</div>
-          <div class="pub-authors">Zhaorun Chen*, Xun Liu*, Haibo Tong*, Chengquan Guo*, Yuzhou Nie*, <b>Jiawei Zhang*</b>, Mintong Kang*, Chejian Xu*, Qichang Liu*, Xiaogeng Liu*, Tianneng Shi*, Chaowei Xiao, Sanmi Koyejo, Percy Liang, Wenbo Guo, Dawn Song, Bo Li</div>
-          <div class="pub-venue">arXiv 2026</div>
-          <div class="pub-link"><a href="https://arxiv.org/abs/2605.04808">[arXiv]</a></div>
-        </div>
-
-        <div class="pub-year">2025</div>
-
-        <div class="pub-box">
-          <div class="pub-title">Any-Depth Alignment: Unlocking Innate Safety Alignment of LLMs to Any-Depth</div>
-          <div class="pub-authors"><b>Jiawei Zhang</b>, Andrew Estornell, David D. Baek, Bo Li, Xiaojun Xu</div>
-          <div class="pub-venue"><i>ICLR 2026</i></div>
-          <div class="pub-link"><a href="https://arxiv.org/abs/2510.18081">[arXiv]</a></div>
-        </div>
-        
-        <div class="pub-box">
-          <div class="pub-title">ARMs: Adaptive Red-Teaming Agent against Multimodal Models with Plug-and-Play Attacks</div>
-          <div class="pub-authors">Zhaorun Chen*, Xun Liu*, Mintong Kang, <b>Jiawei Zhang</b>, Minzhou Pan, Shuang Yang, Bo Li</div>
-          <div class="pub-venue"><i>ICLR 2026</i></div>
-          <div class="pub-link"><a href="https://arxiv.org/pdf/2510.02677">[arXiv]</a></div>
-        </div>
-        
-        <div class="pub-box">
-          <div class="pub-title">GraphQ-LM: Scalable Graph Representation for Large Language Models via Residual Vector Quantization</div>
-          <div class="pub-authors"><b>Jiawei Zhang</b>, Yang Yang, Kaushik Rangadurai, Tao Liu, Minhui Huang, Yiping Han, Bo Li, Shuang Yang</div>
-          <div class="pub-venue">arXiv 2025</div>
-          <!-- <div class="pub-link"><a href="#">[arXiv]</a></div> -->
-        </div>
-
-       <div class="pub-box">
-        <div class="pub-title">Poly-Guard: Massive Multi-Domain Safety Policy-Grounded Guardrail Dataset</div>
-        <div class="pub-authors">Mintong Kang*, Zhaorun Chen*, Chejian Xu*, <b>Jiawei Zhang*</b>, Chengquan Guo*, Minzhou Pan, Ivan Revilla, Yu Sun, Bo Li</div>
-        <div class="pub-venue"><i>NeurIPS 2025</i></div>
-        <div class="pub-link">
-          <a href="https://arxiv.org/abs/2506.19054">[arXiv]</a>
-          &nbsp;&nbsp;
-          <a href="https://github.com/AI-secure/PolyGuard">[code]</a>
-          &nbsp;&nbsp;
-          <a href="https://huggingface.co/datasets/AI-Secure/PolyGuard">[dataset]</a>
-        </div>
+    <div class="intern-box">
+      <img class="intern-logo" src="https://upload.wikimedia.org/wikipedia/commons/7/78/Anthropic_logo.svg" alt="Anthropic">
+      <div class="intern-info">
+        <div class="intern-company">Anthropic</div>
+        <div class="intern-role">AI Safety Research Fellow</div>
+        <div class="intern-date">Jan 2026 – Present</div>
       </div>
+    </div>
 
-     <div class="pub-box">
+    <div class="intern-box">
+      <img class="intern-logo" src="https://upload.wikimedia.org/wikipedia/sco/2/21/Nvidia_logo.svg" alt="NVIDIA">
+      <div class="intern-info">
+        <div class="intern-company">NVIDIA Research</div>
+        <div class="intern-role">Autonomous Driving Research Intern, Santa Clara</div>
+        <div class="intern-date">Oct 2025 – Jan 2026</div>
+        <div class="intern-advisor">Advised by Dr. Boris Ivanovic and Prof. Marco Pavone</div>
+      </div>
+    </div>
+
+    <div class="intern-box">
+      <img class="intern-logo" src="data/ByteDance Seedream Logo PNG SVG-01.png" alt="ByteDance">
+      <div class="intern-info">
+        <div class="intern-company">ByteDance Seed Research</div>
+        <div class="intern-role">Responsible AI Research Intern, San Jose</div>
+        <div class="intern-date">June 2025 – Sept 2025</div>
+        <div class="intern-advisor">Advised by Dr. Xiaojun Xu and Dr. Hang Li</div>
+      </div>
+    </div>
+
+    <div class="intern-box">
+      <img class="intern-logo" src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg" alt="Meta">
+      <div class="intern-info">
+        <div class="intern-company">Meta AI</div>
+        <div class="intern-role">GenAI Research Collaborator (External)</div>
+        <div class="intern-date">Sept 2024 – June 2025</div>
+        <div class="intern-advisor">Advised by Dr. Shuang Yang</div>
+      </div>
+    </div>
+
+    <div class="intern-box">
+      <img class="intern-logo" src="https://s.yimg.com/ny/api/res/1.2/B2KpaX_.DZsGOGk9eRXIdQ--/YXBwaWQ9aGlnaGxhbmRlcjt3PTI0MDA7aD02ODY-/https://media.zenfs.com/en/business-wire.com/3ce419965b02def34af568b9163830f4" alt="Nuro">
+      <div class="intern-info">
+        <div class="intern-company">Nuro AI</div>
+        <div class="intern-role">Machine Learning Research Intern (Pathfinder), Mountain View</div>
+        <div class="intern-date">May 2024 – Aug 2024</div>
+        <div class="intern-advisor">Advised by Dr. Aleksandr Petiushko</div>
+      </div>
+    </div>
+
+    <div class="intern-box">
+      <img class="intern-logo" src="data/seaai.png" alt="Sea">
+      <div class="intern-info">
+        <div class="intern-company">Sea AI Lab</div>
+        <div class="intern-role">Machine Learning Research Intern, Singapore</div>
+        <div class="intern-date">May 2023 – Aug 2023</div>
+        <div class="intern-advisor">Advised by Dr. Tianyu Pang and Dr. Chao Du</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== Selected Publications =================== -->
+  <section class="section">
+    <span class="section-label">Research</span>
+    <h2 class="section-title">Selected Publications <span class="note">(* denotes co-first authorship)</span></h2>
+
+    <div class="pub-year">2026</div>
+
+    <div class="pub-box">
+      <div class="pub-title">DecodingTrust-Agent Platform (DTap): A Controllable and Interactive Red-Teaming Platform for AI Agents</div>
+      <div class="pub-authors">Zhaorun Chen*, Xun Liu*, Haibo Tong*, Chengquan Guo*, Yuzhou Nie*, <b>Jiawei Zhang*</b>, Mintong Kang*, Chejian Xu*, Qichang Liu*, Xiaogeng Liu*, Tianneng Shi*, Chaowei Xiao, Sanmi Koyejo, Percy Liang, Wenbo Guo, Dawn Song, Bo Li</div>
+      <div class="pub-venue">arXiv 2026</div>
+      <div class="pub-link"><a href="https://arxiv.org/abs/2605.04808">[arXiv]</a></div>
+    </div>
+
+    <div class="pub-year">2025</div>
+
+    <div class="pub-box">
+      <div class="pub-title">Any-Depth Alignment: Unlocking Innate Safety Alignment of LLMs to Any-Depth</div>
+      <div class="pub-authors"><b>Jiawei Zhang</b>, Andrew Estornell, David D. Baek, Bo Li, Xiaojun Xu</div>
+      <div class="pub-venue">ICLR 2026</div>
+      <div class="pub-link"><a href="https://arxiv.org/abs/2510.18081">[arXiv]</a></div>
+    </div>
+
+    <div class="pub-box">
+      <div class="pub-title">ARMs: Adaptive Red-Teaming Agent against Multimodal Models with Plug-and-Play Attacks</div>
+      <div class="pub-authors">Zhaorun Chen*, Xun Liu*, Mintong Kang, <b>Jiawei Zhang</b>, Minzhou Pan, Shuang Yang, Bo Li</div>
+      <div class="pub-venue">ICLR 2026</div>
+      <div class="pub-link"><a href="https://arxiv.org/pdf/2510.02677">[arXiv]</a></div>
+    </div>
+
+    <div class="pub-box">
+      <div class="pub-title">GraphQ-LM: Scalable Graph Representation for Large Language Models via Residual Vector Quantization</div>
+      <div class="pub-authors"><b>Jiawei Zhang</b>, Yang Yang, Kaushik Rangadurai, Tao Liu, Minhui Huang, Yiping Han, Bo Li, Shuang Yang</div>
+      <div class="pub-venue">arXiv 2025</div>
+    </div>
+
+    <div class="pub-box">
+      <div class="pub-title">Poly-Guard: Massive Multi-Domain Safety Policy-Grounded Guardrail Dataset</div>
+      <div class="pub-authors">Mintong Kang*, Zhaorun Chen*, Chejian Xu*, <b>Jiawei Zhang*</b>, Chengquan Guo*, Minzhou Pan, Ivan Revilla, Yu Sun, Bo Li</div>
+      <div class="pub-venue">NeurIPS 2025</div>
+      <div class="pub-link">
+        <a href="https://arxiv.org/abs/2506.19054">[arXiv]</a>
+        <a href="https://github.com/AI-secure/PolyGuard">[code]</a>
+        <a href="https://huggingface.co/datasets/AI-Secure/PolyGuard">[dataset]</a>
+      </div>
+    </div>
+
+    <div class="pub-box">
       <div class="pub-title">UDora: A Unified Red Teaming Framework Against LLM Agents by Dynamically Leveraging Their Own Reasoning</div>
       <div class="pub-authors"><b>Jiawei Zhang</b>, Shuang Yang, Bo Li</div>
-      <div class="pub-venue"><i>ICML 2025</i></div>
+      <div class="pub-venue">ICML 2025</div>
       <div class="pub-link">
         <a href="https://arxiv.org/abs/2503.01908">[arXiv]</a>
-        &nbsp;&nbsp;
         <a href="https://github.com/AI-secure/UDora">[code]</a>
       </div>
     </div>
 
-
-      <div class="pub-box">
-        <div class="pub-title">SafeAuto: Knowledge-Enhanced Safe Autonomous Driving with Multimodal Foundation Models</div>
-        <div class="pub-authors"><b>Jiawei Zhang</b>, Xuan Yang, Taiqi Wang, Yu Yao, Aleksandr Petiushko, Bo Li</div>
-        <div class="pub-venue"><i>ICML 2025</i></div>
-        <div class="pub-link">
-          <a href="https://arxiv.org/abs/2503.00211">[arXiv]</a>
-          &nbsp;&nbsp;
-          <a href="https://github.com/AI-secure/SafeAuto">[code]</a>
-        </div>
+    <div class="pub-box">
+      <div class="pub-title">SafeAuto: Knowledge-Enhanced Safe Autonomous Driving with Multimodal Foundation Models</div>
+      <div class="pub-authors"><b>Jiawei Zhang</b>, Xuan Yang, Taiqi Wang, Yu Yao, Aleksandr Petiushko, Bo Li</div>
+      <div class="pub-venue">ICML 2025</div>
+      <div class="pub-link">
+        <a href="https://arxiv.org/abs/2503.00211">[arXiv]</a>
+        <a href="https://github.com/AI-secure/SafeAuto">[code]</a>
       </div>
+    </div>
 
-
-      <div class="pub-box">
-        <div class="pub-title">AdvWeb: Controllable Black-Box Attacks on VLM-Powered Web Agents</div>
-        <div class="pub-authors">Chejian Xu, Mintong Kang, <b>Jiawei Zhang</b>, Zeyi Liao, Lingbo Mo, Mengqi Yuan, Huan Sun, Bo Li</div>
-        <div class="pub-venue"><i>ICML 2025</i></div>
-        <div class="pub-link">
-          <a href="https://arxiv.org/abs/2410.17401v4">[arXiv]</a>
-          &nbsp;&nbsp;
-          <a href="https://github.com/AI-secure/AdvAgent">[code]</a>
-        </div>
+    <div class="pub-box">
+      <div class="pub-title">AdvWeb: Controllable Black-Box Attacks on VLM-Powered Web Agents</div>
+      <div class="pub-authors">Chejian Xu, Mintong Kang, <b>Jiawei Zhang</b>, Zeyi Liao, Lingbo Mo, Mengqi Yuan, Huan Sun, Bo Li</div>
+      <div class="pub-venue">ICML 2025</div>
+      <div class="pub-link">
+        <a href="https://arxiv.org/abs/2410.17401v4">[arXiv]</a>
+        <a href="https://github.com/AI-secure/AdvAgent">[code]</a>
       </div>
+    </div>
 
-
-      <div class="pub-box">
-        <div class="pub-title">Guardagent: Safeguard LLM Agents by a Guard Agent via Knowledge-Enabled Reasoning</div>
-        <div class="pub-authors">Zhen Xiang, Linzhi Zheng, Yanjie Li, Junyuan Hong, Qinbin Li, Han Xie, <b>Jiawei Zhang</b>, Zidi Xiong, Chulin Xie, Carl Yang, Dawn Song, Bo Li</div>
-        <div class="pub-venue"><i>ICML 2025</i></div>
-        <div class="pub-link">
-          <a href="https://arxiv.org/abs/2406.09187">[arXiv]</a>
-          &nbsp;&nbsp;
-          <a href="https://github.com/guardagent/code">[code]</a>
-        </div>
+    <div class="pub-box">
+      <div class="pub-title">Guardagent: Safeguard LLM Agents by a Guard Agent via Knowledge-Enabled Reasoning</div>
+      <div class="pub-authors">Zhen Xiang, Linzhi Zheng, Yanjie Li, Junyuan Hong, Qinbin Li, Han Xie, <b>Jiawei Zhang</b>, Zidi Xiong, Chulin Xie, Carl Yang, Dawn Song, Bo Li</div>
+      <div class="pub-venue">ICML 2025</div>
+      <div class="pub-link">
+        <a href="https://arxiv.org/abs/2406.09187">[arXiv]</a>
+        <a href="https://github.com/guardagent/code">[code]</a>
       </div>
-
+    </div>
 
     <div class="pub-box">
       <div class="pub-title">MMDT: Decoding the Trustworthiness and Safety of Multimodal Foundation Models</div>
       <div class="pub-authors">Chejian Xu*, <b>Jiawei Zhang*</b>, Zhaorun Chen*, Chulin Xie*, Mintong Kang*, Zhuowen Yuan*, Alexander Xiong, Zidi Xiong, Chenhui Zhang, Lingzhi Yuan, Yi Zeng, Peiyang Xu, Chengquan Guo, Andy Zhou, Jeffrey Ziwei Tan, Xuandong Zhao, Francesco Pinto, Zhen Xiang, Yu Gai, Zinan Lin, Dan Hendrycks, Bo Li, Dawn Song</div>
-      <div class="pub-venue"><i>ICLR 2025</i></div>
+      <div class="pub-venue">ICLR 2025</div>
       <div class="pub-link">
         <a href="https://arxiv.org/abs/2503.14827">[arXiv]</a>
-        &nbsp;&nbsp;
         <a href="https://github.com/AI-secure/MMDT">[code]</a>
-        &nbsp;&nbsp;
         <a href="https://huggingface.co/datasets/AI-Secure/MMDecodingTrust-T2I">[dataset&nbsp;T2I]</a>
-        &nbsp;&nbsp;
         <a href="https://huggingface.co/datasets/AI-Secure/MMDecodingTrust-I2T">[dataset&nbsp;I2T]</a>
       </div>
     </div>
 
-
-      <div class="pub-box">
-        <div class="pub-title">EIA: Environmental Injection Attack on Generalist Web Agents for Privacy Leakage</div>
-        <div class="pub-authors">Zeyi Liao, Lingbo Mo, Chejian Xu, Mintong Kang, <b>Jiawei Zhang</b>, Chaowei Xiao, Yuan Tian, Bo Li, Huan Sun</div>
-        <div class="pub-venue"><i>ICLR 2025</i></div>
-        <div class="pub-link">
-          <a href="https://arxiv.org/abs/2409.11295">[arXiv]</a>
-          &nbsp;&nbsp;
-          <a href="https://github.com/OSU-NLP-Group/EIA_against_webagent">[code]</a>
-        </div>
+    <div class="pub-box">
+      <div class="pub-title">EIA: Environmental Injection Attack on Generalist Web Agents for Privacy Leakage</div>
+      <div class="pub-authors">Zeyi Liao, Lingbo Mo, Chejian Xu, Mintong Kang, <b>Jiawei Zhang</b>, Chaowei Xiao, Yuan Tian, Bo Li, Huan Sun</div>
+      <div class="pub-venue">ICLR 2025</div>
+      <div class="pub-link">
+        <a href="https://arxiv.org/abs/2409.11295">[arXiv]</a>
+        <a href="https://github.com/OSU-NLP-Group/EIA_against_webagent">[code]</a>
       </div>
+    </div>
 
+    <div class="pub-box">
+      <div class="pub-title">KnowHalu: Hallucination Detection via Multi-Form Knowledge Based Factual Checking</div>
+      <div class="pub-authors"><b>Jiawei Zhang</b>, Chejian Xu, Yu Gai, Freddy Lecue, Dawn Song, Bo Li</div>
+      <div class="pub-venue">ICLR 2025 Workshop on Foundation Models in the Wild</div>
+      <div class="pub-link"><a href="https://arxiv.org/abs/2404.02935">[arXiv]</a></div>
+    </div>
 
-        <div class="pub-box">
-          <div class="pub-title">KnowHalu: Hallucination Detection via Multi-Form Knowledge Based Factual Checking</div>
-          <div class="pub-authors"><b>Jiawei Zhang</b>, Chejian Xu, Yu Gai, Freddy Lecue, Dawn Song, Bo Li</div>
-          <div class="pub-venue"><i>ICLR 2025 Workshop on Foundation Models in the Wild</i></div>
-          <div class="pub-link"><a href="https://arxiv.org/abs/2404.02935">[arXiv]</a></div>
-        </div>
+    <div class="pub-year">2024</div>
 
-        <div class="pub-year">2024</div>
-
-      <div class="pub-box">
-        <div class="pub-title">Graph Chain-of-Thought: Augmenting Large Language Models by Reasoning on Graphs</div>
-        <div class="pub-authors">Bowen Jin, Chulin Xie, <b>Jiawei Zhang</b>, Kashob Kumar Roy, Yu Zhang, Zheng Li, Ruirui Li, Xianfeng Tang, Suhang Wang, Yu Meng, Jiawei Han</div>
-        <div class="pub-venue"><i>ACL 2024</i></div>
-        <div class="pub-link">
-          <a href="https://arxiv.org/abs/2404.07103">[arXiv]</a>
-          &nbsp;&nbsp;
-          <a href="https://github.com/PeterGriffinJin/Graph-CoT">[code]</a>
-        </div>
+    <div class="pub-box">
+      <div class="pub-title">Graph Chain-of-Thought: Augmenting Large Language Models by Reasoning on Graphs</div>
+      <div class="pub-authors">Bowen Jin, Chulin Xie, <b>Jiawei Zhang</b>, Kashob Kumar Roy, Yu Zhang, Zheng Li, Ruirui Li, Xianfeng Tang, Suhang Wang, Yu Meng, Jiawei Han</div>
+      <div class="pub-venue">ACL 2024</div>
+      <div class="pub-link">
+        <a href="https://arxiv.org/abs/2404.07103">[arXiv]</a>
+        <a href="https://github.com/PeterGriffinJin/Graph-CoT">[code]</a>
       </div>
+    </div>
 
-      <div class="pub-box">
-        <div class="pub-title">ChatScene: Knowledge-Enabled Safety-Critical Scenario Generation for Autonomous Vehicles</div>
-        <div class="pub-authors"><b>Jiawei Zhang</b>, Chejian Xu, Bo Li</div>
-        <div class="pub-venue"><i>CVPR 2024</i></div>
-        <div class="pub-link">
-          <a href="https://arxiv.org/abs/2405.14062">[arXiv]</a>
-          &nbsp;&nbsp;
-          <a href="https://github.com/javyduck/ChatScene">[code]</a>
-        </div>
+    <div class="pub-box">
+      <div class="pub-title">ChatScene: Knowledge-Enabled Safety-Critical Scenario Generation for Autonomous Vehicles</div>
+      <div class="pub-authors"><b>Jiawei Zhang</b>, Chejian Xu, Bo Li</div>
+      <div class="pub-venue">CVPR 2024</div>
+      <div class="pub-link">
+        <a href="https://arxiv.org/abs/2405.14062">[arXiv]</a>
+        <a href="https://github.com/javyduck/ChatScene">[code]</a>
       </div>
+    </div>
 
-      <div class="pub-box">
-        <div class="pub-title">MMCBench: Benchmarking Large Multimodal Models against Common Corruptions</div>
-        <div class="pub-authors"><b>Jiawei Zhang</b>, Tianyu Pang, Chao Du, Yi Ren, Bo Li, Min Lin</div>
-        <div class="pub-venue">arXiv 2024</div>
-        <div class="pub-link">
-          <a href="https://arxiv.org/abs/2401.11943">[arXiv]</a>
-          &nbsp;&nbsp;
-          <a href="https://github.com/sail-sg/MMCBench">[code]</a>
-        </div>
+    <div class="pub-box">
+      <div class="pub-title">MMCBench: Benchmarking Large Multimodal Models against Common Corruptions</div>
+      <div class="pub-authors"><b>Jiawei Zhang</b>, Tianyu Pang, Chao Du, Yi Ren, Bo Li, Min Lin</div>
+      <div class="pub-venue">arXiv 2024</div>
+      <div class="pub-link">
+        <a href="https://arxiv.org/abs/2401.11943">[arXiv]</a>
+        <a href="https://github.com/sail-sg/MMCBench">[code]</a>
       </div>
+    </div>
 
-        <div class="pub-year">2023</div>
+    <div class="pub-year">2023</div>
 
-      <div class="pub-box">
-        <div class="pub-title">DiffSmooth: Certifiably Robust Learning via Diffusion Models and Local Smoothing</div>
-        <div class="pub-authors"><b>Jiawei Zhang</b>, Zhongzhu Chen, Huan Zhang, Chaowei Xiao, Bo Li</div>
-        <div class="pub-venue"><i>32th USENIX Security Symposium (USENIX Security) 2023</i></div>
-        <div class="pub-link">
-          <a href="https://www.usenix.org/conference/usenixsecurity23/presentation/zhang-jiawei">[arXiv]</a>
-          &nbsp;&nbsp;
-          <a href="https://github.com/javyduck/DiffSmooth">[code]</a>
-        </div>
+    <div class="pub-box">
+      <div class="pub-title">DiffSmooth: Certifiably Robust Learning via Diffusion Models and Local Smoothing</div>
+      <div class="pub-authors"><b>Jiawei Zhang</b>, Zhongzhu Chen, Huan Zhang, Chaowei Xiao, Bo Li</div>
+      <div class="pub-venue">32th USENIX Security Symposium (USENIX Security) 2023</div>
+      <div class="pub-link">
+        <a href="https://www.usenix.org/conference/usenixsecurity23/presentation/zhang-jiawei">[arXiv]</a>
+        <a href="https://github.com/javyduck/DiffSmooth">[code]</a>
       </div>
+    </div>
 
-      <div class="pub-box">
-        <div class="pub-title">CARE: Certifiably Robust Learning with Reasoning via Variational Inference</div>
-        <div class="pub-authors"><b>Jiawei Zhang</b>, Linyi Li, Ce Zhang, Bo Li</div>
-        <div class="pub-venue"><i>IEEE Conference on Secure and Trustworthy Machine Learning (SatML) 2023</i></div>
-        <div class="pub-link">
-          <a href="https://arxiv.org/abs/2209.05055">[arXiv]</a>
-          &nbsp;&nbsp;
-          <a href="https://github.com/javyduck/CARE">[code]</a>
-        </div>
+    <div class="pub-box">
+      <div class="pub-title">CARE: Certifiably Robust Learning with Reasoning via Variational Inference</div>
+      <div class="pub-authors"><b>Jiawei Zhang</b>, Linyi Li, Ce Zhang, Bo Li</div>
+      <div class="pub-venue">IEEE Conference on Secure and Trustworthy Machine Learning (SatML) 2023</div>
+      <div class="pub-link">
+        <a href="https://arxiv.org/abs/2209.05055">[arXiv]</a>
+        <a href="https://github.com/javyduck/CARE">[code]</a>
       </div>
+    </div>
 
-        <div class="pub-year">2022</div>
+    <div class="pub-year">2022</div>
 
-        <div class="pub-box">
-          <div class="pub-title">Improving Certified Robustness via Statistical Learning with Logical Reasoning</div>
-          <div class="pub-authors">Zhuolin Yang*, Zhikuan Zhao*, Boxin Wang, <b>Jiawei Zhang</b>, Linyi Li, Hengzhi Pei, Bojan Karlas, Ji Liu, Heng Guo, Ce Zhang, Bo Li</div>
-          <div class="pub-venue"><i>NeurIPS 2022</i></div>
-          <div class="pub-link">
-            <a href="https://arxiv.org/abs/2003.00120" target="_blank">[arXiv]</a>
-            &nbsp;&nbsp;
-            <a href="https://github.com/Sensing-Reasoning/Sensing-Reasoning-Pipeline" target="_blank">[code]</a>
-          </div>
-        </div>
+    <div class="pub-box">
+      <div class="pub-title">Improving Certified Robustness via Statistical Learning with Logical Reasoning</div>
+      <div class="pub-authors">Zhuolin Yang*, Zhikuan Zhao*, Boxin Wang, <b>Jiawei Zhang</b>, Linyi Li, Hengzhi Pei, Bojan Karlas, Ji Liu, Heng Guo, Ce Zhang, Bo Li</div>
+      <div class="pub-venue">NeurIPS 2022</div>
+      <div class="pub-link">
+        <a href="https://arxiv.org/abs/2003.00120" target="_blank">[arXiv]</a>
+        <a href="https://github.com/Sensing-Reasoning/Sensing-Reasoning-Pipeline" target="_blank">[code]</a>
+      </div>
+    </div>
 
-        <div class="pub-box">
-          <div class="pub-title">Double Sampling Randomized Smoothing</div>
-          <div class="pub-authors">Linyi Li, <b>Jiawei Zhang</b>, Tao Xie, Bo Li</div>
-          <div class="pub-venue"><i>ICML 2022</i></div>
-          <div class="pub-link">
-            <a href="https://arxiv.org/abs/2206.07912" target="_blank">[arXiv]</a>
-            &nbsp;&nbsp;
-            <a href="https://github.com/llylly/DSRS" target="_blank">[code]</a>
-          </div>
-        </div>
+    <div class="pub-box">
+      <div class="pub-title">Double Sampling Randomized Smoothing</div>
+      <div class="pub-authors">Linyi Li, <b>Jiawei Zhang</b>, Tao Xie, Bo Li</div>
+      <div class="pub-venue">ICML 2022</div>
+      <div class="pub-link">
+        <a href="https://arxiv.org/abs/2206.07912" target="_blank">[arXiv]</a>
+        <a href="https://github.com/llylly/DSRS" target="_blank">[code]</a>
+      </div>
+    </div>
 
-        <div class="pub-year">2021</div>
+    <div class="pub-year">2021</div>
 
-        <div class="pub-box">
-          <div class="pub-title">Progressive-Scale Boundary Blackbox Attack via Projective Gradient Estimation</div>
-          <div class="pub-authors"><b>Jiawei Zhang*</b>, Linyi Li*, Huichen Li, Xiaolu Zhang, Shuang Yang, Bo Li</div>
-          <div class="pub-venue"><i>ICML 2021</i></div>
-          <div class="pub-link">
-            <a href="https://arxiv.org/abs/2106.06056" target="_blank">[arXiv]</a>
-            &nbsp;&nbsp;
-            <a href="https://github.com/AI-secure/PSBA" target="_blank">[code]</a>
-          </div>
-        </div>
+    <div class="pub-box">
+      <div class="pub-title">Progressive-Scale Boundary Blackbox Attack via Projective Gradient Estimation</div>
+      <div class="pub-authors"><b>Jiawei Zhang*</b>, Linyi Li*, Huichen Li, Xiaolu Zhang, Shuang Yang, Bo Li</div>
+      <div class="pub-venue">ICML 2021</div>
+      <div class="pub-link">
+        <a href="https://arxiv.org/abs/2106.06056" target="_blank">[arXiv]</a>
+        <a href="https://github.com/AI-secure/PSBA" target="_blank">[code]</a>
+      </div>
+    </div>
+  </section>
 
-      <div class="pub-year">Workshops and Competitions</div>
-      <ul style="font-size:16px; color:#333; line-height:1.6; margin-top:8px; margin-bottom:20px;">
-        <li>
-          <a href="https://neurips.cc/virtual/2024/competition/84796" target="_blank">
-            <b>CLAS 2024: The Competition for LLM and Agent Safety, NeurIPS 2024</b>
-          </a>
-        </li>
-        <li>
-          <a href="https://github.com/safeai-lab/SafeBench" target="_blank">
-            <b>Secure and Safe Autonomous Driving (SSAD) Workshop and Challenge, CVPR 2023</b>
-          </a>
-        </li>
-      </ul>
+  <!-- =================== Workshops & Competitions ================= -->
+  <section class="section">
+    <span class="section-label">Community</span>
+    <h2 class="section-title">Workshops and Competitions</h2>
+    <ul class="plain-list">
+      <li>
+        <a href="https://neurips.cc/virtual/2024/competition/84796" target="_blank">
+          <b>CLAS 2024: The Competition for LLM and Agent Safety, NeurIPS 2024</b>
+        </a>
+      </li>
+      <li>
+        <a href="https://github.com/safeai-lab/SafeBench" target="_blank">
+          <b>Secure and Safe Autonomous Driving (SSAD) Workshop and Challenge, CVPR 2023</b>
+        </a>
+      </li>
+    </ul>
+  </section>
 
-      <div class="pub-year">Professional Service</div>
-      <ul style="font-size:16px; color:#333; line-height:1.6; margin-top:8px; margin-bottom:40px;">
-        <li><b>Session Chair</b> — ICLR 2025</li>
-        <li><b>Top Reviewer</b> — NeurIPS 2025</li>
-        <li><b>Program Committee</b> — ICML, NeurIPS, ICLR, CVPR, ECCV, AISTATS, AAAI, COLM, ACL, JIMR, etc.</li>
-      </ul>
+  <!-- ====================== Professional Service ================== -->
+  <section class="section">
+    <span class="section-label">Service</span>
+    <h2 class="section-title">Professional Service</h2>
+    <ul class="plain-list">
+      <li><b>Session Chair</b> — ICLR 2025</li>
+      <li><b>Top Reviewer</b> — NeurIPS 2025</li>
+      <li><b>Program Committee</b> — ICML, NeurIPS, ICLR, CVPR, ECCV, AISTATS, AAAI, COLM, ACL, JIMR, etc.</li>
+    </ul>
+  </section>
 
+  <footer class="site-footer">
+    © 2026 Jiawei Zhang · Originally adapted from <a href="https://jonbarron.info/">Jon Barron</a>'s template.
+  </footer>
 
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-        <table width="100%" align="center" border="0" cellspacing="0" cellpadding="20">
-            <tbody><tr>
-                <td>
-                    <br>
-                    <p align="right">
-                        <font size="2">
-                        Template from <a href="https://jonbarron.info/">Jon Barron</a>.
-                        </font>
-                    </p>
-                </td>
-            </tr>
-        </tbody></table>
-
-      </a></td>
-    </tr>
-  </tbody></table>
+</div>
+</body>
 </html>

@@ -4,15 +4,16 @@
    =================================================================== */
 
 :root {
-  --bg: #ffffff;
-  --bg-soft: #f7f5f3;
-  --text: #1f1f1f;
-  --text-soft: #555555;
-  --text-faint: #8a8a8a;
+  --bg: #f6f2e7;
+  --card: #fbf8f0;
+  --bg-soft: #efe9da;
+  --text: #2e2a22;
+  --text-soft: #5d5748;
+  --text-faint: #8f8674;
   --accent: #800000;
-  --accent-soft: #b34747;
-  --border: #e8e4e0;
-  --code-bg: #f4f2f0;
+  --accent-soft: #a34848;
+  --border: #ddd5c2;
+  --code-bg: #efe9da;
   --box-theorem: #244a73;
   --box-definition: #1c6b65;
   --box-example: #9a6b16;
@@ -28,6 +29,7 @@
 
 html[data-theme="dark"] {
   --bg: #191a1c;
+  --card: #202224;
   --bg-soft: #202224;
   --text: #d8d6d3;
   --text-soft: #a5a29e;
@@ -53,7 +55,18 @@ html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
-  background: var(--bg);
+  background-color: var(--bg);
+  /* central veil keeps the sketches faint beneath the text column while
+     they stay fuller-strength in the margins */
+  background-image:
+    linear-gradient(90deg, rgba(246, 242, 231, 0) 0%,
+      rgba(246, 242, 231, 0.62) 24%, rgba(246, 242, 231, 0.62) 76%,
+      rgba(246, 242, 231, 0) 100%),
+    url("/images/math-doodles.svg");
+  background-size: 100% 100%, cover;
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
+  background-attachment: fixed, fixed;
   color: var(--text);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
@@ -72,7 +85,9 @@ a:hover { color: var(--accent-soft); }
 
 .site-header {
   border-bottom: 1px solid var(--border);
-  background: var(--bg);
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   position: sticky;
   top: 0;
   z-index: 50;
@@ -151,7 +166,7 @@ a:hover { color: var(--accent-soft); }
   transition: border-color 0.15s ease;
 }
 
-.search-box:focus { border-color: var(--accent); background: var(--bg); }
+.search-box:focus { border-color: var(--accent); background: var(--card); }
 .search-box::placeholder { color: var(--text-faint); }
 
 .no-results {
@@ -189,7 +204,7 @@ a:hover { color: var(--accent-soft); }
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 22px 26px 18px;
-  background: var(--bg);
+  background: var(--card);
   transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
@@ -227,7 +242,7 @@ a:hover { color: var(--accent-soft); }
 .series-acc {
   border: 1px solid var(--border);
   border-radius: 10px;
-  background: var(--bg);
+  background: var(--card);
   margin-bottom: 14px;
   transition: border-color 0.18s ease;
 }
@@ -320,6 +335,7 @@ a:hover { color: var(--accent-soft); }
 
 .topic-link {
   border: 1px solid var(--border);
+  background: var(--card);
   border-radius: 8px;
   padding: 7px 18px;
   font-size: 15px;
@@ -411,6 +427,7 @@ a:hover { color: var(--accent-soft); }
   flex-direction: column;
   gap: 5px;
   border: 1px solid var(--border);
+  background: var(--card);
   border-radius: 10px;
   padding: 14px 18px;
   transition: border-color 0.18s ease;
@@ -452,7 +469,7 @@ a.series-nav-card:hover { border-color: var(--accent); }
 .pager button {
   cursor: pointer;
   border: 1px solid var(--border);
-  background: var(--bg);
+  background: var(--card);
   color: var(--text-soft);
   border-radius: 6px;
   padding: 5px 12px;
@@ -680,7 +697,7 @@ a.series-nav-card:hover { border-color: var(--accent); }
   right: 14px;
   z-index: 40;
   border: 1px solid var(--border);
-  background: var(--bg);
+  background: var(--card);
   font-size: 12.5px;
   font-weight: 600;
   text-transform: uppercase;
@@ -770,6 +787,8 @@ html.toc-collapsed .toc-reopen { display: block; }
 html[data-theme="dark"] .post-content figure img.figure-light {
   filter: invert(0.88) hue-rotate(180deg);
 }
+
+html[data-theme="dark"] body { background-image: none; }
 
 .post-content figcaption {
   margin-top: 12px;
