@@ -118,6 +118,8 @@ a:hover { color: var(--accent-soft); }
 .hero-side {
   flex: 0 0 250px;
   text-align: center;
+  /* offset the quote below so the photo itself sits on the text midline */
+  padding-top: 84px;
 }
 
 .hero-photo {
