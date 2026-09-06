@@ -223,6 +223,10 @@ a:hover { color: var(--accent-soft); }
 /* Reduce the artwork while keeping the shared logo column aligned. */
 .intern-logo--compact { padding: 8px 16px; }
 
+.intern-logo--seed {
+  height: 76px;
+}
+
 .intern-info { flex: 1; }
 
 .intern-company {
