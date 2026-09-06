@@ -95,6 +95,21 @@ a:hover { color: var(--accent-soft); }
 
 .hero-text p { margin: 0 0 14px; color: var(--text); }
 
+.hero-bio .bio-highlight { color: var(--accent); }
+.hero-bio a { font-weight: 400; }
+
+.bio-affiliation {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.bio-logo {
+  width: 1.6em;
+  height: 1.6em;
+  flex: none;
+}
+
 .hero-links {
   margin-top: 20px;
   display: flex;
