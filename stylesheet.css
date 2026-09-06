@@ -222,6 +222,7 @@ a:hover { color: var(--accent-soft); }
 
 /* Reduce the artwork while keeping the shared logo column aligned. */
 .intern-logo--compact { padding: 8px 16px; }
+.intern-logo--nuro { padding: 10px 24px; }
 
 .intern-info { flex: 1; }
 
